@@ -1,0 +1,84 @@
+.cantainer-main-menu-principal  {
+  
+  width: 100dvw;
+  min-height: 100dvh;
+  height: 0; /* Permite transitar suave de cima p/ baixo com as altura em conjutas */
+  padding: .5rem;
+  bottom: 0;
+  background-color: var(--color-black-bkg-5);
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  /* 
+  transition: all ease-in-out 1ms; */
+  transition: min-height 0.5s ease-in, opacity .3s ease;
+  opacity: 0;
+  visibility: hidden;
+  box-shadow: 0 0 2px var(--color-secondary);
+  z-index: 1;
+}
+
+.cantainer-main-menu-principal-cmd {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 65%;
+  height: 79%;
+  border-radius: 10px;
+  background-color: var(--color-white);
+  box-shadow: 0 2px 10px var(--color-secondary);
+  z-index: 2;
+  margin-bottom: 2rem;
+}
+
+/* Animação leve */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* .cantainer-main-menu-principal-cmd footer   {
+  display: flex;
+  width: 40%;
+  height: 55%; 
+  background-color: var(--color-primary);
+} */
+
+.open-menu {
+  top: 0;
+  opacity: 1;
+  min-height: 100dvh;
+  max-height: 0;
+  visibility: visible;
+  z-index: 1;
+}
+
+.open-menu > section {
+  animation: fadeIn 1s ease-in-out;
+}
+
+@media only screen and (min-width:190px) and (max-width:650px) {
+
+  .cantainer-main-menu-principal{
+    min-height: 100dvh;
+    max-height: 0;
+  }
+
+  .cantainer-main-menu-principal-cmd {
+    width: 380px;
+    height: 440px;
+    margin-bottom: .65rem;
+  }
+
+ 
+
+  
+}

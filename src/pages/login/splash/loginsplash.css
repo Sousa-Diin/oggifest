@@ -1,0 +1,56 @@
+/* Estilos principais */
+
+.body-spin {
+  min-width: 100dvw;
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(229, 44, 102);
+}
+
+@media only screen and  (min-width:185px) and (max-width:650px){
+  .body-spin {
+    max-width: 100dvw;
+    max-height: 100dvh;
+  }
+}
+/* Tela de carregamento */
+.loading-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Animação de carregamento (círculo) */
+.loading-circle {
+  width: 50px;
+  height: 50px;
+  /* border: 5px solid #4b6382;
+  border-top: 5px solid #a4b5ca; */
+  border: 5px solid #37a2c2;
+  border-top: 5px solid #e59e07;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Título da tela de carregamento */
+.loading-screen > h2 {
+  color: #cdd5db;
+  font-size: 1.5rem;
+  opacity: 0.9;
+}
+
+

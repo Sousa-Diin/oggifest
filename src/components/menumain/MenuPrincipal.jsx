@@ -72,9 +72,9 @@ const MenuPrincipal = ({open, handleClosenMenu}) => {
         />
       </div>
     </form>
-       <footer className="flex  justify-between m-1 my-px">
+       <footer className="flex  justify-around  w-80 m-1 my-px">
           <button className="p-1 bg-teal-400  rounded-sm bg-mysecondary " onClick={{}} >Salvar</button>
-          <button className="p-1 bg-teal-400 rounded-sm bg-myprimary " onClick={handleClosenMenu} >Cancelar</button>
+          <button className="p-1 rounded-sm bg-pink-800 bg-myprimary " onClick={handleClosenMenu} >Cancelar</button>
        </footer>
       
       </section>

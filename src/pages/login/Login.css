@@ -1,0 +1,365 @@
+*{
+  margin: 0;
+}
+
+/* Animação leve */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.login-container-div {
+  animation: fadeIn 1s ease-in-out;
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1440px) {
+  .container-login {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: space-between;
+    width: 100dvw;
+    height: 100vh;
+    background-color: #fff;
+    background-image: url('https://franquias.oggisorvetes.com.br/wp-content/uploads/2022/04/logo-roxo-bg.png');
+    background-size: cover; /* A imagem cobre toda a tela */
+    background-position: center; /* Centraliza a imagem */
+    background-repeat: no-repeat; /* Evita a repetição da imagem */ height: 100dvh; /* Altura total da janela de visualização */
+  }
+
+  .login-container-div, .login-form {
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+  }
+  .login-container-div { 
+    
+    width: 90%;
+    min-height: 400px;
+    max-width: 450px;
+  /*   min-height: 40%;
+    max-width: 50%; */
+    margin-left: 45%;
+    padding: 40px;
+    background-color: rgb(205, 213, 219,.3);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px #e59e07;
+    text-align: center;
+    box-sizing: border-box;
+
+  }
+
+  .login-form{
+    /* height: 75%; */
+    height: auto;
+  }
+
+  .login-form input {
+    margin-bottom: 15px;
+    padding: 12px;
+    
+    font-size: 1.2rem;
+    border: none;
+    background-color: rgb(227, 195, 157,.3);
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .login-form input::placeholder{
+    color: #cdd5db;
+  }
+  .login-container-div {
+    color: #cdd5db;
+    width: 90%;
+    background-color: rgb(205, 213, 219,.5);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px var(--color-primary);
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  .login-container-div h2 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: var(--color-secondary);
+  }
+
+  .login-form button {
+  
+    background-color: var(--color-secondary); 
+    color: white;
+    border: 3px solid var(--color-white);
+    border-radius: 12px;
+    cursor: pointer;
+    transition:  0.3s;
+    width: 100%;
+   
+    height: 40px; 
+  }
+
+  .login-form button:hover {
+    background-color: var(--color-purple); 
+  }
+
+
+  .login-footer {
+    display: flex;
+    justify-content: space-between;
+    color: #cdd5db;
+    font-size: medium;
+    text-decoration: underline;
+    width: 95%;
+    max-width: 400px;
+  }
+
+  .login-footer :hover { color:#071739}
+}
+
+
+/* Responsividade para smartphones */
+@media only screen and (min-width: 190px) and (max-width: 750px) {
+  *{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  .container-login {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: space-between;
+    width: 100dvw;
+    height: 100dvh;
+    background-color: #071739;
+    background-image: url('../../../src/assets/design/background-mobile.png');
+    background-size: cover; /* A imagem cobre toda a tela */
+    background-position: center; /* Centraliza a imagem */
+    background-repeat: no-repeat; /* Evita a repetição da imagem */ height: 100vh; /* Altura total da janela de visualização */
+  }
+  /* Estilo para o container de login */
+.login-container-div {
+ 
+  width: 90%;
+  height: auto;
+  margin: 0 auto;
+  padding: 30px;
+  background-color: rgb(205, 213, 219,.8);
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgb(75, 99, 130);
+  text-align: center;
+  box-sizing: border-box;
+  font-size: 1.1rem;
+  
+}
+
+/* Estilo para o título */
+.login-container-div h2 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  color: #fff;
+}
+
+/* Estilo para o formulário */
+.login-form {
+  height: 50dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  
+  font-size: 1.3rem;
+}
+
+
+.login-footer {
+  width: 98%;
+  display: flex;
+  margin-top: 5px;
+  justify-content: space-around;
+  color: #4b6382;
+  font-size: medium;
+  font-size: medium;
+  text-decoration: underline;
+}
+
+.login-footer a{
+  margin: 0 auto;
+}
+
+.login-footer a:hover { color:#f2f2f2}
+
+/* Estilo para os inputs */
+.login-form input {
+  margin-bottom: 15px;
+  padding: 12px;
+  border: none;
+  background-color: rgb(227, 195, 157,.4);
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.login-form input::placeholder{
+  color: #fff;
+}
+
+/* Estilo para o botão */
+.login-form button {
+  padding: 12px;
+  background-color: #4B6382; /* Cor do botão em harmonia com E&WDoces */
+  color: white;
+  border: 2px solid #E3C39D;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 100%;
+}
+
+.login-form button:hover {
+  background-color: #4B6382; /* Cor ao passar o mouse */
+
+}
+
+.login-form input,
+.login-form button {
+    
+    font-size: 1rem;/* Ajusta o tamanho da fonte dos inputs e botões */
+    padding: 10px; /* Padding menor em telas pequenas */
+  }
+
+  .login-container-div {
+    padding: 20px;  /*Reduz o padding em telas menores */
+  }
+
+  .login-container-div h2 {
+    
+    font-size: 1.3rem;/* Tamanho do título ajustado para smartphones */
+  }
+  
+}
+
+/* Responsividade para tablet */
+@media  only screen  and (min-width: 390px) and (max-width: 800px) and (min-height:300px) and (max-height:600){
+  *{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  .container-login {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: space-between;
+    width: 100dvw;
+    height: 100dvh;
+    background-color: var(--color-primary);
+    background-image: url('../../../src/assets/design/background-mobile.png');
+    background-size: cover; /* A imagem cobre toda a tela */
+    background-position: center; /* Centraliza a imagem */
+    background-repeat: no-repeat; /* Evita a repetição da imagem */ height: 100vh; /* Altura total da janela de visualização */
+  }
+  /* Estilo para o container de login */
+.login-container-div {
+ 
+  width: 50%;
+  height: auto;
+  margin: 0 auto;
+  padding: 30px;
+  background-color: rgb(205, 213, 219,.8);
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgb(75, 99, 130);
+  text-align: center;
+  box-sizing: border-box;
+  font-size: 1.1rem;
+  
+}
+
+/* Estilo para o título */
+.login-container-div h2 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  color: #fff;
+}
+
+/* Estilo para o formulário */
+.login-form {
+  height: 50dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  
+  font-size: 1.3rem;
+}
+
+
+.login-footer {
+  width: 98%;
+  display: flex;
+  margin-top: 5px;
+  justify-content: space-around;
+  color: #4b6382;
+  font-size: medium;
+  font-size: medium;
+  text-decoration: underline;
+}
+
+.login-footer a{
+  margin: 0 auto;
+}
+
+.login-footer a:hover { color:#f2f2f2}
+
+/* Estilo para os inputs */
+.login-form input {
+  margin-bottom: 15px;
+  padding: 12px;
+  border: none;
+  background-color: rgb(227, 195, 157,.4);
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.login-form input::placeholder{
+  color: #fff;
+}
+
+/* Estilo para o botão */
+.login-form button {
+  padding: 12px;
+  background-color: #4B6382; /* Cor do botão em harmonia com E&WDoces */
+  color: white;
+  border: 2px solid #E3C39D;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 100%;
+}
+
+.login-form button:hover {
+  background-color: #4B6382; /* Cor ao passar o mouse */
+
+}
+
+.login-form input,
+.login-form button {
+    
+    font-size: 1rem;/* Ajusta o tamanho da fonte dos inputs e botões */
+    padding: 10px; /* Padding menor em telas pequenas */
+  }
+
+  .login-container-div {
+    padding: 20px;  /*Reduz o padding em telas menores */
+  }
+
+  .login-container-div h2 {
+    
+    font-size: 1.3rem;/* Tamanho do título ajustado para smartphones */
+  }
+  
+}
+

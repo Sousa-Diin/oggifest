@@ -1,0 +1,53 @@
+.container-faturar-cobrar {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;  /* Altura total da tela */
+    overflow-y: auto;  /* Permite rolar o conteúdo, se necessário */
+    background-color: var(--color-black);
+    background-image: url('../../assets/design/oggi_logo_title.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 50%;
+
+}
+
+.main-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  width: 100%;   
+  height: auto; 
+  
+  /* background-image: url('../../assets/background/logo_bck_desktop.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 80%; */
+  
+ /*  flex: 1; */  /* Permite que o conteúdo principal ocupe o espaço restante */
+  margin-top: 75px;  /* Margem para o header fixo */
+  margin-bottom: 80vh; /* Margem para o footer fixo */
+  padding: 20px;
+  /* overflow-y: auto; */  /* Permite rolar o conteúdo, se necessário */
+
+  
+}
+
+.hide { display:none ;}
+
+@media only screen and (min-width: 190px) and (max-width: 650px) {
+  .container-faturar-cobrar{
+    background-size: 80%;
+  }
+  
+  .main-menu { 
+    width: 99%; 
+    max-width: 520px; /* Altura pode ser ajustada conforme necessário */
+    height: auto;
+    max-height: 550px;       
+    margin-top: 60px;  /* Menor espaço para header em telas pequenas */
+    margin-bottom: 160dvh; /* Ajuste para o footer em telas pequenas */
+  
+  }
+ 
+}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../provider/AuthContextProvider";
+import StatusCheckpoint from "../check/StatusCheckPoint";
 import "./menuprincipal.css";
 
 const MenuPrincipal = ({ open, handleClosenMenu }) => {
@@ -12,6 +13,10 @@ const MenuPrincipal = ({ open, handleClosenMenu }) => {
     data: "",
     status: "",
   });
+
+  const handleStatusChange = (newStatus) => {
+    setFormData((prev) => ({ ...prev, status: newStatus }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -103,23 +108,7 @@ const MenuPrincipal = ({ open, handleClosenMenu }) => {
               className="w-96 border p-1 rounded"
             />
           </div>
-
-          <div className="flex flex-row justify-around items-center">
-            <label htmlFor="status" className="p-2">
-              Status:
-            </label>
-            <input
-              id="status"
-              value={formData.status}
-              onChange={(e) =>
-                setFormData({ ...formData, status: e.target.value })
-              }
-              type="text"
-              placeholder="Digite o status"
-              className="w-96 border p-1 rounded"
-            />
-          </div>
-
+          <StatusCheckpoint onChange={ handleStatusChange} />
           <footer className="flex justify-around w-80 m-1 my-px">
             <button type="submit" className="p-1 bg-teal-400 rounded-sm">
               Salvar
@@ -138,4 +127,4 @@ const MenuPrincipal = ({ open, handleClosenMenu }) => {
   );
 };
 
-export default MenuPrincipal;
+export default MenuPrincipal; 

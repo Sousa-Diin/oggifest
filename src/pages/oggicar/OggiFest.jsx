@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { FaSearch, FaPlus } from "react-icons/fa"; 
-import { IoMdMenu } from "react-icons/io";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import './OggiFest.css'
 import MenuPrincipal from "../../components/menumain/MenuPrincipal";
 import { useAuth } from '../../provider/AuthContextProvider'
 import {agendamentos} from '../../service/ListAgendar'
+import { SideBar } from "../../components/siderBar/SideBar";
 
 export default function OggiFest() {
 
@@ -16,6 +16,8 @@ export default function OggiFest() {
   const [termoBusca, setTermoBusca] = useState("");
   const [open, handleOpenMenu] = useState(false);
   const [openSide, handleOpenSide] = useState(false);
+  const [writeTitle, setWriteTitle] = useState(false);
+  
   
 
   const handleClosenMenu = () => {
@@ -24,6 +26,7 @@ export default function OggiFest() {
 
   const handleCloseSideBar = () => {
     handleOpenSide(!openSide);
+    setWriteTitle(!writeTitle);
   }
   const formattedDate = new Intl.DateTimeFormat("pt-BR", {
     weekday: "long", // Nome do dia da semana (ex: "terça-feira")
@@ -57,12 +60,12 @@ export default function OggiFest() {
 
   return (
     <div className="flex ">
-      <aside className={`flex-col bg-blue-950 text-white  min-w-12 min-h-screen ${openSide ? "open-side" : ""}`} style={{backgroundColor:'#37A2C2'}}>
-        <div className="flex items-center justify-between w-full p-2 gap-1  ">
-          <p>Menu</p>
-          <button onClick={handleCloseSideBar} className="font-bold text-2xl"><IoMdMenu/></button>
-        </div>
-      </aside>
+      <SideBar 
+        openSide={openSide}
+        writeTitle={writeTitle}
+        handleCloseSideBar={handleCloseSideBar}
+        
+      />
       <section className=" flex-1  section-agender">
         <h1 className=" flex-1 text-center font-bold p-2 text-xl text-pink-600" style={{backgroundColor:'#EAE8E1'}}>CARRINHO - OGGI FEST </h1>
         <div className="flex-1 container-agender p-1">

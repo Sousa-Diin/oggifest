@@ -24,30 +24,30 @@
     flex-direction: column;
     justify-content: space-around;
     align-items: space-between;
-    width: 100dvw;
+    width: 100%;
     height: 100dvh;
     background-image: url('https://franquias.oggisorvetes.com.br/wp-content/uploads/2022/04/logo-roxo-bg.png');
     background-size: cover; /* A imagem cobre toda a tela */
     background-position: center; /* Centraliza a imagem */
-    background-repeat: no-repeat; /* Evita a repetição da imagem */ height: 100dvh; /* Altura total da janela de visualização */
+    background-repeat: no-repeat; /* Evita a repetição da imagem */ height: min-content; /* Altura total da janela de visualização */
   }
 
   .login-container-div {
     display: flex;
     flex-flow: column;
     justify-content: space-between;
-    
+    margin: 0 auto;
+    margin-top: 5rem;
   }
   .login-container-div { 
     
-    width: 90%;
+    width: 100%;
     min-height: 400px;
     max-width: 450px;
   /*   min-height: 40%;
     max-width: 50%; */
-    margin:10% 0 0 39%;
     padding: 2rem;
-    background-color: rgba(205, 213, 219,.3);
+    background-color: rgba(205, 213, 219,.5);
     border-radius: 8px;
     box-shadow: 0 2px 10px #e59e07;
     text-align: center;
@@ -56,13 +56,13 @@
   }
 
   .login-form{
-    /* height: 75%; */
-    height: auto;
-    
+    height: 40vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
   }
 
   .login-form input {
-    margin-bottom: 20px;
     padding: 10px;
     color: var(--color-secondary);
     font-size: 1.2rem;
@@ -78,7 +78,7 @@
   }
   .login-container-div {
     width: 90%;
-    background-color: var(--color-white);
+    background-color: /* var(--color-white) */;
     border-radius: 8px;
     box-shadow: 0 2px 10px var(--color-primary);
     text-align: center;
@@ -87,7 +87,8 @@
 
   .login-container-div h2 {
     font-size: 2rem;
-    color: var(--color-secondary);
+    color: var(--color-white);
+    text-shadow: var(--color-black)5px 5px 10px ;
   }
 
   .login-form button {
@@ -162,15 +163,10 @@
 .login-container-div h2 {
   margin-bottom: 20px;
   font-size: 22px;
-  color: #fff;
 }
 
 /* Estilo para o formulário */
 .login-form {
-  height: 50dvh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
   
   font-size: 1.3rem;
 }

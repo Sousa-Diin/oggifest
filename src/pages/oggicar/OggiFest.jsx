@@ -4,8 +4,13 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import './OggiFest.css'
 import MenuPrincipal from "../../components/menumain/MenuPrincipal";
+import { useAuth } from '../../provider/AuthContextProvider'
+import {agendamentos} from '../../service/ListAgendar'
 
 export default function OggiFest() {
+
+  const { getStoredEvents } = useAuth();
+  const listLocalStorageAgender = getStoredEvents();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [termoBusca, setTermoBusca] = useState("");
   const [open, handleOpenMenu] = useState(false);
@@ -26,29 +31,18 @@ export default function OggiFest() {
 
     return lista.filter(
       (agendamento) =>
-        agendamento.titulo.toLowerCase().includes(termo.toLowerCase()) ||
-        agendamento.comanda.toString().includes(termo) // Converte número para string e busca
+        agendamento.nome.toLowerCase().includes(termo.toLowerCase()) ||
+        agendamento.pedido.toString().includes(termo) // Converte número para string e busca
     );
   };
 
   // Lista de agendamentos com horário
-  const agendamentos = [
-    { id: 1, data: "2024-12-12", horario: "13:00", status: "Pago", comanda: 32, titulo: "Marcela" },
-    { id: 2, data: "2024-12-14", horario: "14:00", status: "Pago", comanda: 0, titulo: "Flávia" },
-    { id: 3, data: "2024-12-16", horario: "11:00", status: "Pago", comanda: 29, titulo: "Policia Militar" },
-    { id: 4, data: "2024-12-21", horario: "15:00", status: "Pago", comanda: 36, titulo: "Maria Luciana" },
-    { id: 5, data: "2025-01-18", horario: "12:00", status: "Pago", comanda: 1, titulo: "Rodrigo" },
-    { id: 6, data: "2025-02-22", horario: "10:30", status: "Pago", comanda: 50, titulo: "Rhuan" },
-    { id: 7, data: "2025-02-22", horario: "15:00", status: "Pago", comanda: 1, titulo: "Pedro" },
-    { id: 8, data: "2025-05-10", horario: "10:30", status: "Agendado", comanda: NaN, titulo: "Maria teste" },
-    { id: 9, data: "2025-02-20", horario: "14:30", status: "Pago", comanda: 39, titulo: "Tecnotextil" },
-  ];
 
    // Formatar a data para YYYY-MM-DD
    const formatarData = (date) => date.toISOString().split("T")[0];
 
    // Filtrar os agendamentos do dia selecionado e ordenar por horário
-   const agendamentosFiltrados = agendamentos
+   const agendamentosFiltrados = listLocalStorageAgender
      .filter((evento) => evento.data === formatarData(selectedDate))
      .sort((a, b) => a.horario.localeCompare(b.horario)); // Ordena pelo horário
   
@@ -89,8 +83,8 @@ export default function OggiFest() {
                   <div key={evento.id} className="flex items-center border-b py-2">
                     <div className="w-2 h-8 bg-yellow-500 mr-2"></div>
                     <span className="mr-2 flex-1">⌚{evento.horario}</span>
-                    <span className="flex-1">{evento.titulo}</span>
-                    <span className="font-bold flex-1">Pedido: {evento.comanda}</span>
+                    <span className="flex-1">{evento.nome}</span>
+                    <span className="font-bold flex-1">Pedido: {evento.pedido}</span>
                     <span className="flex-1">{evento.status} {evento.status === "Pago" ? '✔' : evento.status === "Entrada" ?  '⚠' :'❌'}</span>
                  </div>
                 ))}

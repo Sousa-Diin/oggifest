@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FaSearch, FaPlus } from "react-icons/fa"; 
+import { IoMdMenu } from "react-icons/io";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import './OggiFest.css'
@@ -14,9 +15,15 @@ export default function OggiFest() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [termoBusca, setTermoBusca] = useState("");
   const [open, handleOpenMenu] = useState(false);
+  const [openSide, handleOpenSide] = useState(false);
+  
 
   const handleClosenMenu = () => {
     handleOpenMenu(!open);
+  }
+
+  const handleCloseSideBar = () => {
+    handleOpenSide(!openSide);
   }
   const formattedDate = new Intl.DateTimeFormat("pt-BR", {
     weekday: "long", // Nome do dia da semana (ex: "terça-feira")
@@ -49,52 +56,60 @@ export default function OggiFest() {
    const resultados = buscarAgendamento(agendamentos, termoBusca);
 
   return (
-    <div>
-      {/* <h1 className=" flex text-xl items-center font-bold">CARRINHO - OGGI FEST </h1> */}
-      <div className="flex-1 container-agender p-1">
-        <header className="flex w-full p-1 items-center justify-between border-b ">
-          
-          <div className="relative ">
-            <input value={termoBusca} onChange={(e) => setTermoBusca(e.target.value)}type="text" placeholder="Buscar por nome" className="w-96 border p-2 rounded" />
-            <FaSearch className="absolute right-3 top-3 text-gray-500 " />
-          </div>
-          <button onClick={handleClosenMenu} className="bg-pink-600 text-white p-2 rounded-full ">
-            <FaPlus />
-          </button>
-        </header>
-        <MenuPrincipal open={open} handleClosenMenu={handleClosenMenu}/>
-      
-        <div className="flex-col  bg-white mt-1  p-1  shadow">
-          <aside className="flex w-3/4 justify-between">
-            <p className="text-purple-600 italic">{formattedDate} </p> 
-            <p className="count"> Alugados: { agendamentosFiltrados.length}</p></aside>
-          <Calendar onChange={setSelectedDate} value={selectedDate} className="calendar " />
+    <div className="flex ">
+      <aside className={`flex-col bg-blue-950 text-white  min-w-12 min-h-screen ${openSide ? "open-side" : ""}`} style={{backgroundColor:'#37A2C2'}}>
+        <div className="flex items-center justify-between w-full p-2 gap-1  ">
+          <p>Menu</p>
+          <button onClick={handleCloseSideBar} className="font-bold text-2xl"><IoMdMenu/></button>
         </div>
-
-        {/* Agendamentos */}
-        <div className="mt- agendamento bg-white p-1  shadow">
-          <h2 className="text-lg font-semibold ">
-            {new Date().toDateString() === selectedDate.toDateString() ? 'Hoje' : `Agendamentos para ${selectedDate.toLocaleDateString("pt-BR")}`}
-          </h2>
-
-          {agendamentosFiltrados.length > 0 ? (
-              <ul className="mt-2">
-                {agendamentosFiltrados.map((evento) => (
-                  <div key={evento.id} className="flex items-center border-b py-2">
-                    <div className="w-2 h-8 bg-yellow-500 mr-2"></div>
-                    <span className="mr-2 flex-1">⌚{evento.horario}</span>
-                    <span className="flex-1">{evento.nome}</span>
-                    <span className="font-bold flex-1">Pedido: {evento.pedido}</span>
-                    <span className="flex-1">{evento.status} {evento.status === "Pago" ? '✔' : evento.status === "Entrada" ?  '⚠' :'❌'}</span>
-                 </div>
-                ))}
-              </ul>
+      </aside>
+      <section className=" flex-1  section-agender">
+        <h1 className=" flex-1 text-center font-bold p-2 text-xl text-pink-600" style={{backgroundColor:'#EAE8E1'}}>CARRINHO - OGGI FEST </h1>
+        <div className="flex-1 container-agender p-1">
+          <header className="flex w-full p-1 items-center justify-between border-b ">
             
-          ):(
-            <p className="text-gray-500 text-center mt-2">Nenhum agendamento</p>
-          )}
-        </div>  
-      </div> 
+            <div className="relative bg-blue-50">
+              <input value={termoBusca} onChange={(e) => setTermoBusca(e.target.value)}type="text" placeholder="Buscar por nome" className="w-96 border p-2 rounded" />
+              <FaSearch className="absolute right-3 top-3 text-pink-600 " />
+            </div>
+            <button onClick={handleClosenMenu} className="bg-pink-600 text-white p-2 rounded-full ">
+              <FaPlus />
+            </button>
+          </header>
+          <MenuPrincipal open={open} handleClosenMenu={handleClosenMenu}/>
+        
+          <div className="flex-col  bg-white mt-1  p-1  shadow">
+            <aside className="flex w-3/4 justify-between">
+              <p className="text-purple-600 italic">{formattedDate} </p> 
+              <p className="count"> Alugados: { agendamentosFiltrados.length}</p></aside>
+            <Calendar onChange={setSelectedDate} value={selectedDate} className="calendar " />
+          </div>
+
+          {/* Agendamentos */}
+          <div className="mt- agendamento bg-white p-1  shadow">
+            <h2 className="text-lg font-semibold ">
+              {new Date().toDateString() === selectedDate.toDateString() ? 'Hoje' : `Agendamentos para ${selectedDate.toLocaleDateString("pt-BR")}`}
+            </h2>
+
+            {agendamentosFiltrados.length > 0 ? (
+                <ul className="mt-2">
+                  {agendamentosFiltrados.map((evento) => (
+                    <div key={evento.id} className="flex items-center border-b py-2">
+                      <div className="w-2 h-8 bg-yellow-500 mr-2"></div>
+                      <span className="mr-2 flex-1">⌚{evento.horario}</span>
+                      <span className="flex-1">{evento.nome}</span>
+                      <span className="font-bold flex-1">Pedido: {evento.pedido}</span>
+                      <span className="flex-1">{evento.status} {evento.status === "Pago" ? '✔' : evento.status === "Entrada" ?  '⚠' :'❌'}</span>
+                  </div>
+                  ))}
+                </ul>
+              
+            ):(
+              <p className="text-gray-500 text-center mt-2">Nenhum agendamento</p>
+            )}
+          </div>  
+        </div> 
+      </section>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 {
+  "homepage": " https://sousa-diin.github.io/oggifest/",
   "name": "oggifest-app",
   "private": true,
   "version": "0.0.0",
@@ -7,7 +8,9 @@
     "dev": "concurrently -k \"vite\" \"wait-on http://localhost:5173 && electron .\"",
     "build": "vite build && electron-builder",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "vite build",
+    "deploy": "gh-pages -d dist"
   },
   "main": "electron/main.js",
   "dependencies": {
@@ -34,6 +37,7 @@
     "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.18",
+    "gh-pages": "^6.3.0",
     "globals": "^15.14.0",
     "postcss": "^8.5.3",
     "tailwindcss": "^4.0.8",

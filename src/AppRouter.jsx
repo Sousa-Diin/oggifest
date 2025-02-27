@@ -9,6 +9,7 @@ import Store from './pages/main/Store';
 import MenuPrincipal from "./components/menumain/MenuPrincipal";
 import OggiFest from './pages/oggicar/OggiFest';
 import LoginSplash from "./pages/login/splash/LoginSplash";
+import Agendamentos from "./pages/Agendamentos";
 const AppRouter =() => {
    
   return(
@@ -19,6 +20,7 @@ const AppRouter =() => {
         <Route path="/oggi/main/store" element={<Store/>} />             
         <Route path="/oggi/main/menu" element={<MenuPrincipal/>} />
         <Route path="/oggi/main/car" element={<OggiFest/>} />
+        <Route path="/oggi/agendamentos" element={<Agendamentos/>}/>
                      
         {/* <Route path="*" element={<PageNotFound/>} />  */}          
       </Routes>

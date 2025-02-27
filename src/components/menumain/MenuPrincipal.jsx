@@ -47,10 +47,10 @@ const MenuPrincipal = ({ open, handleClosenMenu }) => {
           className="flex flex-col p-2 justify-between bg-mygelowhite h-72"
           onSubmit={handleSubmit}
         >
-          <div className="flex flex-row justify-around items-center">
-            <label htmlFor="nome" className="p-2">
+          <div className="flex flex-row justify-between items-center">
+            <label htmlFor="nome" className="  w-25 p-2 ">
               Nome:
-            </label>
+            </label> 
             <input
               id="nome"
               value={formData.nome}
@@ -64,7 +64,7 @@ const MenuPrincipal = ({ open, handleClosenMenu }) => {
           </div>
 
           <div className="flex flex-row justify-around items-center">
-            <label htmlFor="order" className="p-2">
+            <label htmlFor="order" className="p-2  w-25 ">
               Pedido:
             </label>
             <input
@@ -80,7 +80,7 @@ const MenuPrincipal = ({ open, handleClosenMenu }) => {
           </div>
 
           <div className="flex flex-row justify-around items-center">
-            <label htmlFor="hour" className="p-2">
+            <label htmlFor="hour" className="p-2  w-25 ">
               Horário:
             </label>
             <input
@@ -95,7 +95,7 @@ const MenuPrincipal = ({ open, handleClosenMenu }) => {
           </div>
 
           <div className="flex flex-row justify-around items-center">
-            <label htmlFor="data" className="p-2">
+            <label htmlFor="data" className="p-2 w-25 ">
               Data:
             </label>
             <input

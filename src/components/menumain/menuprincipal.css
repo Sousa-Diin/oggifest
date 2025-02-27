@@ -56,9 +56,11 @@
 } */
 
 .open-menu {
+  width:100%;
+  max-width:900px;
   top: 0;
   opacity: 1;
-  min-height: 85dvh;
+  min-height: 75dvh;
   max-height: 0;
   visibility: visible;
   z-index: 1;

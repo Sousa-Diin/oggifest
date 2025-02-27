@@ -8,7 +8,6 @@ function createWindow() {
       nodeIntegration: true,
     },
   });
-
   win.loadURL('http://localhost:5173');
 }
 

@@ -1,0 +1,44 @@
+/*
+ * Paleta de cor OGGI
+
+*/
+
+
+
+:root {
+  --color-primary: #E52C66;
+  --color-primary-cc: rgb(229, 44, 102,.5);
+  --color-secondary: #37A2C2;
+  --color-purple: #963584;
+  --color-orange: #E59E07;
+  --color-white: #EAE8E1;
+  --color-gelo-white: #fcfcfc;
+  --color-black: #222;
+
+  /* font-family: Verdana, Geneva, Tahoma, sans-serif; */
+  /* font-family: 'Roboto', sans-serif; */
+
+  /* Tons de vermelho */
+--vermelho-escuro: #8B0000;       /* DarkRed */
+--vermelho-sangue: #B22222;       /* FireBrick */
+--vermelho-sangue-cc: rgb(178, 34, 34,.4);       /* FireBrick */
+--vermelho-padrão: #FF0000;       /* Red */
+
+/* Tons de verde */
+--verde-grama: #7CFC00;         /* LawnGreen */
+--verde-grama-cc: rgb(124, 252, 0,.2);         /* LawnGreen */
+--verde-neon: #39FF14;          /* Neon Green */
+
+
+}
+
+*{
+  box-sizing: border-box;
+  
+}
+
+html, body { transition: all 0.3s ease-in-out; /* transição suave */}
+
+
+
+

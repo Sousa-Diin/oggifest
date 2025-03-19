@@ -1,0 +1,26 @@
+.container-faturar-cobrar {
+    display: flex;
+    flex-direction: column;
+
+}
+
+
+
+.hide { display:none ;}
+
+@media only screen and (min-width: 190px) and (max-width: 650px) {
+  .container-faturar-cobrar{
+    background-size: 80%;
+  }
+  
+  .main-menu { 
+    width: 99%; 
+    max-width: 520px; /* Altura pode ser ajustada conforme necessário */
+    height: auto;
+    max-height: 550px;       
+    margin-top: 60px;  /* Menor espaço para header em telas pequenas */
+    margin-bottom: 160dvh; /* Ajuste para o footer em telas pequenas */
+  
+  }
+ 
+}

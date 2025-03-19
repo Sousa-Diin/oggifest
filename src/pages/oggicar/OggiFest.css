@@ -1,0 +1,24 @@
+.open-side{
+  width: 16rem;
+}
+
+.container-agender {
+  background-color: var(--color-white);
+  width: 100%;
+  height: 100dvh;
+}
+
+.calendar {
+  width: 100%;
+  height: 90%;
+  background-color: #fff;
+}
+
+.agendamento {
+  width: 100%;
+}
+
+.count {
+  align-items: center;
+  color: var(--color-secondary);
+}

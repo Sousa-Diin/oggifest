@@ -1,0 +1,33 @@
+@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root {
+  --color-primary: #E52C66;
+  --color-primary-cc: rgba(229, 44, 102, 0.5);
+  --color-secondary: #37A2C2;
+  --color-purple: #963584;
+  --color-orange: #E59E07;
+  --color-white: #EAE8E1;
+  --color-gelo-white: #fcfcfc;
+  --color-black: #222;
+}
+
+/* Exemplo de uso */
+.text-primary {
+  color: var(--color-primary);
+}
+
+.bg-primary {
+  background-color: var(--color-primary);
+}
+
+
+/* Definir altura total da tela para a página */
+html, body {
+  
+  font-family: 'Roboto', sans-serif;
+}
+

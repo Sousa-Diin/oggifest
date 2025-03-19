@@ -1,5 +1,6 @@
-import AppRouter from './AppRouter'
 import './App.css'
+import AppRouter from './AppRouter'
+import Store from './pages/main/Store'
 
 function App() {
 
@@ -7,7 +8,6 @@ function App() {
     <>
       <AppRouter/>
     </>
-    
   )
 }
 

@@ -14,10 +14,10 @@ const AppRouter =() => {
   return(
     <Router>
       <Routes> 
-        <Route path="/oggi/" element={<Store/>} />             
-        <Route path="/oggi/main/menu" element={<MenuPrincipal/>} />
-        <Route path="/oggi/main/car" element={<OggiFest/>} />
-        <Route path="/oggi/agendamentos" element={<Agendamentos/>}/>
+        <Route path="oggifest/" element={<Store/>} />             
+        <Route path="/oggifest/main/menu" element={<MenuPrincipal/>} />
+        <Route path="/oggifest/main/car" element={<OggiFest/>} />
+        <Route path="/oggifest/agendamentos" element={<Agendamentos/>}/>
                      
         {/* <Route path="*" element={<PageNotFound/>} />  */}          
       </Routes>

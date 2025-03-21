@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { agendamentos } from "../service/ListAgendar";
+import url from '../service/api'
+import Papa from 'papaparse';
 
 const AuthContext = createContext({});
 
@@ -11,12 +13,28 @@ const setLocalStorage = (key, value) => {
   }
 };
 
-const getStoredEvents = () => {
+
+// Função para buscar os dados da API e armazenar no localStorage
+export const getData = async () => {
   try {
-    const storeData = JSON.parse(localStorage.getItem("agendaList"));
+    const response = await fetch(url);
+    const csv = await response.text();
+    const json = Papa.parse(csv, { header: true, dynamicTyping: true });
+
+    setLocalStorage("agendamentos", json.data); // Salva no localStorage
+    return json.data;
+  } catch (error) {
+    console.error("Erro ao buscar os dados da API:", error);
+    return [];
+  }
+};
+
+export const getStoredEvents = () => {
+  try {
+    const storeData = JSON.parse(localStorage.getItem("agendamentos"));
 
     if (!storeData){
-      localStorage.setItem("agendaList", JSON.stringify(agendamentos));
+      localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
       return agendamentos;
     }
     return storeData;
@@ -49,7 +67,7 @@ const AuthContextProvider = ({ children }) => {
       const newList = [...prevList, newEvent];
   
       // Salva a lista atualizada no localStorage
-      setLocalStorage("agendaList", newList);
+      setLocalStorage("agendamentos", newList);
   
       return newList;
     });
@@ -59,7 +77,7 @@ const AuthContextProvider = ({ children }) => {
   
 
   return (
-    <AuthContext.Provider value={{ evento, setEvento, addEvento, getStoredEvents }}>
+    <AuthContext.Provider value={{ evento, setEvento, addEvento, getStoredEvents,getData }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,3 +1,6 @@
+import url from  './api';
+import Papa from 'papaparse';
+
 export const agendamentos = [
   { id: 1, data: "2024-12-12", horario: "13:00", status: "Pago", pedido: 32, nome: "Marcela" },
   { id: 2, data: "2024-12-14", horario: "14:00", status: "Pago", pedido: 0, nome: "Flávia" },
@@ -9,3 +12,13 @@ export const agendamentos = [
   { id: 8, data: "2025-05-10", horario: "10:30", status: "Agendado", pedido: NaN, nome: "Maria teste" },
   { id: 9, data: "2025-02-20", horario: "14:30", status: "Pago", pedido: 39, nome: "Tecnotextil" },
 ];
+
+// Função para salvar no localStorage
+const setLocalStorage = (key, value) => {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (error) {
+    console.error("Erro ao salvar no localStorage:", error);
+  }
+};
+

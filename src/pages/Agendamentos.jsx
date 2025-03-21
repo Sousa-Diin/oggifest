@@ -1,18 +1,16 @@
 import { useNavigate } from 'react-router-dom';
 import { IoMdArrowBack } from "react-icons/io";
-import {agendamentos} from '../service/ListAgendar.js'
-
+import { getStoredEvents } from '../provider/AuthContextProvider.jsx';
   
 import React, { useAuth } from "../provider/AuthContextProvider.jsx"
   
   const Agendamentos = () => {
-    const {getStoredEvents} = useAuth();
 
     const appointments  = getStoredEvents();
     const navigate = useNavigate();
 
     const handleChangePage = () => {
-      navigate("/oggi/main/car")
+      navigate("/oggifest/")
     };
 
     return (
@@ -24,11 +22,11 @@ import React, { useAuth } from "../provider/AuthContextProvider.jsx"
         ) : (
           appointments.map((appointment) => (
             <div key={appointment.id} style={{ border: "1px solid #ccc", padding: "10px", margin: "10px" }}>
-              <h3 className='text-[#E59E07] '>{appointment.nome}</h3>
-              <p>Data: {appointment.data}</p>
-              <p>Hora: {appointment.horario}</p>
-              <p>Status: {appointment.status}</p>
-              <pre>Pedido: {appointment.pedido}</pre>
+              <h3 className='text-[#E59E07] '>{appointment.Cliente}</h3>
+              <p>Data: {appointment.Saida}</p>
+              <p>Hora: {appointment.Horario}</p>
+              <p>Status: {appointment.Status}</p>
+              <pre>Pedido: {appointment.Pedido}</pre>
               <button onClick={null}>Remover</button>
             </div>
           ))

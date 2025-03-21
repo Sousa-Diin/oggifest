@@ -2,11 +2,12 @@ import React from 'react';
 import { IoMdMenu } from "react-icons/io";
 import { TfiAgenda } from "react-icons/tfi";
 import '../../pages/oggicar/OggiFest.css'
+import { useNavigate } from 'react-router-dom';
 
 export const SideBar = ({openSide, writeTitle, handleCloseSideBar}) => {
-  /* const navigate = useNavigate(); */
+  const navigate = useNavigate();
   const handleChangePages = () => {
-    /* navigate("/oggi/agendamentos"); */
+    navigate("/oggifest/agendamentos");
   };
 
   return(

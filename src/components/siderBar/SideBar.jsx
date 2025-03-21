@@ -11,7 +11,7 @@ export const SideBar = ({openSide, writeTitle, handleCloseSideBar}) => {
   };
 
   return(
-    <aside className={`flex-col bg-blue-950 text-white  min-w-12 min-h-screen ${openSide ? "open-side" : ""}`} style={{backgroundColor:'#37A2C2'}}>
+    <aside className={`flex-col bg-blue-950 text-white  min-w-12 min-h-dvh ${openSide ? "open-side" : ""}`} style={{backgroundColor:'#37A2C2'}}>
       <div onClick={handleCloseSideBar} className="flex items-center justify-between w-full p-2 gap-1  ">
           <p>{writeTitle ? 'Menu' : ''}</p>
           <button onClick={handleCloseSideBar} className="font-bold text-2xl"><IoMdMenu/></button>

@@ -17,22 +17,22 @@ export default function OggiFest() {
   const [writeTitle, setWriteTitle] = useState(false);
   const [agendamentos, setAgendamentos] = useState(getStoredEvents());
   getData();
-
   const formattedDate = new Intl.DateTimeFormat("pt-BR", {
     weekday: "long", // Nome do dia da semana (ex: "terça-feira")
     day: "2-digit",  // Dia com dois dígitos (ex: "19")
     month: "long",   // Nome do mês (ex: "fevereiro")
     year: "numeric"  // Ano completo (ex: "2025")
   }).format(selectedDate);
-
+  
   const formatarData = (date) => date.toISOString().split("T")[0];
+  //console.log('Date: ', formatarData( selectedDate));
   
   const agendamentosFiltrados = listLocalStorageAgender
-    .filter( (evento) =>  evento.Saida === selectedDate)
+    .filter( (evento) =>  formatarData(new Date(evento.Saida)) === formatarData(selectedDate))
     .sort((a, b) => a.Horario.localeCompare(b.Horario));
 
   return (
-    <div className="flex ">
+    <div className="flex min-h-full">
       <SideBar openSide={openSide} writeTitle={writeTitle} handleCloseSideBar={() => handleOpenSide(!openSide)} />
       <section className="flex-1 section-agender">
         <h1 className="flex-1 text-center font-bold p-2 text-xl text-pink-600" style={{ backgroundColor: '#EAE8E1' }}>
@@ -56,7 +56,7 @@ export default function OggiFest() {
           </header>
           <MenuPrincipal open={open} handleClosenMenu={() => handleOpenMenu(!open)} />
           
-          <div className="flex-col bg-white mt-1 p-1 shadow">
+          <div className="flex-col bg-white mt-1 p-1  shadow">
             <aside className="flex w-3/4 justify-between">
               <p className="text-purple-600 italic">{formattedDate}</p>
               <p className="count">Alugados: {agendamentosFiltrados.length}</p>

@@ -13,8 +13,6 @@ export default function OggiFest() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [termoBusca, setTermoBusca] = useState("");
   const [open, handleOpenMenu] = useState(false);
-  const [openSide, handleOpenSide] = useState(false);
-  const [writeTitle, setWriteTitle] = useState(false);
   const [agendamentos, setAgendamentos] = useState(getStoredEvents());
   getData();
   const formattedDate = new Intl.DateTimeFormat("pt-BR", {
@@ -32,8 +30,8 @@ export default function OggiFest() {
     .sort((a, b) => a.Horario.localeCompare(b.Horario));
 
   return (
-    <div className="flex min-h-full">
-      <SideBar openSide={openSide} writeTitle={writeTitle} handleCloseSideBar={() => handleOpenSide(!openSide)} />
+    <div className="flex h-full lg:w-dvw lg:h-dvh">
+      
       <section className="flex-1 section-agender">
         <h1 className="flex-1 text-center font-bold p-2 text-xl text-pink-600" style={{ backgroundColor: '#EAE8E1' }}>
           CARRINHO - OGGI FEST

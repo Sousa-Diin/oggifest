@@ -14,14 +14,14 @@ import React, { useAuth } from "../provider/AuthContextProvider.jsx"
     };
 
     return (
-      <div>
+      <div className='flex flex-wrap'>
         <button onClick={handleChangePage}><IoMdArrowBack/></button>
         <h2>Lista de Agendamentos</h2>
         {appointments.length === 0 ? (
           <p>Nenhum agendamento encontrado.</p>
         ) : (
           appointments.map((appointment) => (
-            <div key={appointment.id} style={{ border: "1px solid #ccc", padding: "10px", margin: "10px" }}>
+            <div className='w-50' key={appointment.id} style={{ border: "1px solid #ccc", padding: "10px", margin: "10px" }}>
               <h3 className='text-[#E59E07] '>{appointment.Cliente}</h3>
               <p>Data: {appointment.Saida}</p>
               <p>Hora: {appointment.Horario}</p>

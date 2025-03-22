@@ -4,6 +4,11 @@
 
 }
 
+.aside-content {  
+  width: 95dvw;
+  margin-left: 5%;
+}
+
 
 
 .hide { display:none ;}
@@ -12,15 +17,5 @@
   .container-faturar-cobrar{
     background-size: 80%;
   }
-  
-  .main-menu { 
-    width: 99%; 
-    max-width: 520px; /* Altura pode ser ajustada conforme necessário */
-    height: auto;
-    max-height: 550px;       
-    margin-top: 60px;  /* Menor espaço para header em telas pequenas */
-    margin-bottom: 160dvh; /* Ajuste para o footer em telas pequenas */
-  
-  }
- 
+
 }

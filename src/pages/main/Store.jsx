@@ -7,16 +7,18 @@ import { SideBar } from '../../components/siderBar/SideBar';
 
 
 function Store() {
-  const [openOggiPage, setOpenOggiPage] = useState(true); //muda de pagina
-  const [openAgendamentoPage, setOpenAgendamentoPage] = useState(false); //muda de pagina
+  const [openPage, setOpenPage] = useState(true); //muda de pagina
 
   return (
     <main className='flex'>
-      <SideBar  />
+      <SideBar openPage={openPage} setOpenPage={setOpenPage}  />
+      <div className='aside-content overflow-y-auto'>
+        {openPage ? 
+          <OggiFest/> :
+          <Agendamentos openPage={openPage} setOpenPage={setOpenPage}/>
+        }
+      </div>
       
-      {openOggiPage ? <OggiFest/> :
-        <Agendamentos/>
-      }
       
     
     </main>

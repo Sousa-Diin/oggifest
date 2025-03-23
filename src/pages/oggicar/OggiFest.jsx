@@ -4,6 +4,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import './OggiFest.css'
 import MenuPrincipal from "../../components/menumain/MenuPrincipal";
+import CustomWindow from "../../components/menumain/CustomWindow";
 import { SideBar } from "../../components/siderBar/SideBar";
 import { getData, getStoredEvents } from '../../provider/AuthContextProvider'
 

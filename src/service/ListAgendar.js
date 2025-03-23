@@ -1,5 +1,3 @@
-import url from  './api';
-import Papa from 'papaparse';
 
 export const agendamentos = [
   { id: 1, data: "2024-12-12", horario: "13:00", status: "Pago", pedido: 32, nome: "Marcela" },
@@ -14,11 +12,4 @@ export const agendamentos = [
 ];
 
 // Função para salvar no localStorage
-const setLocalStorage = (key, value) => {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-  } catch (error) {
-    console.error("Erro ao salvar no localStorage:", error);
-  }
-};
 

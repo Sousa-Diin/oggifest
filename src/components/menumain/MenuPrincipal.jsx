@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../provider/AuthContextProvider";
 import StatusCheckpoint from "../check/StatusCheckPoint";
+
+import { X, Minus, Square } from "lucide-react";
+
 import "./menuprincipal.css";
 
 const MenuPrincipal = ({ open, handleClosenMenu }) => {
@@ -38,11 +41,15 @@ const MenuPrincipal = ({ open, handleClosenMenu }) => {
   }, [evento]);
 
   return (
+   
     <div className={`cantainer-main-menu-principal ${open ? "open-menu" : ""}`}>
+      
       <section className="cantainer-main-menu-principal-cmd">
+        
         <h5 className="text-2xl text-center text-purple-600">
           Agendar carrinho
         </h5>
+        
         <form
           className="flex flex-col p-2 justify-between bg-mygelowhite h-72"
           onSubmit={handleSubmit}

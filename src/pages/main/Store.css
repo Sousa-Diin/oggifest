@@ -4,18 +4,16 @@
 
 }
 
-.aside-content {  
-  width: 95dvw;
-  margin-left: 5%;
-}
-
 
 
 .hide { display:none ;}
 
-@media only screen and (min-width: 190px) and (max-width: 650px) {
-  .container-faturar-cobrar{
-    background-size: 80%;
+@media only screen and (min-width: 1440px) {
+  .aside-content {  
+    width: 100dvw;
+    height: 100%;
+    margin-left: 2.8%;
   }
+  
 
 }

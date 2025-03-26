@@ -31,7 +31,7 @@ export default function OggiFest() {
     .sort((a, b) => a.Horario.localeCompare(b.Horario));
 
   return (
-    <div className="flex h-full lg:w-dvw lg:h-dvh">
+    <div className="flex h-full  lg:h-dvh">
       
       <section className="flex-1 section-agender">
         <h1 className="flex-1 text-center font-bold p-2 text-xl text-pink-600" style={{ backgroundColor: '#EAE8E1' }}>
@@ -62,7 +62,7 @@ export default function OggiFest() {
             </aside>
             <Calendar onChange={setSelectedDate} value={selectedDate} className="calendar" />
           </div>
-          <div className="mt-2 agendamento bg-white p-1 shadow">
+          <div className="mt-2 agendamento bg-white p-1 ">
             <h2 className="text-lg font-semibold">
               {new Date().toDateString() === selectedDate.toDateString() ? 'Hoje' : `Agendamentos para ${selectedDate.toLocaleDateString("pt-BR")}`}
             </h2>

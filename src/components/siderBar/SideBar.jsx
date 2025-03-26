@@ -10,7 +10,7 @@ export const SideBar = ({openPage, setOpenPage}) => {
   };
 
   return(
-    <aside className='flex-col bg-blue-950 text-white fixed w-12 min-h-dvh' style={{backgroundColor:'#37A2C2'}}>
+    <aside className='flex-col bg-blue-950 text-white fixed w-10 min-h-dvh z-1 @max-[300]:opacity' style={{backgroundColor:'#37A2C2'}}>
       <div onClick={handleChangePages} className="flex items-center justify-between w-full p-2 gap-1  ">
           <button onClick={{}} className="font-bold text-2xl"><IoMdMenu/></button>
       </div>

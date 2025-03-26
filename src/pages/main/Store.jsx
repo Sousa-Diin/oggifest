@@ -10,9 +10,9 @@ function Store() {
   const [openPage, setOpenPage] = useState(true); //muda de pagina
 
   return (
-    <main className='flex'>
+    <main className='flex w-full min-h-dvh bg-[#EAE8E1]'>
       <SideBar openPage={openPage} setOpenPage={setOpenPage}  />
-      <div className='aside-content overflow-y-auto'>
+      <div className='aside-content ml-10.5 md:ml-14 overflow-y-auto'>
         {openPage ? 
           <OggiFest/> :
           <Agendamentos openPage={openPage} setOpenPage={setOpenPage}/>

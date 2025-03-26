@@ -4,11 +4,13 @@
 
 }
 
-
+.aside-content {
+  margin-left: 4dvw;
+}
 
 .hide { display:none ;}
 
-@media only screen and (min-width: 1440px) {
+@media only screen and (min-width: 1450px) {
   .aside-content {  
     width: 100dvw;
     height: 100%;

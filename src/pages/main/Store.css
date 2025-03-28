@@ -1,21 +1,15 @@
-.container-faturar-cobrar {
-    display: flex;
-    flex-direction: column;
 
+.store-main{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.aside-content {
-  margin-left: 4dvw;
-}
 
 .hide { display:none ;}
 
-@media only screen and (min-width: 1450px) {
-  .aside-content {  
-    width: 100dvw;
-    height: 100%;
-    margin-left: 2.8%;
-  }
+@media only screen and (min-width: 1024px) and (max-width:2560px){
+
   
 
 }

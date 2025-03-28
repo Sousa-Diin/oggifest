@@ -3,6 +3,7 @@ import { IoMdArrowBack } from "react-icons/io";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineModeEditOutline } from "react-icons/md";
 import { getStoredEvents } from '../provider/AuthContextProvider.jsx';
+import './Agendamentos.css'
   
   const Agendamentos = ({openPage, setOpenPage}) => {
 
@@ -14,36 +15,45 @@ import { getStoredEvents } from '../provider/AuthContextProvider.jsx';
     };
 
     return (
-      <div className='flex-col lg:w-full md:dvw items-center'>
-        <div className='flex gap-3 p-2'>
+      <div className='container-data'>
+        <div className='flex gap-3 p-1'>
           <button onClick={handleChangePage}><IoMdArrowBack/></button>
           <p>Lista de Agendamentos</p>
         </div> 
-        <table className='flex-col lg:w-full md:min-w-full'>
-          <tr className="flex lg:justify-around lg:w-full md:w-dvw md:justify-between  p-1 bg-[#E59E07]">
-            {listCabecalhoSheet.map( (title) => ( <td className="">{title}</td>))}
+        <table className='container-data-table'>
+          <tr className="flex  title-cabecalho justify-between  bg-[#E59E07]">
+            {/* {listCabecalhoSheet.map( (title) => ( <tr className="">{title}</tr>))} */}
+            <td className="w-12 text-center"> Id</td>
+            <td className="w-30 text-center"> Saida</td>
+            <td className="w-15 text-center"> Horario</td>
+            <td className="w-60 text-center"> Cliente</td>
+            <td className="w-20 text-center"> Quantidade</td>
+            <td className="w-40 text-center"> Valor</td>
+            <td className="w-10 text-center"> Pedido</td>
+            <td className="w-25 text-center">Status</td>
+            <td className="w-25 text-center">Ações</td>
           </tr>
-          <tr className='h-96 overflow-y-auto'>
-            <div className=' flex-col p-1 justify-center '>
+          <tr className='field-table'>
+            <div className=''>
               {appointments.length === 0 ? (
                 <p>Nenhum agendamento encontrado.</p>
               ) : (
                 appointments.map((appointment) => (
 
-                  <tr key={appointment.id} className="flex lg:w-full  justify-between lg:mb-1  lg:h-8 items-center text-zinc-700 ">
+                  <tr key={appointment.id} className="field-table-son  text-zinc-700 ">
                          {/* <div className="w-2 h-8 bg-yellow-500 mr-2"></div> */}
 
-                         <td className="bg-[#fcfcfc] lg:w-full md:w-full p-1 shadow ">{appointment.Id}</td>
-                         <td className="bg-[#fcfcfc] lg:w-full md:w-full p-1 shadow  ">{appointment.Saida}</td>
-                         <td className="bg-[#fcfcfc] lg:w-full md:w-full p-1 shadow ">{appointment.Horario}</td>
-                         <td className="bg-[#fcfcfc] lg:w-full md:w-full p-1 shadow  font-bold">{appointment.Cliente}</td>
-                         <td className="bg-[#fcfcfc] lg:w-full md:w-full p-1 shadow ">{appointment.Quantidade}</td>
-                         <td className="bg-[#fcfcfc] lg:w-full md:w-full p-1 shadow ">{appointment.Valor}</td>
-                         <td className="bg-[#fcfcfc] lg:w-full md:w-full p-1 shadow ">{appointment.Pedido}</td>
-                         <td className="bg-[#fcfcfc] lg:w-full md:w-full p-1 shadow ">{appointment.Status} {appointment.Status === "Pago" ? '✔' : appointment.status === "Entrada" ? '⚠' : '❌'}</td>
+                         <td className="w-12 h-8 p-1 shadow ">{appointment.Id}</td>
+                         <td className="w-30 h-8 p-1 shadow  ">{appointment.Saida}</td>
+                         <td className="w-15 h-8 p-1 shadow ">{appointment.Horario}</td>
+                         <td className="w-60 h-8 p-1 shadow  font-bold">{appointment.Cliente}</td>
+                         <td className="w-25 h-8 p-1 shadow ">{appointment.Quantidade}</td>
+                         <td className="w-30 h-8 p-1 shadow ">{appointment.Valor}</td>
+                         <td className="w-15 h-8 p-1 shadow ">{appointment.Pedido}</td>
+                         <td className="w-25 h-8 p-1 shadow ">{appointment.Status} {appointment.Status === "Pago" ? '✔' : appointment.status === "Entrada" ? '⚠' : '❌'}</td>
                          <div className=' flex '>
-                            <button className='lg:w-13 p-2  bg-[#37A2C2] cursor-pointer'><MdOutlineModeEditOutline /></button>
-                            <button className='lg:w-13 p-2  bg-[#37A2C2] cursor-pointer'><RiDeleteBin6Line /></button>
+                            <button onClick={()=> alert('Função desabilitada.')} className=' btn-edit p-2 bg-[#37A2C2] shadow cursor-pointer'><MdOutlineModeEditOutline /></button>
+                            <button onClick={()=> alert('Função desabilitada.')} className=' btn-delete p-2 bg-[#37A2C2] shadow cursor-pointer'><RiDeleteBin6Line /></button>
                          </div>
                   </tr>
                 ))

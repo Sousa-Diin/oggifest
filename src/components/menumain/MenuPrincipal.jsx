@@ -7,18 +7,18 @@ import { X, Minus, Square } from "lucide-react";
 import "./menuprincipal.css";
 
 const MenuPrincipal = ({ open, handleClosenMenu }) => {
-  const { evento, addEvento } = useAuth();
+  const { evento, addEvento  } = useAuth();
 
   const [formData, setFormData] = useState({
-    nome: "",
-    pedido: "",
-    horario: "",
-    data: "",
-    status: "",
+    Cliente: "",
+    Pedido: "",
+    Horario: "",
+    Saida: "",
+    Status: "",
   });
 
   const handleStatusChange = (newStatus) => {
-    setFormData((prev) => ({ ...prev, status: newStatus }));
+    setFormData((prev) => ({ ...prev, Status: newStatus }));
   };
 
   const handleSubmit = (e) => {
@@ -32,11 +32,11 @@ const MenuPrincipal = ({ open, handleClosenMenu }) => {
 
   useEffect(() => {
     setFormData({
-      nome: "",
-      pedido: "",
-      horario: "",
-      data: "",
-      status: "",
+      Cliente: "",
+      Pedido: "",
+      Horario: "",
+      Saida: "",
+      Status: "",
     });
   }, [evento]);
 
@@ -60,9 +60,9 @@ const MenuPrincipal = ({ open, handleClosenMenu }) => {
             </label> 
             <input
               id="nome"
-              value={formData.nome}
+              value={formData.Cliente}
               onChange={(e) =>
-                setFormData({ ...formData, nome: e.target.value })
+                setFormData({ ...formData, Cliente: e.target.value })
               }
               type="text"
               placeholder="Digite o nome"
@@ -76,9 +76,9 @@ const MenuPrincipal = ({ open, handleClosenMenu }) => {
             </label>
             <input
               id="order"
-              value={formData.pedido}
+              value={formData.Pedido}
               onChange={(e) =>
-                setFormData({ ...formData, pedido: Number(e.target.value) })
+                setFormData({ ...formData, Pedido: Number(e.target.value) })
               }
               type="number"
               placeholder="Digite número do pedido"
@@ -92,9 +92,9 @@ const MenuPrincipal = ({ open, handleClosenMenu }) => {
             </label>
             <input
               id="hour"
-              value={formData.horario}
+              value={formData.Horario}
               onChange={(e) =>
-                setFormData({ ...formData, horario: e.target.value })
+                setFormData({ ...formData, Horario: e.target.value })
               }
               type="time"
               className="w-96 border p-1 rounded"
@@ -107,9 +107,9 @@ const MenuPrincipal = ({ open, handleClosenMenu }) => {
             </label>
             <input
               id="data"
-              value={formData.data}
+              value={formData.Saida}
               onChange={(e) =>
-                setFormData({ ...formData, data: e.target.value })
+                setFormData({ ...formData, Saida: e.target.value })
               }
               type="date"
               className="w-96 border p-1 rounded"

@@ -1,7 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { agendamentos } from "../service/ListAgendar";
-import url from '../service/api'
-import Papa from 'papaparse';
 
 const AuthContext = createContext({});
 
@@ -13,71 +11,57 @@ const setLocalStorage = (key, value) => {
   }
 };
 
-
-// Função para buscar os dados da API e armazenar no localStorage
-export const getData = async () => {
+const getLocalStorage = (key) => {
   try {
-    const response = await fetch(url);
-    const csv = await response.text();
-    const json = Papa.parse(csv, { header: true, dynamicTyping: true });
-
-    setLocalStorage("agendamentos", json.data); // Salva no localStorage
-    return json.data;
-  } catch (error) {
-    console.error("Erro ao buscar os dados da API:", error);
-    return [];
-  }
-};
-
-export const getStoredEvents = () => {
-  try {
-    const storeData = JSON.parse(localStorage.getItem("agendamentos"));
-
-    if (!storeData){
-      localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
-      return agendamentos;
-    }
-    return storeData;
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : null;
   } catch (error) {
     console.error("Erro ao recuperar do localStorage:", error);
-    return [];
+    return null;
   }
 };
 
 const AuthContextProvider = ({ children }) => {
-  //Estado inicial carregado do localstorage
   const [evento, setEvento] = useState([]);
 
-  // Carregar eventos do localStorage quando o contexto ininicar
+  // Carregar dados ao iniciar
   useEffect(() => {
-   setEvento(getStoredEvents());
+    const loadData = async () => {
+      const stored = getLocalStorage("agendamentos");
+
+      if (stored && stored.length > 0) {
+        setEvento(stored);
+      } else {
+        const apiData = await agendamentos();
+        setEvento(apiData);
+        setLocalStorage("agendamentos", apiData);
+      }
+    };
+
+    loadData();
   }, []);
 
   const addEvento = (ev) => {
-    // Validação para garantir que o evento tenha os campos necessários
-    if (!ev || !ev.nome || !ev.pedido || !ev.horario || !ev.data || !ev.status) {
+    if (!ev || !ev.Cliente || !ev.Pedido || !ev.Horario || !ev.Saida || !ev.Status) {
       console.error("Erro ao adicionar evento: dados inválidos.", ev);
       return;
     }
-  
-    setEvento((prevList) => {
-      const lastId = prevList.length > 0 ? prevList[prevList.length - 1].id : 0; // Pegando último ID
-      const newEvent = { ...ev, id: lastId + 1 }; // Criando evento com novo ID
 
+    setEvento((prevList) => {
+      const lastId = prevList.length > 0 ? prevList[prevList.length - 1].Id || 0 : 0;
+      const newEvent = { ...ev, Id: lastId + 1 };
       const newList = [...prevList, newEvent];
-  
-      // Salva a lista atualizada no localStorage
-      setLocalStorage("agendamentos", newList);
-  
+
+      setLocalStorage("agendamentos", newList); // Salva sempre na mesma chave
+
       return newList;
     });
-  
+
     console.log("Evento adicionado com sucesso:", ev);
   };
-  
 
   return (
-    <AuthContext.Provider value={{ evento, setEvento, addEvento, getStoredEvents,getData }}>
+    <AuthContext.Provider value={{ evento, setEvento, addEvento }}>
       {children}
     </AuthContext.Provider>
   );
@@ -85,7 +69,6 @@ const AuthContextProvider = ({ children }) => {
 
 export default AuthContextProvider;
 
-// Hook personalizado para usar o contexto
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {

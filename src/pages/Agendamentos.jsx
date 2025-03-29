@@ -2,13 +2,13 @@ import { useNavigate } from 'react-router-dom';
 import { IoMdArrowBack } from "react-icons/io";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineModeEditOutline } from "react-icons/md";
-import { getStoredEvents } from '../provider/AuthContextProvider.jsx';
+import { useAuth } from '../provider/AuthContextProvider.jsx';
 import './Agendamentos.css'
   
   const Agendamentos = ({openPage, setOpenPage}) => {
 
-    const appointments  = getStoredEvents();
-    const listCabecalhoSheet = ['Id', 'Data','Horário','Nome', 'Quantidade','Valor','Pedido','Situação', 'Ações'];
+    const {evento}  = useAuth();
+    //const listCabecalhoSheet = ['Id', 'Data','Horário','Nome', 'Quantidade','Valor','Pedido','Situação', 'Ações'];
     const count = 0;
     const handleChangePage = () => {
       setOpenPage(!openPage);
@@ -35,10 +35,10 @@ import './Agendamentos.css'
           </tr>
           <tr className='field-table'>
             <div className=''>
-              {appointments.length === 0 ? (
+              {evento.length === 0 ? (
                 <p>Nenhum agendamento encontrado.</p>
               ) : (
-                appointments.map((appointment) => (
+                evento.map((appointment) => (
 
                   <tr key={appointment.id} className="field-table-son  text-zinc-700 ">
                          {/* <div className="w-2 h-8 bg-yellow-500 mr-2"></div> */}
@@ -48,9 +48,9 @@ import './Agendamentos.css'
                          <td className="w-15 h-8 p-1 shadow ">{appointment.Horario}</td>
                          <td className="w-60 h-8 p-1 shadow  font-bold">{appointment.Cliente}</td>
                          <td className="w-25 h-8 p-1 shadow ">{appointment.Quantidade}</td>
-                         <td className="w-30 h-8 p-1 shadow ">{appointment.Valor}</td>
+                         <td className={`w-30 h-8 p-1 shadow ${appointment.Valor <  '250' ? 'text-[#ff0000]': ''}`}>R$ {appointment.Valor}</td>
                          <td className="w-15 h-8 p-1 shadow ">{appointment.Pedido}</td>
-                         <td className="w-25 h-8 p-1 shadow ">{appointment.Status} {appointment.Status === "Pago" ? '✔' : appointment.status === "Entrada" ? '⚠' : '❌'}</td>
+                         <td className="w-29 h-8 p-1 shadow ">{appointment.Status} {appointment.Status === "Pago" ? '✔' : appointment.Status === "Entrada" ? '⚠' : '❓'}</td>
                          <div className=' flex '>
                             <button onClick={()=> alert('Função desabilitada.')} className=' btn-edit p-2 bg-[#37A2C2] shadow cursor-pointer'><MdOutlineModeEditOutline /></button>
                             <button onClick={()=> alert('Função desabilitada.')} className=' btn-delete p-2 bg-[#37A2C2] shadow cursor-pointer'><RiDeleteBin6Line /></button>

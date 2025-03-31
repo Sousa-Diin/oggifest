@@ -61,7 +61,7 @@ const AuthContextProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ evento, setEvento, addEvento }}>
+    <AuthContext.Provider value={{ evento, setEvento, addEvento, setLocalStorage }}>
       {children}
     </AuthContext.Provider>
   );

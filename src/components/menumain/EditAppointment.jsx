@@ -2,18 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../provider/AuthContextProvider";
 import StatusCheckpoint from "../check/StatusCheckPoint";
 
-import "./menuprincipal.css";
+/* import "./menuprincipal.css"; */
 
-const MenuPrincipal = ({ message, open, handleClosenMenu, appointment }) => {
+const EditAppoitment = ({ message, appointment,handleClosenMenu }) => {
   const { evento, addEvento  } = useAuth();
 
-  const [formData, setFormData] = useState({
-    Cliente: "",
-    Pedido: "",
-    Horario: "",
-    Saida: "",
-    Status: "",
-  }|| appointment);
+  const [formData, setFormData] = useState(appointment || {});
 
   const handleStatusChange = (newStatus) => {
     setFormData((prev) => ({ ...prev, Status: newStatus }));
@@ -28,21 +22,16 @@ const MenuPrincipal = ({ message, open, handleClosenMenu, appointment }) => {
     handleClosenMenu();
   };
 
+
   useEffect(() => {
-    setFormData({
-      Cliente: "",
-      Pedido: "",
-      Horario: "",
-      Saida: "",
-      Status: "",
-    });
-  }, [evento]);
+    setFormData(appointment || {});  // Atualiza quando o agendamento muda
+  }, [appointment]);
 
   return (
    
-    <div className={`cantainer-main-menu-principal ${open ? "open-menu" : ""}`}>
+    <div className='cantainer-main-menu-principal '>
       
-      <section className="cantainer-main-menu-principal-cmd">
+      <section className="">
         
         <h5 className="text-2xl text-center text-purple-600">
          {message.title}
@@ -132,4 +121,4 @@ const MenuPrincipal = ({ message, open, handleClosenMenu, appointment }) => {
   );
 };
 
-export default MenuPrincipal; 
+export default EditAppoitment; 

@@ -137,9 +137,9 @@ export default function CustomWindow({ message, openWindowEdit, setOpenWindowEdi
       </div>
 
       
-      <form onSubmit={handleSubmit} className="flex flex-col justify-around items-center w-[588px] h-[70%] p-1">
+      <form onSubmit={handleSubmit} className=" flex flex-col justify-around items-center w-[588px] h-[88%] p-1">
         
-        
+        <div  className="w-[100%] flex flex-col gap-2 justify-between">
         <aside className="w-[100%] flex flex-row gap-2 justify-between">
           <input
             className="w-[25%] p-1 bg-[#fff] rounded shadow"
@@ -216,6 +216,7 @@ export default function CustomWindow({ message, openWindowEdit, setOpenWindowEdi
           onChange={(e) => setFormData({ ...formData, Status: e.target.value })}
           placeholder="Status"
         />
+        </div>
 
        
         <div className="mt-2 p-1 flex flex-row w-[99.5%] h-[15%] justify-end gap-3 text-white">

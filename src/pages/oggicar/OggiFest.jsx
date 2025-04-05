@@ -12,6 +12,7 @@ export default function OggiFest() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [termoBusca, setTermoBusca] = useState("");
   const [open, handleOpenMenu] = useState(false);
+
   const message = {
     title: "Agendar Carrinho",
     btnConfirm: "Salvar",
@@ -51,15 +52,16 @@ export default function OggiFest() {
     
   };
 
-  const handleSubmit = (e) => {
+  /* const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Dados do agendamento:", formData);
-
-    addEvento(formData);
+    
+    const convertData = Object.fromEntries(formData.entries());
+    addEvento(convertData);
     alert(message.ok);
     handleOpenMenu();
   };
-
+ */
   return (
     <div className="flex h-full lg:h-dvh">
       <section className="flex-1 section-agender">

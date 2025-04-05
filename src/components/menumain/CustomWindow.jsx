@@ -126,6 +126,8 @@ export default function CustomWindow({ message, openWindowEdit, setOpenWindowEdi
     setOpenWindowEdit(false);
   };
 
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   return (
     <div className="shadow bg-[#EAE8E1] transition-all duration-300 w-[98.5%] h-[98%]">
       
@@ -220,12 +222,14 @@ export default function CustomWindow({ message, openWindowEdit, setOpenWindowEdi
 
        
         <div className="mt-2 p-1 flex flex-row w-[99.5%] h-[15%] justify-end gap-3 text-white">
+          
           <button type="button" className="p-1 rounded bg-[#ff0000]" onClick={() => setOpenWindowEdit(false)}>
             {message.btnCancel}
           </button>
           <button type="submit" className="p-1 rounded bg-[#37A2C2] hover:bg-blue-600">
             {message.btnConfirm}
           </button>
+          
         </div>
       </form>
     </div>

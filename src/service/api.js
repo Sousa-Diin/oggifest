@@ -3,3 +3,4 @@ const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQLk_IahvgeqvN9HSDB
 
 export default url;
 
+export const urlSheets = "https://script.google.com/macros/s/**-**/exec";

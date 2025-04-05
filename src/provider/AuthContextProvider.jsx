@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { agendamentos } from "../service/ListAgendar";
+import { enviarParaPlanilha } from "../service/ListAgendar";
 
 const AuthContext = createContext({});
 
@@ -53,12 +54,43 @@ const AuthContextProvider = ({ children }) => {
       const newList = [...prevList, newEvent];
 
       setLocalStorage("agendamentos", newList); // Salva sempre na mesma chave
-
+      enviarParaPlanilha(newEvent);
       return newList;
     });
 
     console.log("Evento adicionado com sucesso:", ev);
   };
+
+  /* const addEvento = async (ev) => {
+    if (
+      !ev ||
+      !ev.Cliente ||
+      !ev.Pedido ||
+      !ev.Saida ||
+      !ev.Horario ||
+      !ev.Status ||
+      !ev.Entrega 
+    ) {
+      
+      console.error("Erro ao adicionar evento: dados inválidos.", ev);
+      return;
+    }
+  
+    setEvento((prevList) => {
+      const lastId = prevList.length > 0 ? prevList[prevList.length - 1].Id || 0 : 0;
+      const newEvent = { ...ev, Id: lastId + 1 };
+      const newList = [...prevList, newEvent];
+  
+      setLocalStorage("agendamentos", newList);
+  
+      // Disparar a requisição para a API
+      enviarParaPlanilha(newEvent);
+  
+      console.log("Evento adicionado com sucesso:", newEvent);
+      return newList;
+    });
+  }; */
+ 
 
   return (
     <AuthContext.Provider value={{ evento, setEvento, addEvento, setLocalStorage }}>

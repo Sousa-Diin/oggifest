@@ -1,36 +1,37 @@
 .container-data {
-  /* background-color: blue; */
-  width:95.8dvw;
+  background-color: blue;
+  width:95dvw;
   height: 100%;
   ;
 }
 
 .container-data-table{
-  width: 100%;
+  width: 99%;
 }
 
 .title-cabecalho {
-  width: 94.8dvw;
+  width: 95dvw;
 }
 
 .field-table{
-  width: 100%;
+  width: 100%;  
+  height: 500px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  max-height: 525px;
   overflow-y: auto;
 }
 
 .field-table-son{
-  width: 94dvw;
+  width: 95dvw;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content:space-around;
   align-items: center;
-  margin-bottom: .2rem;
+  overflow-y: auto;
+  /* margin-bottom: .1rem; */
   background-color: var(--color-gelo-white);
 }
 

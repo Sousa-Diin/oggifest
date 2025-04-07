@@ -3,7 +3,8 @@ import { DeploymentID } from './authSheets';
 
 import Papa from 'papaparse';
 
-// Função para buscar os dados da API e armazenar no localStorage
+// Função para buscar os dados da API 
+// Method: GET
 export const agendamentos = async () => {
   try {
     const response = await fetch(url);
@@ -17,6 +18,7 @@ export const agendamentos = async () => {
   }
 };
 
+//Method: POST
 export const enviarParaPlanilha = async (evento) => {
   try {
     fetch(`https://script.google.com/macros/s/${DeploymentID}/exec`, {

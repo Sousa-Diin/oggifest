@@ -42,54 +42,30 @@ const AuthContextProvider = ({ children }) => {
     loadData();
   }, []);
 
-  const addEvento = (ev) => {
+  const addEvento = async (ev) => {
     if (!ev || !ev.Cliente || !ev.Pedido || !ev.Horario || !ev.Saida || !ev.Status) {
       console.error("Erro ao adicionar evento: dados inválidos.", ev);
       return;
     }
-
-    setEvento((prevList) => {
-      const lastId = prevList.length > 0 ? prevList[prevList.length - 1].Id || 0 : 0;
-      const newEvent = { ...ev, Id: lastId + 1 };
-      const newList = [...prevList, newEvent];
-
-      setLocalStorage("agendamentos", newList); // Salva sempre na mesma chave
-      enviarParaPlanilha(newEvent);
-      return newList;
-    });
-
-    console.log("Evento adicionado com sucesso:", ev);
+  
+    const prevList = [...evento]; // pega a lista atual
+    const lastId = prevList.length > 0 ? prevList[prevList.length - 1].Id || 0 : 0;
+    const newEvent = { ...ev, Id: lastId + 1 };
+    const newList = [...prevList, newEvent];
+  
+    //console.log("newEvent:", newEvent);
+    //console.log("newList:", newList);
+  
+    // Envia para a planilha
+    await enviarParaPlanilha(newEvent);
+  
+    // Atualiza localStorage e estado
+    localStorage.removeItem("agendamentos");
+    setLocalStorage("agendamentos", newList);
+    setEvento(newList);
+  
+    console.log("Evento adicionado com sucesso:", newEvent);
   };
-
-  /* const addEvento = async (ev) => {
-    if (
-      !ev ||
-      !ev.Cliente ||
-      !ev.Pedido ||
-      !ev.Saida ||
-      !ev.Horario ||
-      !ev.Status ||
-      !ev.Entrega 
-    ) {
-      
-      console.error("Erro ao adicionar evento: dados inválidos.", ev);
-      return;
-    }
-  
-    setEvento((prevList) => {
-      const lastId = prevList.length > 0 ? prevList[prevList.length - 1].Id || 0 : 0;
-      const newEvent = { ...ev, Id: lastId + 1 };
-      const newList = [...prevList, newEvent];
-  
-      setLocalStorage("agendamentos", newList);
-  
-      // Disparar a requisição para a API
-      enviarParaPlanilha(newEvent);
-  
-      console.log("Evento adicionado com sucesso:", newEvent);
-      return newList;
-    });
-  }; */
  
 
   return (

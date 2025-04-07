@@ -1,16 +1,16 @@
 .container-data {
-  background-color: blue;
-  width:95dvw;
-  height: 100%;
+  /* background-color: blue; */
+  width:96dvw;
+  min-height: 100%;
   ;
 }
 
 .container-data-table{
-  width: 99%;
+  width: 100%;
 }
 
 .title-cabecalho {
-  width: 95dvw;
+  width: 96.3dvw;
 }
 
 .field-table{
@@ -40,6 +40,62 @@
   color: var(--color-white);
   transform: scale(.99);
 }
+
+.bg-image-car {
+  background-image: url('../../src/assets/carrinho-oggi-front.png');
+  background-size: 15%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+
+
+  color: var(--color-secondary);
+  font-weight: 700;
+
+}
+
+
+ .no-items-animation {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #37A2C2;
+  animation: moveInDiamond 5s infinite, pulseGlow 2s infinite alternate;
+  text-shadow: 0 0 5px #37A2C2, 0 0 15px #37A2C2;
+}
+
+/* Animação em cruz */
+@keyframes moveInDiamond {
+  
+  0% {
+    transform: translate(0, -100px);           /* Topo (↑) */
+  }
+  40% {
+    transform: translate(100px, 0);            /* Direita (→) */
+  }
+  60% {
+    transform: translate(0, 100px);            /* Baixo (↓) */
+  }
+  80% {
+    transform: translate(-150px, -100px);           /* Esquerda (←) */
+  }
+  100% {
+    transform: translate(0px, -100px);               /* Volta ao centro */
+  }
+}
+
+
+@keyframes pulseGlow {
+  0% {
+    text-shadow: 0 0 5px #37A2C2, 0 0 15px #37A2C2;
+  }
+  100% {
+    text-shadow: 0 0 15px #37A2C2, 0 0 30px #37A2C2;
+  }
+}
+
 
 .btn-delete{
   color: #8B0000;

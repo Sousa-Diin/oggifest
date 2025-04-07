@@ -47,6 +47,7 @@ const AuthContextProvider = ({ children }) => {
       console.error("Erro ao adicionar evento: dados inválidos.", ev);
       return;
     }
+    
   
     const prevList = [...evento]; // pega a lista atual
     const lastId = prevList.length > 0 ? prevList[prevList.length - 1].Id || 0 : 0;

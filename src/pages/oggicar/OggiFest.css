@@ -2,13 +2,14 @@
 
 .container-agender {
   background-color: var(--color-white);
-  width: 100%;
+  width: 95dvw;
   height: 90%;
 }
 
 .calendar {
-  width: 93dvw;
-  height: 80%;
+  margin: 0 auto;
+  width: 80%;
+  height: 56dvh;
   background-color: #fff;
 }
 

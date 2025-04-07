@@ -63,9 +63,9 @@ export default function OggiFest() {
   };
  */
   return (
-    <div className="flex h-full lg:h-dvh">
+    <div className="flex h-[95dvh]">
       <section className="flex-1 section-agender">
-        <h1 className="flex-1 text-center font-bold p-2 text-xl text-pink-600" style={{ backgroundColor: '#EAE8E1' }}>
+        <h1 className="flex-1 text-center font-bold p- text-xl text-pink-600" style={{ backgroundColor: '#EAE8E1' }}>
           CARRINHO - OGGI FEST
         </h1>
         <div className="flex-1 container-agender p-1">
@@ -76,11 +76,11 @@ export default function OggiFest() {
                 onChange={(e) => setTermoBusca(e.target.value)}
                 type="text"
                 placeholder="Buscar por nome"
-                className="w-96 border p-2 rounded"
+                className="w-96 border p-1 rounded"
               />
               <FaSearch className="absolute right-3 top-3 text-pink-600 " />
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-1">
               <button onClick={() => handleOpenMenu(!open)} className="bg-pink-600 text-white p-2 rounded-full">
                 <FaPlus />
               </button>
@@ -90,7 +90,7 @@ export default function OggiFest() {
             </div>
           </header>
           { open ?
-             <aside className='flex items-center justify-center w-[94.5dvw]  h-[100%] absolute top-0'
+             <aside className='flex items-center justify-center w-[94dvw]  h-[100%] absolute top-0'
                 style={{backgroundColor:"rgba(0,0,0,.5)"}}>
                 <div className='flex w-[600px] h-[400px] z-1 items-center justify-center rounded shadow '>
                   <CustomWindow 
@@ -112,16 +112,16 @@ export default function OggiFest() {
             <Calendar onChange={setSelectedDate} value={selectedDate} className="calendar" />
           </div>
 
-          <div className="mt-2 agendamento bg-white p-1">
-            <h2 className="text-lg font-semibold">
+          <div className="mt-1 agendamento bg-white p-1">
+            <p className="text-lg font-semibold">
               {new Date().toDateString() === selectedDate.toDateString() ? 'Hoje' : `Agendamentos para ${selectedDate.toLocaleDateString("pt-BR")}`}
-            </h2>
+            </p>
 
             {agendamentosFiltrados.length > 0 ? (
               <ul className="mt-2">
                 {agendamentosFiltrados.map((ev) => (
-                  <div key={ev.Id} className="flex items-center border-b py-2">
-                    <div className="w-2 h-8 bg-yellow-500 mr-2"></div>
+                  <div key={ev.Id} className="flex items-center border-b py-0.5">
+                    <div className="w-2 h-8 bg-yellow-500 mr-1"></div>
                     <span className="mr-2 flex-1">⌚{ev.Horario}</span>
                     <span className="flex-1">{ev.Cliente}</span>
                     <span className="flex-1">{ev.Quantidade}</span>

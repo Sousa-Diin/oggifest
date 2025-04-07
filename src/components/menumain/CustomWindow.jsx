@@ -116,33 +116,28 @@ export default function CustomWindow({ message, openWindowEdit, setOpenWindowEdi
           placeholder="Status"
         /> */}
         <div className="w-[100%] p-1 shadow">
-          <select
-            value={
-              formData.Valor <= 0
-                ? "Agendado"
-                : formData.Valor < 200
-                ? "Entrada"
-                : formData.Status
-            }
-            onChange={(e) =>setFormData({ ...formData, Status: e.target.value })}
-            disabled={formData.Valor <= 0 || formData.Valor < 200}
-            className={`
-              w-full bg-transparent border 
-              ${
-                formData.Valor <= '0'
-                  ? 'border-blue-400 text-blue-400'
-                  : formData.Valor < 200
-                  ? 'border-yellow-400 text-yellow-400'
-                  : 'border-green-400 text-green-400'
-              } 
-              rounded px-2 py-1 outline-none transition-all duration-300
-              futuristic-select
-            `}
-          >
-            <option value="Agendado">Agendado</option>
-            <option value="Entrada">Entrada</option>
-            <option value="Pago">Pago</option>
-          </select>
+        <select
+          value={formData.Status || "Agendado"}
+          onChange={(e) => setFormData({ ...formData, Status: e.target.value })}
+          className={`
+            w-full bg-transparent border 
+            ${
+              formData.Status === "Agendado"
+                ? 'border-blue-400 text-blue-400'
+                : formData.Status === "Entrada"
+                ? 'border-yellow-400 text-yellow-400'
+                : 'border-green-400 text-green-400'
+            } 
+            rounded px-2 py-1 outline-none transition-all duration-300
+            futuristic-select
+          `}
+        >
+          <option value="Agendado" disabled={formData.Valor > 0}>Agendado</option>
+          <option value="Entrada" disabled={formData.Valor >= 200}>Entrada</option>
+          <option value="Pago" disabled={formData.Valor < 200}>Pago</option>
+
+        </select>
+          
         </div>
 
         </div>

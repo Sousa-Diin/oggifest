@@ -3,7 +3,9 @@ import { IoMdArrowBack } from "react-icons/io";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineModeEditOutline } from "react-icons/md";
 import { useAuth } from '../provider/AuthContextProvider.jsx';
-import './Agendamentos.css'
+import './Agendamentos.css';
+import Notie from '../service/notieService.js';
+
 import { useState, useEffect } from 'react';
   
   const Agendamentos = ({openPage, setOpenPage}) => {
@@ -26,14 +28,21 @@ import { useState, useEffect } from 'react';
       setEvento(newList); // Atualiza o estado na tela
     };
 
-    // Função para excluir item
     const handleDeleteAppointment = (id) => {
-      const confirmDelete = window.confirm("Tem certeza que deseja excluir este agendamento?");
-      if (!confirmDelete) return;
-    
-      const updatedAppointments = evento.filter(item => item.Id !== id);
-      updateLocalStorage('agendamentos', setEvento, updatedAppointments);
+      
+      Notie.confirm(
+        'Deseja mesmo excluir este agendamento?',
+        () => {
+          const updatedAppointments = evento.filter(item => item.Id !== id);
+          updateLocalStorage('agendamentos', setEvento, updatedAppointments);
+          Notie.success('Agendamento removido com sucesso!');
+        },
+        () => {
+          Notie.info('Ação cancelada!');
+        }
+      );
     };
+    
 
     const handleChangePage = () => {
       setOpenPage(!openPage);

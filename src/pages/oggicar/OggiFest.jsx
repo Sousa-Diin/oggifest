@@ -52,16 +52,6 @@ export default function OggiFest() {
     
   };
 
-  /* const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Dados do agendamento:", formData);
-    
-    const convertData = Object.fromEntries(formData.entries());
-    addEvento(convertData);
-    alert(message.ok);
-    handleOpenMenu();
-  };
- */
   return (
     <div className="flex h-[95dvh]">
       <section className="flex-1 section-agender">
@@ -69,7 +59,7 @@ export default function OggiFest() {
           CARRINHO - OGGI FEST
         </h1>
         <div className="flex-1 container-agender p-1">
-          <header className="flex w-full p-1 items-center justify-between border-b">
+          <header className="flex w-[100%] p-1 items-center justify-between border-b">
             <div className="relative bg-blue-50">
               <input 
                 value={termoBusca}
@@ -103,13 +93,18 @@ export default function OggiFest() {
             </aside> : ''
           }
           
-
           <div className="flex-col bg-white mt-1 p-1 shadow">
             <aside className="flex w-3/4 justify-between">
               <p className="text-purple-600 italic">{formattedDate}</p>
               <p className="count">Alugados: {agendamentosFiltrados.length}</p>
             </aside>
-            <Calendar onChange={setSelectedDate} value={selectedDate} className="calendar" />
+            <div className="flex justify-center my-2">
+              <Calendar 
+                onChange={setSelectedDate} 
+                value={selectedDate} 
+                className="react-calendar max-w-full sm:max-w-md md:max-w-lg lg:max-w-xl" 
+              />
+            </div>
           </div>
 
           <div className="mt-1 agendamento bg-white p-1">
@@ -136,6 +131,7 @@ export default function OggiFest() {
               <p className="text-gray-500 text-center mt-2">Nenhum agendamento</p>
             )}
           </div>
+          
         </div>
       </section>
     </div>

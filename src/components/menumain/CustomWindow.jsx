@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../provider/AuthContextProvider";
 import { X } from "lucide-react";
+import Notie from "../../service/notieService";
 
 export default function CustomWindow({ message, openWindowEdit, setOpenWindowEdit, appointment }) {
   const { evento, addEvento } = useAuth();
@@ -14,16 +15,16 @@ export default function CustomWindow({ message, openWindowEdit, setOpenWindowEdi
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(formData.Status === ""){
+      Notie.alert("Selecione um status!");
+      return;
+    }
     console.log("Dados do agendamento:", formData);
     
     await addEvento(formData); // Espera o envio terminar
-  
-    alert(message.ok);
     setOpenWindowEdit(false);
   };
   
-
-  const apiUrl = import.meta.env.VITE_API_URL;
 
   return (
     <div className="shadow bg-[#EAE8E1] transition-all duration-300 w-[99%] h-[100%]">
@@ -55,6 +56,7 @@ export default function CustomWindow({ message, openWindowEdit, setOpenWindowEdi
             value={formData.Cliente || ''}
             onChange={(e) => setFormData({ ...formData, Cliente: e.target.value })}
             placeholder="Nome"
+            required
           />
         </aside>
         
@@ -65,6 +67,7 @@ export default function CustomWindow({ message, openWindowEdit, setOpenWindowEdi
             type="date"
             name="Saida"
             value={formData.Saida || ''}
+            required
             onChange={(e) => setFormData({ ...formData, Saida: e.target.value })}
           />
           <input
@@ -72,6 +75,7 @@ export default function CustomWindow({ message, openWindowEdit, setOpenWindowEdi
             type="time"
             name="Horario"
             value={formData.Horario || ''}
+            required
             onChange={(e) => setFormData({ ...formData, Horario: e.target.value })}
           />
         </aside>
@@ -85,6 +89,7 @@ export default function CustomWindow({ message, openWindowEdit, setOpenWindowEdi
             value={formData.Pedido || ''}
             onChange={(e) => setFormData({ ...formData, Pedido: e.target.value })}
             placeholder="Pedido"
+            required
           />
           <div className="flex justify-between w-[65%]">
             <input
@@ -94,6 +99,7 @@ export default function CustomWindow({ message, openWindowEdit, setOpenWindowEdi
               value={formData.Quantidade || ''}
               onChange={(e) => setFormData({ ...formData, Quantidade: e.target.value })}
               placeholder="Quantidade"
+              required
             />
             <input
               className={`w-[49%] p-1 bg-[#fff] rounded shadow ${Number(formData.Valor) < 250 ? 'text-[#ff0000]' : ''}`} 
@@ -102,22 +108,13 @@ export default function CustomWindow({ message, openWindowEdit, setOpenWindowEdi
               value={formData.Valor || ''}
               onChange={(e) => setFormData({ ...formData, Valor: e.target.value })}
               placeholder="Valor"
+              required
             />
           </div>
         </aside>
-
-        
-        {/* <input
-          className="p-1 bg-[#fff] rounded shadow w-[100%] text-center"
-          type="text"
-          name="Status"
-          value={formData.Status || ''}
-          onChange={(e) => setFormData({ ...formData, Status: e.target.value })}
-          placeholder="Status"
-        /> */}
         <div className="w-[100%] p-1 shadow">
         <select
-          value={formData.Status || "Agendado"}
+          value={formData.Status || ""}
           onChange={(e) => setFormData({ ...formData, Status: e.target.value })}
           className={`
             w-full bg-transparent border 
@@ -126,17 +123,20 @@ export default function CustomWindow({ message, openWindowEdit, setOpenWindowEdi
                 ? 'border-blue-400 text-blue-400'
                 : formData.Status === "Entrada"
                 ? 'border-yellow-400 text-yellow-400'
-                : 'border-green-400 text-green-400'
+                : formData.Status === "Pago"
+                ? 'border-green-400 text-green-400'
+                : 'border-red-400 text-red-400'
             } 
             rounded px-2 py-1 outline-none transition-all duration-300
             futuristic-select
           `}
         >
-          <option value="Agendado" disabled={formData.Valor > 0}>Agendado</option>
-          <option value="Entrada" disabled={formData.Valor >= 200}>Entrada</option>
-          <option value="Pago" disabled={formData.Valor < 200}>Pago</option>
+  <option value="" disabled>Selecione o status</option>
+  <option value="Agendado" disabled={formData.Valor > 0}>Agendado</option>
+  <option value="Entrada" disabled={formData.Valor >= 200}>Entrada</option>
+  <option value="Pago" disabled={formData.Valor < 200}>Pago</option>
+</select>
 
-        </select>
           
         </div>
 
@@ -145,7 +145,7 @@ export default function CustomWindow({ message, openWindowEdit, setOpenWindowEdi
        
         <div className="mt-2 p-1 flex flex-row w-[99.5%] h-[15%] justify-end gap-3 text-white">
           
-          <button type="button" className="p-1 rounded bg-[#ff0000]" onClick={() => setOpenWindowEdit(false)}>
+          <button type="button" className="p-1 rounded bg-[#ff0000]" onClick={() =>{ setOpenWindowEdit(false); Notie.error(message.error) }}>
             {message.btnCancel}
           </button>
           <button type="submit" className="p-1 rounded bg-[#37A2C2] hover:bg-blue-600">

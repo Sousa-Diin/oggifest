@@ -23,6 +23,14 @@ const getLocalStorage = (key) => {
   }
 };
 
+const formatarData = (date) => {
+  if (!(date instanceof Date) || isNaN(date)) {
+    console.error("Data inválida:", date);
+    return ""; // Retorna uma string vazia para evitar erro
+  }
+  return date.toISOString().split("T")[0];
+};
+
 const AuthContextProvider = ({ children }) => {
   const [evento, setEvento] = useState([]);
 
@@ -55,6 +63,10 @@ const AuthContextProvider = ({ children }) => {
       Notie.alert("Erro ao adicionar evento: status inválido.");
       console.error("Evento inválido:", ev);
       return;
+    }else if (ev.Status === undefined) {
+      Notie.alert("Erro ao adicionar evento: status não definido.");
+      console.error("Evento inválido:", ev.Status);
+      return;
     }
   
     const prevList = [...evento];
@@ -72,7 +84,9 @@ const AuthContextProvider = ({ children }) => {
   };
   
   return (
-    <AuthContext.Provider value={{ evento, setEvento, addEvento, setLocalStorage }}>
+    <AuthContext.Provider value={
+      { evento, setEvento, addEvento, setLocalStorage, formatarData }
+    }>
       {children}
     </AuthContext.Provider>
   );

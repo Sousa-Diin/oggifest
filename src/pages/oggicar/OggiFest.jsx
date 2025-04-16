@@ -1,13 +1,15 @@
 import { useState } from "react";
-import { FaSearch, FaPlus, FaTrash } from "react-icons/fa";
+import { FaSearch, FaPlus } from "react-icons/fa";
+import { LuRefreshCcw } from "react-icons/lu";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import './OggiFest.css';
 import CustomWindow from "../../components/menumain/CustomWindow";
 import { useAuth } from '../../provider/AuthContextProvider';
+import Notie from "../../service/notieService";
 
 export default function OggiFest() {
-  const { evento, setEvento, addEvento } = useAuth();
+  const { evento, formatarData } = useAuth();
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [termoBusca, setTermoBusca] = useState("");
@@ -28,14 +30,6 @@ export default function OggiFest() {
     year: "numeric"
   }).format(selectedDate);
 
-  const formatarData = (date) => {
-    if (!(date instanceof Date) || isNaN(date)) {
-      console.error("Data inválida:", date);
-      return ""; // Retorna uma string vazia para evitar erro
-    }
-    return date.toISOString().split("T")[0];
-  };
-
   // 🔍 Filtro por data e termo de busca
   const agendamentosFiltrados = evento
     .filter(
@@ -48,25 +42,25 @@ export default function OggiFest() {
   // 🗑 Função para limpar agendamentos
   const limparAgendamentos = () => {
     localStorage.removeItem('agendamentos');
-    setEvento([]);
-    
+    window.location.reload();
+    Notie.success("Dados atualizados com sucesso!");
   };
 
   return (
-    <div className="flex h-[95dvh]">
-      <section className="flex-1 section-agender">
-        <h1 className="flex-1 text-center font-bold p- text-xl text-pink-600" style={{ backgroundColor: '#EAE8E1' }}>
+    <div className="w-full flex h-full">
+      <section className="bg-[#EAE8E1] w-[95.3dvw] flex flex-col items-center justify-center ">
+        <h1 className="flex-1 text-center font-bold text-xl text-pink-600" style={{ backgroundColor: '#EAE8E1' }}>
           CARRINHO - OGGI FEST
         </h1>
-        <div className="flex-1 container-agender p-1">
+        <div className="w-[100%] flex flex-col  p-1">
           <header className="flex w-[100%] p-1 items-center justify-between border-b">
-            <div className="relative bg-blue-50">
+            <div className="w-[50%] relative bg-blue-50">
               <input 
                 value={termoBusca}
                 onChange={(e) => setTermoBusca(e.target.value)}
                 type="text"
                 placeholder="Buscar por nome"
-                className="w-96 border p-1 rounded"
+                className="w-full border  focus:border-amber-300 sm:font-medium p-1 rounded"
               />
               <FaSearch className="absolute right-3 top-3 text-pink-600 " />
             </div>
@@ -75,14 +69,14 @@ export default function OggiFest() {
                 <FaPlus />
               </button>
               <button onClick={limparAgendamentos} className="bg-red-500 text-white p-2 rounded-full">
-                <FaTrash />
+                <LuRefreshCcw className=""/>
               </button>
             </div>
           </header>
           { open ?
-             <aside className='flex items-center justify-center w-[94dvw]  h-[100%] absolute top-0'
+             <aside className='flex items-center justify-center w-[94.7dvw]  h-full absolute top-0'
                 style={{backgroundColor:"rgba(0,0,0,.5)"}}>
-                <div className='flex w-[600px] h-[400px] z-1 items-center justify-center rounded shadow '>
+                <div className='flex w-[50%] h-[65%] z-1 items-center justify-center rounded shadow '>
                   <CustomWindow 
                     openWindowEdit={open} 
                     setOpenWindowEdit={handleOpenMenu}
@@ -98,7 +92,7 @@ export default function OggiFest() {
               <p className="text-purple-600 italic">{formattedDate}</p>
               <p className="count">Alugados: {agendamentosFiltrados.length}</p>
             </aside>
-            <div className="flex justify-center my-2">
+            <div className="flex justify-center my-1">
               <Calendar 
                 onChange={setSelectedDate} 
                 value={selectedDate} 
@@ -113,15 +107,17 @@ export default function OggiFest() {
             </p>
 
             {agendamentosFiltrados.length > 0 ? (
-              <ul className="mt-2">
+              <ul className="w-full flex flex-col items-center justify-center">
                 {agendamentosFiltrados.map((ev) => (
-                  <div key={ev.Id} className="flex items-center border-b py-0.5">
-                    <div className="w-2 h-8 bg-yellow-500 mr-1"></div>
-                    <span className="mr-2 flex-1">⌚{ev.Horario}</span>
-                    <span className="flex-1">{ev.Cliente}</span>
-                    <span className="flex-1">{ev.Quantidade}</span>
-                    <span className="font-bold flex-1">Pedido: {ev.Pedido}</span>
-                    <span className="flex-1">
+                  <div key={ev.Id} 
+                  className="w-full flex flex-row items-center justify-between border-0 p-1 m-1 rounded-lg shadow-sm"
+                  style={{ backgroundColor: ev.Status === "Pago" ? "#7CFC50" : "#FEE2E2"}}>
+                    <div className="w-2 h-8 rounded-bl rounded-tl bg-yellow-500 "></div>
+                    <span className="">⌚{ev.Horario}</span>
+                    <span className="">{ev.Cliente}</span>
+                    <span className="font-bold">UN: {ev.Quantidade}</span>
+                    <span className="font-bold">Pedido: {ev.Pedido}</span>
+                    <span className="text-sm text-gray-500">
                       {ev.Status} {ev.Status === "Pago" ? '✔' : ev.Status === "Entrada" ? '⚠' : '❓'}
                     </span>
                   </div>

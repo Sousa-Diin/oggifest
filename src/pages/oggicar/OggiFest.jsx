@@ -47,9 +47,9 @@ export default function OggiFest() {
   };
 
   return (
-    <div className="w-full flex h-full">
-      <section className="bg-[#EAE8E1] w-[95.3dvw] flex flex-col items-center justify-center ">
-        <h1 className="flex-1 text-center font-bold text-xl text-pink-600" style={{ backgroundColor: '#EAE8E1' }}>
+    <div className="bg-[#EAE8E1] w-full flex h-dvh p-2">
+      <section className=" w-[94dvw] flex flex-col items-center  ">
+        <h1 className=" text-center font-bold text-xl text-pink-600" style={{ backgroundColor: '#EAE8E1' }}>
           CARRINHO - OGGI FEST
         </h1>
         <div className="w-[100%] flex flex-col  p-1">
@@ -87,16 +87,16 @@ export default function OggiFest() {
             </aside> : ''
           }
           
-          <div className="flex-col bg-white mt-1 p-1 shadow">
+          <div className="w-full flex flex-col bg-white mt-1 p-1 shadow">
             <aside className="flex w-3/4 justify-between">
               <p className="text-purple-600 italic">{formattedDate}</p>
               <p className="count">Alugados: {agendamentosFiltrados.length}</p>
             </aside>
-            <div className="flex justify-center my-1">
+            <div className="flex h-[90%] justify-center my-1">
               <Calendar 
                 onChange={setSelectedDate} 
                 value={selectedDate} 
-                className="react-calendar max-w-full sm:max-w-md md:max-w-lg lg:max-w-xl" 
+                className="react-calendar max-w-full " 
               />
             </div>
           </div>

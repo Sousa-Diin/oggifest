@@ -10,7 +10,7 @@ function App() {
   const [openPage, setOpenPage] = useState(true); //muda de pagina
 
   return (
-    <section className='bg-[#EAE8E1] flex h-[100%]'>
+    <section className='bg-[#EAE8E1] flex h-[100dvh ]'>
       <SideBar  openPage={openPage} setOpenPage={setOpenPage}/>
       <div className='ml-9'>
         {openPage ? 

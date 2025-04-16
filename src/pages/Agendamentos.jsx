@@ -10,7 +10,7 @@ import Notie from '../service/notieService.js';
 
 import { useState, useEffect } from 'react';
   
-  const Agendamentos = ({openPage, setOpenPage}) => {
+  const Agendamentos = ({setActiveComponent }) => {
 
     const { setLocalStorage, formatarData }  = useAuth();
     const [showPasswordModal, setShowPasswordModal] = useState(false);
@@ -63,7 +63,7 @@ import { useState, useEffect } from 'react';
     
 
     const handleChangePage = () => {
-      setOpenPage(!openPage);
+      setActiveComponent('oggifest');
     };
 
     const message = {

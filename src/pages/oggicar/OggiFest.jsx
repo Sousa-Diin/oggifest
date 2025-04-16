@@ -47,7 +47,7 @@ export default function OggiFest() {
   };
 
   return (
-    <div className="bg-[#EAE8E1] w-full flex h-dvh p-2">
+    <div className="bg-[#EAE8E1] w-[100dvw] flex h-dvh p-2">
       <section className=" w-[94dvw] flex flex-col items-center  ">
         <h1 className=" text-center font-bold text-xl text-pink-600" style={{ backgroundColor: '#EAE8E1' }}>
           CARRINHO - OGGI FEST
@@ -59,6 +59,7 @@ export default function OggiFest() {
                 value={termoBusca}
                 onChange={(e) => setTermoBusca(e.target.value)}
                 type="text"
+                disabled
                 placeholder="Buscar por nome"
                 className="w-full border  focus:border-amber-300 sm:font-medium p-1 rounded"
               />
@@ -74,9 +75,9 @@ export default function OggiFest() {
             </div>
           </header>
           { open ?
-             <aside className='flex items-center justify-center w-[94.7dvw]  h-full absolute top-0'
-                style={{backgroundColor:"rgba(0,0,0,.5)"}}>
-                <div className='flex w-[50%] h-[65%] z-1 items-center justify-center rounded shadow '>
+             <aside className='flex items-center justify-center w-[100dvw]  h-full absolute top-0'
+                style={{backgroundColor:"rgba(0,0,0,.5)", width:"100dvw"}}>
+                <div className='flex w-[50%] min-h-[100dvh]  z-1 items-center justify-center rounded shadow '>
                   <CustomWindow 
                     openWindowEdit={open} 
                     setOpenWindowEdit={handleOpenMenu}
@@ -92,7 +93,7 @@ export default function OggiFest() {
               <p className="text-purple-600 italic">{formattedDate}</p>
               <p className="count">Alugados: {agendamentosFiltrados.length}</p>
             </aside>
-            <div className="flex h-[90%] justify-center my-1">
+            <div className="flex h-[90%] min-h-[15dvw] justify-center my-1">
               <Calendar 
                 onChange={setSelectedDate} 
                 value={selectedDate} 

@@ -9,7 +9,8 @@ const PasswordModal = ({ onClose, onConfirm }) => {
   };
 
   return (
-    <div className="fixed inset-0  bg-opacity-50 flex justify-center items-center z-50">
+    <div style={{backgroundColor:"rgba(0,0,0,.4)"}} 
+    className="fixed inset-0  bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white rounded-lg shadow-lg p-6 w-80">
         <h2 className="text-lg font-bold mb-4">Digite a senha para editar</h2>
         <input

@@ -67,6 +67,11 @@ const AuthContextProvider = ({ children }) => {
       Notie.alert("Erro ao adicionar evento: status não definido.");
       console.error("Evento inválido:", ev.Status);
       return;
+    }else if(ev.Valor === 0){
+      Notie.alert("Erro ao adicionar evento: valor zerado.");
+      console.error("Evento inválido:", ev.Valor);
+      return;
+
     }
   
     const prevList = [...evento];
@@ -85,7 +90,7 @@ const AuthContextProvider = ({ children }) => {
   
   return (
     <AuthContext.Provider value={
-      { evento, setEvento, addEvento, setLocalStorage, formatarData }
+      { evento, setEvento, addEvento, setLocalStorage, getLocalStorage, formatarData }
     }>
       {children}
     </AuthContext.Provider>

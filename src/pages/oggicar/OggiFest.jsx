@@ -31,14 +31,32 @@ export default function OggiFest() {
   }).format(selectedDate);
 
   // 🔍 Filtro por data e termo de busca
-  const agendamentosFiltrados = evento
+  /* const agendamentosFiltrados = evento
     .filter(
       (ev) =>
         formatarData(new Date(ev.Saida)) === formatarData(selectedDate) &&
         ev.Cliente.toLowerCase().includes(termoBusca.toLowerCase())
     )
     .sort((a, b) => a.Horario.localeCompare(b.Horario));
+ */
+    const agendamentosFiltrados = evento
+    .filter((ev) => {
+      const dataFormatada = formatarData(new Date(ev.Saida));
+      const termoLower = termoBusca.toLowerCase();
 
+      const correspondeDataSelecionada = dataFormatada === formatarData(selectedDate);
+      const correspondeCliente = ev.Cliente.toLowerCase().includes(termoLower);
+      const correspondeDataBusca = dataFormatada.includes(termoLower);
+
+      if (termoBusca.trim() === "") {
+        return correspondeDataSelecionada;
+      } else {
+        return correspondeCliente || correspondeDataBusca;
+      }
+    })
+    .sort((a, b) => a.Horario.localeCompare(b.Horario));
+
+  
   // 🗑 Função para limpar agendamentos
   const limparAgendamentos = () => {
     localStorage.removeItem('agendamentos');
@@ -47,7 +65,7 @@ export default function OggiFest() {
   };
 
   return (
-    <div className="bg-[#EAE8E1] w-[100dvw] flex h-dvh p-2">
+    <div className="bg-[#EAE8E1] flex h-dvh p-2">
       <section className=" w-[94dvw] flex flex-col items-center  ">
         <h1 className=" text-center font-bold text-xl text-pink-600" style={{ backgroundColor: '#EAE8E1' }}>
           CARRINHO - OGGI FEST
@@ -55,14 +73,14 @@ export default function OggiFest() {
         <div className="w-[100%] flex flex-col  p-1">
           <header className="flex w-[100%] p-1 items-center justify-between border-b">
             <div className="w-[50%] relative bg-blue-50">
-              <input 
-                value={termoBusca}
-                onChange={(e) => setTermoBusca(e.target.value)}
-                type="text"
-                disabled
-                placeholder="Buscar por nome"
-                className="w-full border  focus:border-amber-300 sm:font-medium p-1 rounded"
-              />
+            <input 
+              value={termoBusca}
+              onChange={(e) => setTermoBusca(e.target.value)}
+              type="text"
+              placeholder="Buscar por nome ou data (ex: 11/04/2025)"
+              className="w-full border focus:border-amber-300 sm:font-medium p-1 rounded"
+            />
+
               <FaSearch className="absolute right-3 top-3 text-pink-600 " />
             </div>
             <div className="flex gap-1">
@@ -75,9 +93,9 @@ export default function OggiFest() {
             </div>
           </header>
           { open ?
-             <aside className='flex items-center justify-center w-[100dvw]  h-full absolute top-0'
-                style={{backgroundColor:"rgba(0,0,0,.5)", width:"100dvw"}}>
-                <div className='flex w-[50%] min-h-[100dvh]  z-1 items-center justify-center rounded shadow '>
+             <aside className='inset-0  bg-opacity-50 z-50 flex items-center justify-center w-[94dvw]  min-h-full absolute top-0'
+                style={{backgroundColor:"rgba(0,0,0,.5)", width:"100%"}}>
+                <div className='flex w-[50%] min-h-[100dvh]  items-center justify-center rounded shadow '>
                   <CustomWindow 
                     openWindowEdit={open} 
                     setOpenWindowEdit={handleOpenMenu}
@@ -104,8 +122,13 @@ export default function OggiFest() {
 
           <div className="mt-1 agendamento bg-white p-1">
             <p className="text-lg font-semibold">
-              {new Date().toDateString() === selectedDate.toDateString() ? 'Hoje' : `Agendamentos para ${selectedDate.toLocaleDateString("pt-BR")}`}
+              {termoBusca
+                ? `Resultados para: "${termoBusca}"`
+                : new Date().toDateString() === selectedDate.toDateString()
+                  ? 'Hoje'
+                  : `Agendamentos para ${selectedDate.toLocaleDateString("pt-BR")}`}
             </p>
+
 
             {agendamentosFiltrados.length > 0 ? (
               <ul className="w-full flex flex-col items-center justify-center">

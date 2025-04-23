@@ -5,10 +5,12 @@ import { X } from "lucide-react";
 import Notie from "../../service/notieService";
 
 export default function CustomWindow({ message, openWindowEdit, setOpenWindowEdit, appointment }) {
-  const { evento, addEvento } = useAuth();
+  const { evento, addEvento, setLocalStorage } = useAuth();
   const [formData, setFormData] = useState(appointment || evento || {});
   const [errors, setErrors] = useState({});
 
+  
+  setLocalStorage('currentEvent',appointment);
   useEffect(() => {
     setFormData(appointment || evento || {});
     setErrors({});
@@ -18,6 +20,9 @@ export default function CustomWindow({ message, openWindowEdit, setOpenWindowEdi
     const newErrors = {};
     if (formData.Valor < 0) {
       newErrors.Valor = "Valor não pode ser negativo.";
+    }
+    if (isNaN(formData.Valor) || formData.Valor < 0.01) {
+      newErrors.Valor = "Valor deve ser maior que zero.";
     }
     if (formData.Pedido < 0) {
       newErrors.Pedido = "Pedido não pode ser negativo.";

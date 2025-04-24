@@ -31,15 +31,7 @@ export default function OggiFest() {
   }).format(selectedDate);
 
   // 🔍 Filtro por data e termo de busca
-  /* const agendamentosFiltrados = evento
-    .filter(
-      (ev) =>
-        formatarData(new Date(ev.Saida)) === formatarData(selectedDate) &&
-        ev.Cliente.toLowerCase().includes(termoBusca.toLowerCase())
-    )
-    .sort((a, b) => a.Horario.localeCompare(b.Horario));
- */
-    const agendamentosFiltrados = evento
+   const agendamentosFiltrados = evento
     .filter((ev) => {
       const dataFormatada = formatarData(new Date(ev.Saida));
       const termoLower = termoBusca.toLowerCase();
@@ -77,7 +69,7 @@ export default function OggiFest() {
               value={termoBusca}
               onChange={(e) => setTermoBusca(e.target.value)}
               type="text"
-              placeholder="Buscar por nome ou data (ex: 11/04/2025)"
+              placeholder="Buscar por, Cliente ou dia"
               className="w-full border focus:border-amber-300 sm:font-medium p-1 rounded"
             />
 

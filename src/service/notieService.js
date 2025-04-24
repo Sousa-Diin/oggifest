@@ -46,16 +46,17 @@ const Notie = {
     });
   },
 
-  select(text = 'Escolha uma opção:', options = []) {
+  select(text = 'Escolha uma opção:', options = [], callback) {
     notie.select({
       text,
       cancelText: 'Cancelar',
       choices: options.map(opt => ({
         text: opt.label,
-        handler: opt.onClick
+        handler: () => callback(opt)
       }))
     });
   }
+  
 };
 
 export default Notie;

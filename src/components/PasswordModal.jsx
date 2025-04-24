@@ -15,7 +15,8 @@ const PasswordModal = ({ onClose, onConfirm }) => {
         <h2 className="text-lg font-bold mb-4">Digite a senha para editar</h2>
         <input
           type="password"
-          value={senha}
+          value={senha}          
+          autoComplete="off"
           onChange={(e) => setSenha(e.target.value)}
           className="w-full p-2 border border-gray-300 rounded mb-4"
           placeholder="Senha"

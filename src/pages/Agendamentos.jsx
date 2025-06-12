@@ -100,7 +100,7 @@ const Agendamentos = ({ setActiveComponent }) => {
               { label: 'Todos', value: null },
               { label: 'Pago', value: 'Pago' },
               { label: 'Entrada', value: 'Entrada' },
-              { label: 'Pendente', value: 'Pendente' }
+              { label: 'Agendado', value: 'Agendado' }
             ],
               (selected) => setFiltroStatus(selected.value)
             );
@@ -163,8 +163,16 @@ const Agendamentos = ({ setActiveComponent }) => {
                   <td className="w-25 p-1 shadow">{appointment.Quantidade}</td>
                   <td className={`w-30 p-1 shadow ${Number(appointment.Valor) < 250 ? 'text-[#ff0000]' : ''}`}>R$ {appointment.Valor}</td>
                   <td className="w-15 p-1 shadow">{appointment.Pedido}</td>
-                  <td className="w-29 text-center p-1 shadow">
-                    {appointment.Status} {appointment.Status === "Pago" ? '✔' : appointment.Status === "Entrada" ? '⚠' : '❓'}
+                  <td
+                    className={`w-29 text-center  p-1 shadow ${
+                      appointment.Status === "Pago"
+                        ? "text-[#008000]"
+                        : appointment.Status === "Entrada"
+                        ? "text-[#e9be0b]"
+                        : "text-[#1E3A8A]"
+                    }`}
+                  >
+                    {appointment.Status} {appointment.Status === "Pago" ? '✔' : appointment.Status === "Entrada" ? '⚠' : '❔'}
                   </td>
                   <td className="flex gap-2 justify-center items-center p-1">
                     <button

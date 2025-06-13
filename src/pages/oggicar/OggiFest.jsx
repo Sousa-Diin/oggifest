@@ -31,22 +31,33 @@ export default function OggiFest() {
   }).format(selectedDate);
 
   // 🔍 Filtro por data e termo de busca
-   const agendamentosFiltrados = evento
-    .filter((ev) => {
-      const dataFormatada = formatarData(new Date(ev.Saida));
-      const termoLower = termoBusca.toLowerCase();
+const agendamentosFiltrados = evento
+  .filter((ev) => {
+    const termoLower = (termoBusca || "").toLowerCase();
 
-      const correspondeDataSelecionada = dataFormatada === formatarData(selectedDate);
-      const correspondeCliente = ev.Cliente.toLowerCase().includes(termoLower);
-      const correspondeDataBusca = dataFormatada.includes(termoLower);
+    // Garante que ev.Saida e selectedDate sejam datas válidas
+    const dataSaida = ev?.Saida ? new Date(ev.Saida) : null;
+    const dataSelecionada = selectedDate ? new Date(selectedDate) : null;
 
-      if (termoBusca.trim() === "") {
-        return correspondeDataSelecionada;
-      } else {
-        return correspondeCliente || correspondeDataBusca;
-      }
-    })
-    .sort((a, b) => a.Horario.localeCompare(b.Horario));
+    const dataFormatada = dataSaida ? formatarData(dataSaida) : "";
+    const dataSelecionadaFormatada = dataSelecionada ? formatarData(dataSelecionada) : "";
+
+    const correspondeDataSelecionada = dataFormatada === dataSelecionadaFormatada;
+    const correspondeCliente = (ev?.Cliente || "").toLowerCase().includes(termoLower);
+    const correspondeDataBusca = dataFormatada.includes(termoLower);
+
+    if (termoLower.trim() === "") {
+      return correspondeDataSelecionada;
+    } else {
+      return correspondeCliente || correspondeDataBusca;
+    }
+  })
+  .sort((a, b) => {
+    const horaA = a?.Horario?.toString() || "";
+    const horaB = b?.Horario?.toString() || "";
+    return horaA.localeCompare(horaB);
+  });
+
 
   
   // 🗑 Função para limpar agendamentos

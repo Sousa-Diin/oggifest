@@ -367,5 +367,74 @@ __convertObjToRow(data) {
     return JSON.stringify(result);
   }
 
+  
+   /**
+   * Atualiza um registro com base no ID.
+   *
+   * @param {string} id - Identificador único do registro.
+   * @param {Object} newData - Objeto com os novos dados a atualizar.
+   * @returns {Object|null} Registro atualizado ou null se não encontrado.
+   */
+  update(id, newData) {
+    const headers = this.getHeader();
+    const fieldIndex = headers.indexOf('id');
+    const data = this.__sheetTable.getDataRange().getValues();
+
+    if (fieldIndex === -1) {
+      Logger.log(`Campo "id" não encontrado.`);
+      return null;
+    }
+    
+    const newDataNormalized = {};
+    for (let key in newData) {
+      newDataNormalized[key.toLowerCase()] = newData[key];
+    }
+
+
+
+    for (let i = 1; i < data.length; i++) {
+      if (data[i][fieldIndex] === id) {
+        // Mantém o id original, mesmo se vier no newData
+        const currentRowAsObject = this.convertRowToObject(data[i]);
+        const mergedData = { ...currentRowAsObject, ...newDataNormalized, id }; // Garante o id
+        const updatedRow = this.__convertObjToRow(mergedData);
+
+        this.__sheetTable.getRange(i + 1, 1, 1, updatedRow.length).setValues([updatedRow]);
+        Logger.log(`Registro com ID ${id} atualizado com sucesso.`);
+        Logger.log(JSON.stringify(mergedData, null, 2));
+
+
+        return mergedData;
+      }
+    }
+
+    Logger.log(`ID ${id} não encontrado.`);
+    return null;
+  }
+
+
+  /**
+   * Remove um registro com base no ID.
+   *
+   * @params {string} id - Identificador único do registro.
+   * @returns {boolean} True se removido com sucesso, false se não encontrado.
+   */
+  delete(id) {
+    const headers = this.getHeader();
+    const fieldIndex = headers.indexOf('id');
+    const data = this.__sheetTable.getDataRange().getValues();
+
+    for (let i = 1; i < data.length; i++) {
+      if (data[i][fieldIndex] === id) {
+        this.__sheetTable.deleteRow(i + 1); // +1 porque os dados começam da linha 2
+        Logger.log(`Registro com ID ${id} removido com sucesso.`);
+        return true;
+      }
+    }
+
+    Logger.log(`Registro com ID ${id} não encontrado para exclusão.`);
+    return false;
+  }
+
 
 }

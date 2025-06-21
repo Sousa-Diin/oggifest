@@ -67,7 +67,7 @@ const AuthContextProvider = ({ children }) => {
       Notie.alert("Erro ao adicionar evento: status não definido.");
       console.error("Evento inválido:", ev.Status);
       return;
-    }else if(ev.Valor === 0){
+    }else if(ev.Valor === 0 && ev.Status !== "Agendado") {
       Notie.alert("Erro ao adicionar evento: valor zerado.");
       console.error("Evento inválido:", ev.Valor);
       return;
@@ -79,7 +79,12 @@ const AuthContextProvider = ({ children }) => {
     const newEvent = { ...ev, Id: lastId + 1 };
     const newList = [...prevList, newEvent];
   
-    await enviarParaPlanilha(newEvent);
+    const result = await enviarParaPlanilha(newEvent);
+    if (!result) {
+      Notie.alert("Erro ao enviar dados para a planilha.");
+      console.error("Erro ao enviar dados para a planilha:", evento);
+      return;
+    }
     Notie.success("Evento adicionado com sucesso!");
     localStorage.removeItem("agendamentos");
     setLocalStorage("agendamentos", newList);

@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { agendamentos } from "../service/ListAgendar";
-import { enviarParaPlanilha } from "../service/ListAgendar";
+import { getAllAppointments, createAppointment } from "../service/AppointmentsService"; // Importando o serviço de agendamentos
 import Notie from "../service/notieService"; // Importando o serviço de notificação
 
 const AuthContext = createContext({});
@@ -42,9 +41,10 @@ const AuthContextProvider = ({ children }) => {
       /* if (stored && stored.length > 0) {
         setEvento(stored);
       } else { */
-        const apiData = await agendamentos();
-        setEvento(apiData);
-        setLocalStorage("agendamentos", apiData);
+        const apiData = await getAllAppointments();
+        setEvento(apiData.allAppointments);
+        console.log("Dados carregados da API:", apiData.allAppointments);
+        //setLocalStorage("agendamentos", apiData.allAppointments);
      // }
     };
 
@@ -75,17 +75,16 @@ const AuthContextProvider = ({ children }) => {
     }
   
     const prevList = [...evento];
-    const lastId = prevList.length > 0 ? prevList[prevList.length - 1].Id || 0 : 0;
-    const newEvent = { ...ev, Id: lastId + 1 };
-    const newList = [...prevList, newEvent];
+    const newEvent = { ...ev };
+    const newList = [...prevList];
   
-    const result = await enviarParaPlanilha(newEvent);
+    const result = await createAppointment(newEvent);
     if (!result) {
       Notie.alert("Erro ao enviar dados para a planilha.");
       console.error("Erro ao enviar dados para a planilha:", evento);
       return;
     }
-    Notie.success("Evento adicionado com sucesso!");
+    Notie.success(result.message);
     localStorage.removeItem("agendamentos");
     setLocalStorage("agendamentos", newList);
     setEvento(newList);

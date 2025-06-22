@@ -6,17 +6,25 @@
   color: var(--color-white);
 }
 
-
-.container-data-table{
+.container-data,.container-data-table  {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
+
+.container-data{
+  
+  padding: .2rem;
+}
+
 
 .title-cabecalho {
   width: 95dvw;
 }
 
-.field-table{
-  width: 100%;  
+.field-table{  
   height: 500px;
   display: flex;
   flex-direction: column;

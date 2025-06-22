@@ -2,13 +2,15 @@ import CustomWindow  from '../components/menumain/CustomWindow.jsx'
 import { IoMdArrowBack } from "react-icons/io";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineModeEditOutline } from "react-icons/md";
+import { MdOutlineFilterListOff } from "react-icons/md";
+import { MdClose } from "react-icons/md";
 import { IoFilter } from "react-icons/io5";
 import { useAuth } from '../provider/AuthContextProvider.jsx';
 import './Agendamentos.css';
 import car from '../assets/carrinho-oggi-front.png'
 import PasswordModal from '../components/PasswordModal.jsx';
 import Notie from '../service/notieService.js';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { FormattedDate } from "../util/FormattedDate.js"; // Importando a função de formatação de hora
 
 
@@ -81,8 +83,8 @@ const Agendamentos = ({ setActiveComponent }) => {
   console.log("Eventos.: ", evento);
 
   return (
-    <div className='container-data z-0'>
-      <div className='flex justify-between items-center p-2'>
+    <div className='container-data z-0 '>
+      <div className='flex w-full  justify-between p-2'>
         <section className='flex gap-2 items-center w-[90%]'>
           <button onClick={handleChangePage}><IoMdArrowBack /></button>
           <p>Lista de Agendamentos em</p>
@@ -103,7 +105,7 @@ const Agendamentos = ({ setActiveComponent }) => {
         />
       </div>
 
-      <div className="px-4 pb-2">
+      <div className="flex w-full px-4 pb-2">
         <input
           type="text"
           placeholder="Buscar por, Cliente ou dia"
@@ -112,18 +114,20 @@ const Agendamentos = ({ setActiveComponent }) => {
           autoComplete="off"
           className="w-full p-2 border rounded shadow"
         />
+         { searchTerm ? <MdClose className="relative right-7 top-3 text-pink-600 " onClick={()=>{setSearchTerm('')}} /> : ""}
       </div>
       {filtroStatus === null 
         ? null 
-        : (<div className="text-sm text-gray-600 px-4 pb-2">
+        : (<div className=" flex items-center gap-2 text-sm text-gray-600 px-4 pb-2">
             Filtro ativo: <strong>{filtroStatus}</strong>
+            <MdOutlineFilterListOff onClick={()=> setFiltroStatus(null)} className='text-pink-600'/>
           </div>)
       }
 
       <table className='container-data-table'>
         <thead>
           <tr className=" flex title-cabecalho justify-between bg-[#E59E07]">
-            <th className="w-19 text-center">Telefone</th>
+            <th className="w-30 text-center">Telefone</th>
             <th className="w-30 text-center">Saída</th>
             <th className="w-19 text-center">Horário</th>
             <th className="w-60 text-center">Cliente</th>
@@ -136,7 +140,7 @@ const Agendamentos = ({ setActiveComponent }) => {
         </thead>
       </table>
 
-      <div className='h-[86.8dvh] overflow-y-auto'>
+      <div className='h-[90dvh] p-0.3 overflow-y-auto'>
         <table className='container-data-table'>
           <tbody className='flex flex-col'>
             {eventFilter.length === 0 ? (

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FaSearch, FaPlus } from "react-icons/fa";
+import { MdClose } from "react-icons/md";
 import { LuRefreshCcw } from "react-icons/lu";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
@@ -85,7 +86,7 @@ const agendamentosFiltrados = evento
               className="w-full border focus:border-amber-300 sm:font-medium p-1 rounded"
             />
 
-              <FaSearch className="absolute right-3 top-3 text-pink-600 " />
+              { termoBusca ? <MdClose className="absolute right-3 top-2 text-pink-600 " onClick={()=>{setTermoBusca('')}} /> : ""}
             </div>
             <div className="flex gap-1">
               <button onClick={() => handleOpenMenu(!open)} className="bg-pink-600 text-white p-2 rounded-full">

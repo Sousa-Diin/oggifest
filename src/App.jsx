@@ -16,10 +16,10 @@ function App() {
   };
 
   return (
-    <section className='bg-[#EAE8E1] flex h-[100dvh ]capitalize'>
+    <section className='bg-[#EAE8E1] flex flex-row justify-between w-full gap-1 h-[90dvh ]capitalize'>
       <SideBar  setActiveComponent={setActiveComponent}/>
       <div className='ml-8'>
-     {stackComponent[activeComponent]}
+       {stackComponent[activeComponent]}
       </div>
     </section>
   )

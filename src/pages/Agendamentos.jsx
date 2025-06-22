@@ -9,26 +9,18 @@ import car from '../assets/carrinho-oggi-front.png'
 import PasswordModal from '../components/PasswordModal.jsx';
 import Notie from '../service/notieService.js';
 import { useState, useEffect } from 'react';
+import { FormattedDate } from "../util/FormattedDate.js"; // Importando a função de formatação de hora
+
 
 const Agendamentos = ({ setActiveComponent }) => {
-  const { setLocalStorage, formatarData } = useAuth();
+  const { setLocalStorage, evento, setEvento } = useAuth();
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [openWindowEdit, setOpenWindowEdit] = useState(false);
   const [pendingEdit, setPendingEdit] = useState(null);
-  const [evento, setEvento] = useState([]);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filtroStatus, setFiltroStatus] = useState(null);
 
-  useEffect(() => {
-    const storedAppointments = JSON.parse(localStorage.getItem('agendamentos')) || [];
-    setEvento(storedAppointments);
-  }, []);
-
-  const updateLocalStorage = (key, setEvento, newList) => {
-    localStorage.setItem(key, JSON.stringify(newList));
-    setEvento(newList);
-  };
 
   const currentDate = new Date();
   const nomeMes = currentDate.toLocaleString('default', { month: 'long' });
@@ -38,19 +30,19 @@ const Agendamentos = ({ setActiveComponent }) => {
     if (!searchTerm.trim()) return true;
     const search = searchTerm.toLowerCase();
     return (
-      appointment.Cliente.toLowerCase().includes(search) ||
-      appointment.Saida.toLowerCase().includes(search) 
+      appointment.cliente.toLowerCase().includes(search) ||
+      appointment.saida.toLowerCase().includes(search) 
     );
   };
 
   const matchesFilter = (appointment) => {
     if (!filtroStatus) return true;
-    return appointment.Status.toLowerCase() === filtroStatus.toLowerCase();
+    return appointment.status.toLowerCase() === filtroStatus.toLowerCase();
   };
 
   const eventFilter = evento
     .filter((ev) => {
-      const dataEvento = new Date(ev.Saida);
+      const dataEvento = new Date(ev.saida);
       return (
         dataEvento.getMonth() === currentDate.getMonth() &&
         dataEvento.getFullYear() === currentDate.getFullYear()
@@ -58,13 +50,13 @@ const Agendamentos = ({ setActiveComponent }) => {
     })
     .filter(matchesSearch)
     .filter(matchesFilter)
-    .sort((a, b) => a.Horario.localeCompare(b.Horario));
+    .sort((a, b) => a.horario.localeCompare(b.horario));
 
   const handleDeleteAppointment = (id) => {
     Notie.confirm(
       'Deseja mesmo excluir este agendamento?',
       () => {
-        const updatedAppointments = evento.filter(item => item.Id !== id);
+        const updatedAppointments = evento.filter(item => item.id !== id);
         updateLocalStorage('agendamentos', setEvento, updatedAppointments);
         Notie.success('Agendamento removido com sucesso!');
       },
@@ -85,6 +77,8 @@ const Agendamentos = ({ setActiveComponent }) => {
     ok: "Agendamento editado com sucesso!",
     error: "Erro ao editar."
   };
+
+  console.log("Eventos.: ", evento);
 
   return (
     <div className='container-data z-0'>
@@ -128,8 +122,8 @@ const Agendamentos = ({ setActiveComponent }) => {
 
       <table className='container-data-table'>
         <thead>
-          <tr className="w-full flex title-cabecalho justify-between bg-[#E59E07]">
-            <th className="w-12 text-center">Id</th>
+          <tr className=" flex title-cabecalho justify-between bg-[#E59E07]">
+            <th className="w-19 text-center">Telefone</th>
             <th className="w-30 text-center">Saída</th>
             <th className="w-19 text-center">Horário</th>
             <th className="w-60 text-center">Cliente</th>
@@ -156,29 +150,29 @@ const Agendamentos = ({ setActiveComponent }) => {
             ) : (
               eventFilter.map((appointment) => (
                 <tr key={appointment.Id} className="field-table-son text-zinc-700">
-                  <td className="w-12 text-center p-1 shadow">{appointment.Id}</td>
-                  <td className="w-30 p-1 shadow">{appointment.Saida}</td>
-                  <td className="w-19 p-1 shadow">{appointment.Horario}</td>
-                  <td className="w-60 p-1 shadow font-bold">{appointment.Cliente}</td>
-                  <td className="w-25 p-1 shadow">{appointment.Quantidade}</td>
-                  <td className={`w-30 p-1 shadow ${Number(appointment.Valor) < 250 ? 'text-[#ff0000]' : ''}`}>R$ {appointment.Valor}</td>
-                  <td className="w-15 p-1 shadow">{appointment.Pedido}</td>
+                  <td className="w-30 text-center p-1 shadow">{appointment.telefone}</td>
+                  <td className="w-30 p-1 shadow">  {new Date(appointment.saida).toLocaleDateString('pt-BR')}</td>
+                  <td className="w-19 p-1 shadow">{FormattedDate(appointment.horario)}</td>
+                  <td className="w-60 p-1 shadow font-bold">{appointment.cliente}</td>
+                  <td className="w-25 p-1 shadow">{appointment.quantidade}</td>
+                  <td className={`w-30 p-1 shadow ${Number(appointment.valor) < 250 ? 'text-[#ff0000]' : ''}`}>R$ {appointment.valor}</td>
+                  <td className="w-15 p-1 shadow">{appointment.pedido}</td>
                   <td
                     className={`w-29 text-center  p-1 shadow ${
-                      appointment.Status === "Pago"
+                      appointment.status === "Pago"
                         ? "text-[#008000]"
-                        : appointment.Status === "Entrada"
+                        : appointment.status === "Entrada"
                         ? "text-[#e9be0b]"
                         : "text-[#1E3A8A]"
                     }`}
                   >
-                    {appointment.Status} {appointment.Status === "Pago" ? '✔' : appointment.Status === "Entrada" ? '⚠' : '❔'}
+                    {appointment.status} {appointment.status === "Pago" ? '✔' : appointment.status === "Entrada" ? '⚠' : '❔'}
                   </td>
                   <td className="flex gap-2 justify-center items-center p-1">
                     <button
                       onClick={() => {
                         setShowPasswordModal(true);
-                        setSearchTerm(appointment.Cliente);
+                        setSearchTerm(appointment.cliente);
                         setPendingEdit(appointment);
                       }}
                       className="btn-edit p-2 bg-[#37A2C2] shadow cursor-pointer"
@@ -186,7 +180,7 @@ const Agendamentos = ({ setActiveComponent }) => {
                       <MdOutlineModeEditOutline />
                     </button>
                     <button
-                      onClick={() => handleDeleteAppointment(appointment.Id)}
+                      onClick={() => handleDeleteAppointment(appointment.id)}
                       className="btn-delete p-2 bg-[#37A2C2] shadow cursor-pointer"
                     >
                       <RiDeleteBin6Line />

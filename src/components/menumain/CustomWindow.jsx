@@ -18,20 +18,20 @@ export default function CustomWindow({ message, openWindowEdit, setOpenWindowEdi
 
   const validate = () => {
     const newErrors = {};
-    if (formData.Valor < 0) {
-      newErrors.Valor = "Valor não pode ser negativo.";
+    if (formData.valor < 0) {
+      newErrors.valor = "Valor não pode ser negativo.";
     }
-    if (isNaN(formData.Valor) || formData.Valor < 0.01) {
-      newErrors.Valor = "Valor deve ser maior que zero.";
+    if (isNaN(formData.valor) || formData.valor < 0.01) {
+      newErrors.valor = "Valor deve ser maior que zero.";
     }
-    if (formData.Pedido < 0) {
-      newErrors.Pedido = "Pedido não pode ser negativo.";
+    if (formData.pedido < 0) {
+      newErrors.pedido = "Pedido não pode ser negativo.";
     }
-    if (formData.Quantidade < 0) {
-      newErrors.Quantidade = "Quantidade não pode ser negativa.";
+    if (formData.quantidade < 0) {
+      newErrors.quantidade = "Quantidade não pode ser negativa.";
     }
-    if (!formData.Status) {
-      newErrors.Status = "Selecione um status.";
+    if (!formData.status) {
+      newErrors.status = "Selecione um status.";
     }
     return newErrors;
   };
@@ -44,7 +44,9 @@ export default function CustomWindow({ message, openWindowEdit, setOpenWindowEdi
       Notie.error("Corrija os campos em vermelho.");
       return;
     }
-
+    let preencheDataEntrega = new Date(formData.saida);
+    preencheDataEntrega.setDate(preencheDataEntrega.getDate() + 1);
+    formData.entrega = preencheDataEntrega.toISOString().split('T')[0];
     await addEvento(formData);
     setOpenWindowEdit(false);
   };
@@ -60,16 +62,18 @@ export default function CustomWindow({ message, openWindowEdit, setOpenWindowEdi
 
       <form onSubmit={handleSubmit} className="flex flex-col justify-around items-center h-[90%] p-2 text-sm">
         <fieldset className="w-full flex flex-col gap-3">
-          {/* ID e Nome */}
+          {/* Telefone e Nome */}
           <div className="flex flex-wrap gap-2 w-full">
             <div className="flex-1 min-w-[90px]">
-              <label htmlFor="Id" className="block font-semibold">ID</label>
+              <label htmlFor="Phone" className="block font-semibold">Telefone</label>
               <input
-                type="number"
-                name="Id"
-                disabled
-                value={formData.Id || evento.length + 1}
-                className="w-full p-1 text-center rounded shadow"
+                type="text"
+                name="Phone"
+                value={formData.telefone ?? ''}  
+                placeholder="(00) 00000-0000"              
+                onChange={(e) => setFormData({ ...formData, telefone: e.target.value })}
+                className=" bg-gray-100 w-full p-1 text-center rounded shadow"
+                required
               />
             </div>
             <div className="flex-1 min-w-[180px]">
@@ -77,8 +81,8 @@ export default function CustomWindow({ message, openWindowEdit, setOpenWindowEdi
               <input
                 type="text"
                 name="Cliente"
-                value={formData.Cliente || ''}
-                onChange={(e) => setFormData({ ...formData, Cliente: e.target.value })}
+                value={formData.cliente || ''}
+                onChange={(e) => setFormData({ ...formData, cliente: e.target.value })}
                 className="w-full p-1 bg-gray-100 rounded shadow"
                 required
               />
@@ -92,8 +96,8 @@ export default function CustomWindow({ message, openWindowEdit, setOpenWindowEdi
               <input
                 type="date"
                 name="Saida"
-                value={formData.Saida || ''}
-                onChange={(e) => setFormData({ ...formData, Saida: e.target.value })}
+                value={formData.saida || ''}
+                onChange={(e) => setFormData({ ...formData, saida: e.target.value })}
                 className="w-full p-1 bg-gray-100 rounded shadow"
                 required
               />
@@ -103,8 +107,8 @@ export default function CustomWindow({ message, openWindowEdit, setOpenWindowEdi
               <input
                 type="time"
                 name="Horario"
-                value={formData.Horario || ''}
-                onChange={(e) => setFormData({ ...formData, Horario: e.target.value })}
+                value={formData.horario || ''}
+                onChange={(e) => setFormData({ ...formData, horario: e.target.value })}
                 className="w-full p-1 bg-gray-100 rounded shadow"
                 required
               />
@@ -118,36 +122,36 @@ export default function CustomWindow({ message, openWindowEdit, setOpenWindowEdi
               <input
                 type="number"
                 name="Pedido"
-                value={formData.Pedido || ''}
-                onChange={(e) => setFormData({ ...formData, Pedido: parseFloat(e.target.value) })}
-                className={`w-full p-1 bg-gray-100 rounded shadow ${errors.Pedido ? 'border border-red-500 text-red-500' : ''}`}
+                value={formData.pedido || ''}
+                onChange={(e) => setFormData({ ...formData, pedido: parseFloat(e.target.value) })}
+                className={`w-full p-1 bg-gray-100 rounded shadow ${errors.pedido ? 'border border-red-500 text-red-500' : ''}`}
                 required
               />
-              {errors.Pedido && <p className="text-red-500 text-xs mt-1">{errors.Pedido}</p>}
+              {errors.pedido && <p className="text-red-500 text-xs mt-1">{errors.pedido}</p>}
             </div>
             <div className="flex-1 min-w-[100px]">
               <label htmlFor="Quantidade" className="block font-semibold">Quantidade</label>
               <input
                 type="number"
                 name="Quantidade"
-                value={formData.Quantidade || ''}
-                onChange={(e) => setFormData({ ...formData, Quantidade: parseFloat(e.target.value) })}
-                className={`bg-gray-100 w-full p-1 rounded shadow ${errors.Quantidade ? 'border border-red-500 text-red-500' : ''}`}
+                value={formData.quantidade || ''}
+                onChange={(e) => setFormData({ ...formData, quantidade: parseFloat(e.target.value) })}
+                className={`bg-gray-100 w-full p-1 rounded shadow ${errors.quantidade ? 'border border-red-500 text-red-500' : ''}`}
                 required
               />
-              {errors.Quantidade && <p className="text-red-500 text-xs mt-1">{errors.Quantidade}</p>}
+              {errors.quantidade && <p className="text-red-500 text-xs mt-1">{errors.quantidade}</p>}
             </div>
             <div className="flex-1 min-w-[100px]">
               <label htmlFor="Valor" className="block font-semibold">Valor (R$)</label>
               <input
                 type="number"
                 name="Valor"
-                value={formData.Valor || ''}
-                onChange={(e) => setFormData({ ...formData, Valor: parseFloat(e.target.value) })}
-                className={`bg-gray-100 w-full p-1 rounded shadow ${errors.Valor ? 'border border-red-500 text-red-500' : ''}`}
+                value={formData.valor || ''}
+                onChange={(e) => setFormData({ ...formData, valor: parseFloat(e.target.value) })}
+                className={`bg-gray-100 w-full p-1 rounded shadow ${errors.valor ? 'border border-red-500 text-red-500' : ''}`}
                 required
               />
-              {errors.Valor && <p className="text-red-500 text-xs mt-1">{errors.Valor}</p>}
+              {errors.valor && <p className="text-red-500 text-xs mt-1">{errors.valor}</p>}
             </div>
           </div>
 
@@ -156,22 +160,22 @@ export default function CustomWindow({ message, openWindowEdit, setOpenWindowEdi
             <label htmlFor="Status" className="block font-semibold">Status</label>
             <select
               name="Status"
-              value={formData.Status || ""}
-              onChange={(e) => setFormData({ ...formData, Status: e.target.value })}
+              value={formData.status || ""}
+              onChange={(e) => setFormData({ ...formData, status: e.target.value })}
               className={`bg-gray-100 w-full p-2 rounded border shadow 
-                ${formData.Status === "Agendado" ? 'border-blue-400 text-blue-600' : ''}
-                ${formData.Status === "Entrada" ? 'border-yellow-400 text-yellow-600' : ''}
-                ${formData.Status === "Pago" ? 'border-green-400 text-green-600' : ''}
-                ${errors.Status ? 'border-red-500 text-red-500' : ''}
+                ${formData.status === "Agendado" ? 'border-blue-400 text-blue-600' : ''}
+                ${formData.status === "Entrada" ? 'border-yellow-400 text-yellow-600' : ''}
+                ${formData.status === "Pago" ? 'border-green-400 text-green-600' : ''}
+                ${errors.status ? 'border-red-500 text-red-500' : ''}
               `}
               required
             >
               <option value="" disabled>Selecione o status</option>
-              <option value="Agendado" disabled={formData.Valor > 0}>Agendado</option>
-              <option value="Entrada" disabled={formData.Valor >= 200}>Entrada</option>
-              <option value="Pago" disabled={formData.Valor < 200}>Pago</option>
+              <option value="Agendado" disabled={formData.valor > 0}>Agendado</option>
+              <option value="Entrada" disabled={formData.valor >= 200}>Entrada</option>
+              <option value="Pago" disabled={formData.valor < 200}>Pago</option>
             </select>
-            {errors.Status && <p className="text-red-500 text-xs mt-1">{errors.Status}</p>}
+            {errors.status && <p className="text-red-500 text-xs mt-1">{errors.status}</p>}
           </div>
         </fieldset>
 

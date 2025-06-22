@@ -7,6 +7,7 @@ import './OggiFest.css';
 import CustomWindow from "../../components/menumain/CustomWindow";
 import { useAuth } from '../../provider/AuthContextProvider';
 import Notie from "../../service/notieService";
+import { FormattedDate } from "../../util/FormattedDate"; // Importando a função de formatação de hora
 
 export default function OggiFest() {
   const { evento, formatarData } = useAuth();
@@ -36,14 +37,14 @@ const agendamentosFiltrados = evento
     const termoLower = (termoBusca || "").toLowerCase();
 
     // Garante que ev.Saida e selectedDate sejam datas válidas
-    const dataSaida = ev?.Saida ? new Date(ev.Saida) : null;
+    const dataSaida = ev?.saida ? new Date(ev.saida) : null;
     const dataSelecionada = selectedDate ? new Date(selectedDate) : null;
 
     const dataFormatada = dataSaida ? formatarData(dataSaida) : "";
     const dataSelecionadaFormatada = dataSelecionada ? formatarData(dataSelecionada) : "";
 
     const correspondeDataSelecionada = dataFormatada === dataSelecionadaFormatada;
-    const correspondeCliente = (ev?.Cliente || "").toLowerCase().includes(termoLower);
+    const correspondeCliente = (ev?.cliente || "").toLowerCase().includes(termoLower);
     const correspondeDataBusca = dataFormatada.includes(termoLower);
 
     if (termoLower.trim() === "") {
@@ -53,8 +54,8 @@ const agendamentosFiltrados = evento
     }
   })
   .sort((a, b) => {
-    const horaA = a?.Horario?.toString() || "";
-    const horaB = b?.Horario?.toString() || "";
+    const horaA = a?.horario?.toString() || "";
+    const horaB = b?.horario?.toString() || "";
     return horaA.localeCompare(horaB);
   });
 
@@ -136,16 +137,16 @@ const agendamentosFiltrados = evento
             {agendamentosFiltrados.length > 0 ? (
               <ul className="w-full flex flex-col items-center justify-center">
                 {agendamentosFiltrados.map((ev) => (
-                  <div key={ev.Id} 
+                  <div key={ev.id} 
                   className="w-full flex flex-row items-center justify-between border-0 p-1 m-1 rounded-lg shadow-sm"
-                  style={{ backgroundColor: ev.Status === "Pago" ? "#7CFC50" : "#FEE2E2"}}>
+                  style={{ backgroundColor: ev.status === "Pago" ? "#7CFC50" : "#FEE2E2"}}>
                     <div className="w-2 h-8 rounded-bl rounded-tl bg-yellow-500 "></div>
-                    <span className="">⌚{ev.Horario}</span>
-                    <span className="">{ev.Cliente}</span>
-                    <span className="font-bold">UN: {ev.Quantidade}</span>
-                    <span className="font-bold">Pedido: {ev.Pedido}</span>
+                    <span className="">⌚{FormattedDate(ev.horario)}</span>
+                    <span className="">{ev.cliente}</span>
+                    <span className="font-bold">UN: {ev.quantidade}</span>
+                    <span className="font-bold">Pedido: {ev.pedido}</span>
                     <span className="text-sm text-gray-500">
-                      {ev.Status} {ev.Status === "Pago" ? '✔' : ev.Status === "Entrada" ? '⚠' : '❓'}
+                      {ev.status} {ev.status === "Pago" ? '✔' : ev.status === "Entrada" ? '⚠' : '❓'}
                     </span>
                   </div>
                 ))}

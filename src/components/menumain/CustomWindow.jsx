@@ -3,18 +3,32 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../../provider/AuthContextProvider";
 import { X } from "lucide-react";
 import Notie from "../../service/notieService";
+import { FormattedDate, FormattedHour } from "../../util/FormattedDate";
 
-export default function CustomWindow({ message, openWindowEdit, setOpenWindowEdit, appointment }) {
+export default function CustomWindow({ message, action='insert',/* openWindowEdit, */ setOpenWindowEdit, appointment }) {
   const { evento, addEvento, setLocalStorage } = useAuth();
+
   const [formData, setFormData] = useState(appointment || evento || {});
   const [errors, setErrors] = useState({});
 
   
   setLocalStorage('currentEvent',appointment);
+  /*  useEffect(() => {
+      setFormData(appointment || evento || {});
+      setErrors({});
+    }, [appointment, evento]);
+ */
   useEffect(() => {
-    setFormData(appointment || evento || {});
-    setErrors({});
-  }, [appointment, evento]);
+  if (appointment && Object.keys(appointment).length > 0) {
+    setFormData(appointment);
+  } else if (evento && Object.keys(evento).length > 0) {
+    setFormData(evento);
+  } else {
+    setFormData({});
+  }
+  setErrors({});
+}, [appointment, evento]);
+
 
   const validate = () => {
     const newErrors = {};
@@ -44,10 +58,11 @@ export default function CustomWindow({ message, openWindowEdit, setOpenWindowEdi
       Notie.error("Corrija os campos em vermelho.");
       return;
     }
+    
     let preencheDataEntrega = new Date(formData.saida);
     preencheDataEntrega.setDate(preencheDataEntrega.getDate() + 1);
-    formData.entrega = preencheDataEntrega.toISOString().split('T')[0];
-    await addEvento(formData);
+    formData.entrega = FormattedDate(formData.saida);
+    await addEvento(formData, action);
     setOpenWindowEdit(false);
   };
 
@@ -96,8 +111,8 @@ export default function CustomWindow({ message, openWindowEdit, setOpenWindowEdi
               <input
                 type="date"
                 name="Saida"
-                value={formData.saida || ''}
-                onChange={(e) => setFormData({ ...formData, saida: e.target.value })}
+                value={FormattedDate(formData.saida) || ''}
+                onChange={(e) => setFormData({ ...formData,saida: e.target.value })}
                 className="w-full p-1 bg-gray-100 rounded shadow"
                 required
               />
@@ -107,7 +122,7 @@ export default function CustomWindow({ message, openWindowEdit, setOpenWindowEdi
               <input
                 type="time"
                 name="Horario"
-                value={formData.horario || ''}
+                value={FormattedHour(formData.horario) || ''}
                 onChange={(e) => setFormData({ ...formData, horario: e.target.value })}
                 className="w-full p-1 bg-gray-100 rounded shadow"
                 required

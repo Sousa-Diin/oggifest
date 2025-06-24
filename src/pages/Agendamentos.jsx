@@ -1,4 +1,4 @@
-import CustomWindow  from '../components/menumain/CustomWindow.jsx'
+import CustomWindow  from '../components/menumain/CustomWindow.jsx';
 import { IoMdArrowBack } from "react-icons/io";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineModeEditOutline } from "react-icons/md";
@@ -11,11 +11,11 @@ import car from '../assets/carrinho-oggi-front.png'
 import PasswordModal from '../components/PasswordModal.jsx';
 import Notie from '../service/notieService.js';
 import { useState } from 'react';
-import { FormattedDate } from "../util/FormattedDate.js"; // Importando a função de formatação de hora
-
+import { FormattedDate, FormattedHour } from "../util/FormattedDate.js"; // Importando a função de formatação de hora
+import { deleteAppointment } from '../service/AppointmentsService.js'; // Importando a função de exclusão de agendamento
 
 const Agendamentos = ({ setActiveComponent }) => {
-  const { setLocalStorage, evento, setEvento } = useAuth();
+  const { setLocalStorage, evento } = useAuth();
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [openWindowEdit, setOpenWindowEdit] = useState(false);
   const [pendingEdit, setPendingEdit] = useState(null);
@@ -58,12 +58,18 @@ const Agendamentos = ({ setActiveComponent }) => {
     Notie.confirm(
       'Deseja mesmo excluir este agendamento?',
       () => {
-        const updatedAppointments = evento.filter(item => item.id !== id);
-        updateLocalStorage('agendamentos', setEvento, updatedAppointments);
-        Notie.success('Agendamento removido com sucesso!');
+        const cleanId = String(id).trim();
+        const appointmentDeleted = deleteAppointment(cleanId);
+        console.log('ID do agendamentos excluido:', cleanId);
+        console.log('ID do agendamentos RETORNADO API:', appointmentDeleted.id);
+        appointmentDeleted.then((res)=> {
+          (res.status === 200) ? Notie.success(res.message) : Notie.error(res.message);
+          setSearchTerm('');
+        });
       },
       () => {
         Notie.info('Ação cancelada!');
+        setSearchTerm('');
       }
     );
   };
@@ -153,19 +159,19 @@ const Agendamentos = ({ setActiveComponent }) => {
               </tr>
             ) : (
               eventFilter.map((appointment) => (
-                <tr key={appointment.Id} className="field-table-son text-zinc-700">
+                <tr key={appointment.id} className="field-table-son text-zinc-700">
                   <td className="w-30 text-center p-1 shadow">{appointment.telefone}</td>
-                  <td className="w-30 p-1 shadow">  {new Date(appointment.saida).toLocaleDateString('pt-BR')}</td>
-                  <td className="w-19 p-1 shadow">{FormattedDate(appointment.horario)}</td>
+                  <td className="w-30 p-1 shadow">  {FormattedDate(appointment.saida)}</td>
+                  <td className="w-19 p-1 shadow">{FormattedHour(appointment.horario)}</td>
                   <td className="w-60 p-1 shadow font-bold">{appointment.cliente}</td>
                   <td className="w-25 p-1 shadow">{appointment.quantidade}</td>
                   <td className={`w-30 p-1 shadow ${Number(appointment.valor) < 250 ? 'text-[#ff0000]' : ''}`}>R$ {appointment.valor}</td>
                   <td className="w-15 p-1 shadow">{appointment.pedido}</td>
                   <td
                     className={`w-29 text-center  p-1 shadow ${
-                      appointment.status === "Pago"
+                      appointment.status === "pago"
                         ? "text-[#008000]"
-                        : appointment.status === "Entrada"
+                        : appointment.status === "entrada"
                         ? "text-[#e9be0b]"
                         : "text-[#1E3A8A]"
                     }`}
@@ -206,6 +212,7 @@ const Agendamentos = ({ setActiveComponent }) => {
               setOpenWindowEdit={setOpenWindowEdit}
               appointment={selectedAppointment}
               message={message}
+              action={'edit'}
             />
           </div>
         </aside>

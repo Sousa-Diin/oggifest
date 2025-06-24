@@ -8,7 +8,7 @@ import './OggiFest.css';
 import CustomWindow from "../../components/menumain/CustomWindow";
 import { useAuth } from '../../provider/AuthContextProvider';
 import Notie from "../../service/notieService";
-import { FormattedDate } from "../../util/FormattedDate"; // Importando a função de formatação de hora
+import { FormattedDate, FormattedHour } from "../../util/FormattedDate"; // Importando a função de formatação de hora
 
 export default function OggiFest() {
   const { evento, formatarData } = useAuth();
@@ -106,6 +106,7 @@ const agendamentosFiltrados = evento
                     setOpenWindowEdit={handleOpenMenu}
                     appointment={evento} // Envia os dados para edição
                     message={message}
+                    action={'insert'}
                   /> 
                 </div>
             </aside> : ''
@@ -142,7 +143,7 @@ const agendamentosFiltrados = evento
                   className="w-full flex flex-row items-center justify-between border-0 p-1 m-1 rounded-lg shadow-sm"
                   style={{ backgroundColor: ev.status === "Pago" ? "#7CFC50" : "#FEE2E2"}}>
                     <div className="w-2 h-8 rounded-bl rounded-tl bg-yellow-500 "></div>
-                    <span className="">⌚{FormattedDate(ev.horario)}</span>
+                    <span className="">⌚{FormattedHour(ev.horario)}</span>
                     <span className="">{ev.cliente}</span>
                     <span className="font-bold">UN: {ev.quantidade}</span>
                     <span className="font-bold">Pedido: {ev.pedido}</span>

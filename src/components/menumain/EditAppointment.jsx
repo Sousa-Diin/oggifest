@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../provider/AuthContextProvider";
 import StatusCheckpoint from "../check/StatusCheckPoint";
+import { formattedDate } from "../../util/FormattedDate.js"; // Importando a função de formatação de hora
 
 /* import "./menuprincipal.css"; */
 
 const EditAppoitment = ({ message, appointment,handleClosenMenu }) => {
-  const { evento, addEvento  } = useAuth();
+  const {  addEvento, formatarData  } = useAuth();
 
   const [formData, setFormData] = useState(appointment || {});
 
@@ -17,7 +18,9 @@ const EditAppoitment = ({ message, appointment,handleClosenMenu }) => {
     e.preventDefault();
     console.log("Dados do agendamento:", formData);
 
-    addEvento(formData);
+    formData.Saida = formatarData(formData.saida);
+
+    addEvento(formData,'edit');
     alert(message.ok);
     handleClosenMenu();
   };
@@ -79,7 +82,7 @@ const EditAppoitment = ({ message, appointment,handleClosenMenu }) => {
             </label>
             <input
               id="hour"
-              value={formData.Horario}
+              value={formattedDate(formData.Horario)}
               onChange={(e) =>
                 setFormData({ ...formData, Horario: e.target.value })
               }

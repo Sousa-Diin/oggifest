@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { getAllAppointments, createAppointment } from "../service/AppointmentsService"; // Importando o serviço de agendamentos
+import { getAllAppointments, createAppointment, updateAppointment } from "../service/AppointmentsService"; // Importando o serviço de agendamentos
 import Notie from "../service/notieService"; // Importando o serviço de notificação
+import { Result } from "postcss";
 
 const AuthContext = createContext({});
 
@@ -51,25 +52,26 @@ const AuthContextProvider = ({ children }) => {
     loadData();
   }, []);
 
-  const addEvento = async (ev) => {
-    if (!ev || !ev.Cliente || !ev.Pedido || !ev.Horario || !ev.Saida) {
+  const addEvento = async (ev, action) => {
+    if (!ev || !ev.cliente || !ev.pedido || !ev.horario || !ev.saida) {
       Notie.alert("Erro ao adicionar evento: dados inválidos.");
       console.error("Erro ao adicionar evento: dados inválidos.", ev);
+      console.error("Ação[insert|edit]=> ", action);
       return;
     }
   
     const statusValido = ["Agendado", "Entrada", "Pago"];
-    if (!statusValido.includes(ev.Status)) {
+    if (!statusValido.includes(ev.status)) {
       Notie.alert("Erro ao adicionar evento: status inválido.");
       console.error("Evento inválido:", ev);
       return;
-    }else if (ev.Status === undefined) {
+    }else if (ev.status === undefined) {
       Notie.alert("Erro ao adicionar evento: status não definido.");
-      console.error("Evento inválido:", ev.Status);
+      console.error("Evento inválido:", ev.status);
       return;
-    }else if(ev.Valor === 0 && ev.Status !== "Agendado") {
+    }else if(ev.valor === 0 && ev.status !== "Agendado") {
       Notie.alert("Erro ao adicionar evento: valor zerado.");
-      console.error("Evento inválido:", ev.Valor);
+      console.error("Evento inválido:", ev.valor);
       return;
 
     }
@@ -77,8 +79,22 @@ const AuthContextProvider = ({ children }) => {
     const prevList = [...evento];
     const newEvent = { ...ev };
     const newList = [...prevList];
+
+    let result = null;
+
+    if (action === "insert") { 
+      result = await createAppointment(newEvent);
+    }
+    else if (action === "edit") {
+      result = await updateAppointment(newEvent);
+
+    }else {
+      Notie.alert("Ação inválida. Use 'insert' ou 'edit'.", Result);
+      console.error("Ação inválida:", action);
+      return;
+    }
   
-    const result = await createAppointment(newEvent);
+    
     if (!result) {
       Notie.alert("Erro ao enviar dados para a planilha.");
       console.error("Erro ao enviar dados para a planilha:", evento);

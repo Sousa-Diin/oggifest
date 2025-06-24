@@ -15,7 +15,7 @@ export const updateAppointment = (dados) => googleScriptClient('appointments', '
   ...dados
 });
 
-export const deleteAppointment = (cod) => googleScriptClient('appointments', 'POST', {
+export const deleteAppointment = (id) => googleScriptClient('appointments', 'POST', {
   method: 'DELETE',
-  cod
+  id
 });

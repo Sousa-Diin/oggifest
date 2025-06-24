@@ -13,12 +13,15 @@ import Notie from '../service/notieService.js';
 import { useState } from 'react';
 import { FormattedDate, FormattedHour } from "../util/FormattedDate.js"; // Importando a função de formatação de hora
 import { deleteAppointment } from '../service/AppointmentsService.js'; // Importando a função de exclusão de agendamento
+import { PASSWORD_DELETE, PASSWORD_EDIT } from '../service/authSheets.js';
 
 const Agendamentos = ({ setActiveComponent }) => {
-  const { setLocalStorage, evento } = useAuth();
+  const { evento } = useAuth();
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [atributePassword, setAtributePassword] = useState("");
   const [openWindowEdit, setOpenWindowEdit] = useState(false);
   const [pendingEdit, setPendingEdit] = useState(null);
+  const [pendingDelete, setPendingDelete] = useState(null);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filtroStatus, setFiltroStatus] = useState(null);
@@ -54,18 +57,20 @@ const Agendamentos = ({ setActiveComponent }) => {
     .filter(matchesFilter)
     .sort((a, b) => a.horario.localeCompare(b.horario));
 
-  const handleDeleteAppointment = (id) => {
+  const handleDeleteAppointment = () => {
+    const id = pendingDelete;
+    
     Notie.confirm(
       'Deseja mesmo excluir este agendamento?',
       () => {
         const cleanId = String(id).trim();
         const appointmentDeleted = deleteAppointment(cleanId);
-        console.log('ID do agendamentos excluido:', cleanId);
-        console.log('ID do agendamentos RETORNADO API:', appointmentDeleted.id);
         appointmentDeleted.then((res)=> {
           (res.status === 200) ? Notie.success(res.message) : Notie.error(res.message);
           setSearchTerm('');
+          setPendingDelete(null);
         });
+        window.location.reload(); // Recarrega a página para refletir as mudanças
       },
       () => {
         Notie.info('Ação cancelada!');
@@ -86,15 +91,15 @@ const Agendamentos = ({ setActiveComponent }) => {
     error: "Erro ao editar."
   };
 
-  console.log("Eventos.: ", evento);
+  //console.log("Eventos.: ", evento);
 
   return (
     <div className='container-data z-0 '>
       <div className='flex w-full  justify-between p-2'>
         <section className='flex gap-2 items-center w-[90%]'>
           <button onClick={handleChangePage}><IoMdArrowBack /></button>
-          <p>Lista de Agendamentos em</p>
-          <p className='font-bold text-[#963584] capitalize'>{nomeMes}</p>
+          <p>Agendamentos no mês de</p>
+          <p className='font-bold text-[#963584] capitalize'>{nomeMes} </p>
         </section>
         <IoFilter
           onClick={() => {
@@ -182,6 +187,7 @@ const Agendamentos = ({ setActiveComponent }) => {
                     <button
                       onClick={() => {
                         setShowPasswordModal(true);
+                        setAtributePassword('editar');
                         setSearchTerm(appointment.cliente);
                         setPendingEdit(appointment);
                       }}
@@ -190,7 +196,15 @@ const Agendamentos = ({ setActiveComponent }) => {
                       <MdOutlineModeEditOutline />
                     </button>
                     <button
-                      onClick={() => handleDeleteAppointment(appointment.id)}
+                      onClick={
+                        //() => handleDeleteAppointment(appointment.id) exlui direto
+                        () => {
+                          setShowPasswordModal(true);
+                          setAtributePassword('deletar');                          
+                          setSearchTerm(appointment.cliente);
+                          setPendingDelete(appointment.id);
+                        }
+                      }
                       className="btn-delete p-2 bg-[#37A2C2] shadow cursor-pointer"
                     >
                       <RiDeleteBin6Line />
@@ -220,14 +234,26 @@ const Agendamentos = ({ setActiveComponent }) => {
 
       {showPasswordModal && (
         <PasswordModal
+          
+          message={{ title: `Digite a senha para ${atributePassword} o agendamento` }}
           onClose={() => {setShowPasswordModal(false);setSearchTerm("");}}
           onConfirm={(value) => {
-            if (value === 'oggi4321') {
-              setSelectedAppointment(pendingEdit);
-              setLocalStorage('editAppointment', pendingEdit);
-              setOpenWindowEdit(true);
-            } else {
-              Notie.error('Senha incorreta!');
+            try {
+              if (atributePassword === 'editar' && value === PASSWORD_EDIT) {
+                setOpenWindowEdit(true);
+                setSelectedAppointment(pendingEdit);
+                setShowPasswordModal(false);
+              } else if (atributePassword === 'deletar' && value === PASSWORD_DELETE) {
+                handleDeleteAppointment();
+              }
+              else  
+              if (!value || value.trim() === '') {    
+                throw new Error("Senha não pode ser vazia!");
+              } else {
+                throw new Error('Senha incorreta!');
+              }
+            } catch (error) {
+              Notie.error(error.message);
             }
             setShowPasswordModal(false);
           }}

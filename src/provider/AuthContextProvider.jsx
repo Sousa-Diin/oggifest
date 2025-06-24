@@ -89,7 +89,7 @@ const AuthContextProvider = ({ children }) => {
       result = await updateAppointment(newEvent);
 
     }else {
-      Notie.alert("Ação inválida. Use 'insert' ou 'edit'.", Result);
+      Notie.alert("Ação inválida. Use 'insert' ou 'edit'.", result);
       console.error("Ação inválida:", action);
       return;
     }
@@ -104,6 +104,7 @@ const AuthContextProvider = ({ children }) => {
     localStorage.removeItem("agendamentos");
     setLocalStorage("agendamentos", newList);
     setEvento(newList);
+    window.location.reload(); // Recarrega a página para refletir as mudanças
   
     console.log("Evento adicionado com sucesso:", newEvent);
   };

@@ -1,18 +1,20 @@
 import { useState } from "react";
+import Notie from "../service/notieService.js";
 
-const PasswordModal = ({ onClose, onConfirm }) => {
+const PasswordModal = ({ onClose, onConfirm, message }) => {
   const [senha, setSenha] = useState("");
 
   const handleConfirm = () => {
+    
     onConfirm(senha);
     setSenha(""); // limpa depois
   };
 
   return (
-    <div style={{backgroundColor:"rgba(0,0,0,.4)"}} 
+    <form style={{backgroundColor:"rgba(0,0,0,.4)"}} 
     className="fixed inset-0  bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-80">
-        <h2 className="text-lg font-bold mb-4">Digite a senha para editar</h2>
+      <div className="bg-white rounded-lg shadow-lg p-4 w-90">
+        <p className="text-[1rem]  mb-4">{message.title}</p>
         <input
           type="password"
           value={senha}          
@@ -36,7 +38,7 @@ const PasswordModal = ({ onClose, onConfirm }) => {
           </button>
         </div>
       </div>
-    </div>
+    </form>
   );
 };
 

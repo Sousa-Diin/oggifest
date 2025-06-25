@@ -5,19 +5,14 @@ import { X } from "lucide-react";
 import Notie from "../../service/notieService";
 import { FormattedDate, FormattedHour } from "../../util/FormattedDate";
 
-export default function CustomWindow({ message, action='insert',/* openWindowEdit, */ setOpenWindowEdit, appointment }) {
+export default function CustomWindow({ message, action='insert',subText = "Enviando...", setOpenWindowEdit, appointment }) {
   const { evento, addEvento, setLocalStorage } = useAuth();
-
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState(appointment || evento || {});
   const [errors, setErrors] = useState({});
 
   
   setLocalStorage('currentEvent',appointment);
-  /*  useEffect(() => {
-      setFormData(appointment || evento || {});
-      setErrors({});
-    }, [appointment, evento]);
- */
   useEffect(() => {
   if (appointment && Object.keys(appointment).length > 0) {
     setFormData(appointment);
@@ -52,18 +47,30 @@ export default function CustomWindow({ message, action='insert',/* openWindowEdi
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      Notie.error("Corrija os campos em vermelho.");
-      return;
+    let result = null;
+    try {
+      const validationErrors = validate();
+      if (Object.keys(validationErrors).length > 0) {
+        setErrors(validationErrors);
+        throw new Error("Corrija os campos em vermelho.");
+        //return;
+      }
+
+      let preencheDataEntrega = new Date(formData.saida);
+      preencheDataEntrega.setDate(preencheDataEntrega.getDate() + 1);
+      formData.entrega = FormattedDate(formData.saida);
+
+      //seta o carregamento para true
+      setLoading(true);
+      // Envia os dados do formulário para o serviço de adição de evento
+      result = await addEvento(formData, action);
+      setOpenWindowEdit(false); // Fecha a janela de edição
+    }catch(error){
+      Notie.error(error ||result.message || "Erro ao salvar o evento.");
+    }finally {
+      setLoading(false);
+      Notie.success(result.message || "Evento salvo com sucesso!");
     }
-    
-    let preencheDataEntrega = new Date(formData.saida);
-    preencheDataEntrega.setDate(preencheDataEntrega.getDate() + 1);
-    formData.entrega = FormattedDate(formData.saida);
-    await addEvento(formData, action);
-    setOpenWindowEdit(false);
   };
 
   return (
@@ -207,10 +214,11 @@ export default function CustomWindow({ message, action='insert',/* openWindowEdi
             {message.btnCancel}
           </button>
           <button
+            disabled={loading}
             type="submit"
             className="px-3 py-1 rounded bg-[#37A2C2] hover:bg-blue-600"
           >
-            {message.btnConfirm}
+            {loading ? subText : message.btnConfirm}
           </button>
         </div>
       </form>

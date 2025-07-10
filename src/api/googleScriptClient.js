@@ -22,7 +22,7 @@ export const googleScriptClient = async (rota, metodo = 'GET', dados = {}) => {
 
       const response = await fetch(url, { method: 'GET' });
       const result = await response.json();
-      console.log(`[${rota.toUpperCase()} - GET] Resposta:`, result);
+      //console.log(`[${rota.toUpperCase()} - GET] Resposta:`, result);
       return result;
     }
 

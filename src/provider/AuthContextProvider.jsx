@@ -44,7 +44,7 @@ const AuthContextProvider = ({ children }) => {
       } else { */
         const apiData = await getAllAppointments();
         setEvento(apiData.allAppointments);
-        console.log("Dados carregados da API:", apiData.allAppointments);
+        console.log("Dados carregados da API.");
         //setLocalStorage("agendamentos", apiData.allAppointments);
      // }
     };
@@ -97,7 +97,7 @@ const AuthContextProvider = ({ children }) => {
     
     if (!result) {
       Notie.alert("Erro ao enviar dados para a planilha.");
-      console.error("Erro ao enviar dados para a planilha:", evento);
+      console.error("Erro ao enviar dados para a planilha:", result);
       return;
     }
     Notie.success(result.message);
@@ -106,7 +106,7 @@ const AuthContextProvider = ({ children }) => {
     setEvento(newList);
     window.location.reload(); // Recarrega a página para refletir as mudanças
   
-    console.log("Evento adicionado com sucesso:", newEvent);
+    console.log("Evento adicionado com sucesso:");
   };
   
   return (

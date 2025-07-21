@@ -16,6 +16,7 @@
     "@tailwindcss/postcss": "^4.0.14",
     "@tailwindcss/vite": "^4.0.14",
     "calendar": "^0.1.1",
+    "cleave.js": "^1.6.0",
     "lucide-react": "^0.483.0",
     "node-fetch": "^3.3.2",
     "oggi-fest": "file:",

@@ -14,6 +14,7 @@ import { useState } from 'react';
 import { FormattedDate, FormattedHour } from "../util/FormattedDate.js"; // Importando a função de formatação de hora
 import { deleteAppointment } from '../service/AppointmentsService.js'; // Importando a função de exclusão de agendamento
 import { PASSWORD_DELETE, PASSWORD_EDIT } from '../service/authSheets.js';
+import formatarTelefone from '../util/formatarTelefone.js'; // Importando a função de formatação de telefone
 
 const Agendamentos = ({ setActiveComponent }) => {
   const { evento } = useAuth();
@@ -92,7 +93,7 @@ const Agendamentos = ({ setActiveComponent }) => {
   };
 
   //console.log("Eventos.: ", evento);
-
+  console.log("Telefone formatado:", formatarTelefone("1234567890" ));
   return (
     <div className='container-data z-0 '>
       <div className='flex w-full  justify-between p-2'>
@@ -107,7 +108,8 @@ const Agendamentos = ({ setActiveComponent }) => {
               { label: 'Todos', value: null },
               { label: 'Pago', value: 'Pago' },
               { label: 'Entrada', value: 'Entrada' },
-              { label: 'Agendado', value: 'Agendado' }
+              { label: 'Agendado', value: 'Agendado' },
+              { label: 'Cancelado', value: 'Cancelado' }
             ],
               (selected) => setFiltroStatus(selected.value)
             );
@@ -165,7 +167,7 @@ const Agendamentos = ({ setActiveComponent }) => {
             ) : (
               eventFilter.map((appointment) => (
                 <tr key={appointment.id} className="field-table-son text-zinc-700">
-                  <td className="w-30 text-center p-1 shadow">{appointment.telefone}</td>
+                  <td className="w-38 text-center p-1 shadow">{formatarTelefone(appointment.telefone)}</td>
                   <td className="w-30 p-1 shadow">  {FormattedDate(appointment.saida)}</td>
                   <td className="w-19 p-1 shadow">{FormattedHour(appointment.horario)}</td>
                   <td className="w-60 p-1 shadow font-bold">{appointment.cliente}</td>

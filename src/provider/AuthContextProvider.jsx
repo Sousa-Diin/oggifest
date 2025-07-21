@@ -104,8 +104,9 @@ const AuthContextProvider = ({ children }) => {
     localStorage.removeItem("agendamentos");
     setLocalStorage("agendamentos", newList);
     setEvento(newList);
-    window.location.reload(); // Recarrega a página para refletir as mudanças
-  
+    setInterval(() => { 
+      window.location.reload(); // Recarrega a página para refletir as mudanças
+    }, 3000);
     console.log("Evento adicionado com sucesso:");
   };
   

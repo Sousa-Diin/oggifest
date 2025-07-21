@@ -65,13 +65,16 @@ const Agendamentos = ({ setActiveComponent }) => {
       'Deseja mesmo excluir este agendamento?',
       () => {
         const cleanId = String(id).trim();
+
         const appointmentDeleted = deleteAppointment(cleanId);
+
         appointmentDeleted.then((res)=> {
           (res.status === 200) ? Notie.success(res.message) : Notie.error(res.message);
           setSearchTerm('');
           setPendingDelete(null);
         });
-        window.location.reload(); // Recarrega a página para refletir as mudanças
+
+        
       },
       () => {
         Notie.info('Ação cancelada!');
@@ -93,7 +96,6 @@ const Agendamentos = ({ setActiveComponent }) => {
   };
 
   //console.log("Eventos.: ", evento);
-  console.log("Telefone formatado:", formatarTelefone("1234567890" ));
   return (
     <div className='container-data z-0 '>
       <div className='flex w-full  justify-between p-2'>
@@ -245,6 +247,7 @@ const Agendamentos = ({ setActiveComponent }) => {
                 setOpenWindowEdit(true);
                 setSelectedAppointment(pendingEdit);
                 setShowPasswordModal(false);
+                return;
               } else if (atributePassword === 'deletar' && value === PASSWORD_DELETE) {
                 handleDeleteAppointment();
               }

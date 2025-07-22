@@ -89,11 +89,15 @@ export default function CustomWindow({ message, action='insert',subText = "Envia
           <div className="flex flex-wrap gap-2 w-full">
             <div className="flex-1 min-w-[90px]">
               <label htmlFor="Phone" className="block font-semibold">Telefone</label>
-              <TelefoneInput
-                value={formData.telefone ?? ''}
-                onChange={(telefone) => setFormData({ ...formData, telefone })}
+                <input
+                type="text"
+                name="Phone"
+                value={formData?.telefone}  
+                placeholder="35900001111"              
+                onChange={(e) => setFormData({ ...formData, telefone: e.target.value })}
+                className=" bg-gray-100 w-full p-1 text-center rounded shadow"
+                required
               />
-
 
             </div>
             <div className="flex-1 min-w-[180px]">
@@ -101,7 +105,7 @@ export default function CustomWindow({ message, action='insert',subText = "Envia
               <input
                 type="text"
                 name="Cliente"
-                value={formData.cliente || ''}
+                value={formData?.cliente}
                 onChange={(e) => setFormData({ ...formData, cliente: e.target.value })}
                 className="w-full p-1 bg-gray-100 rounded shadow"
                 required
@@ -116,7 +120,7 @@ export default function CustomWindow({ message, action='insert',subText = "Envia
               <input
                 type="date"
                 name="Saida"
-                value={FormattedDate(formData.saida) || ''}
+                value={FormattedDate(formData?.saida)}
                 onChange={(e) => setFormData({ ...formData,saida: e.target.value })}
                 className="w-full p-1 bg-gray-100 rounded shadow"
                 required
@@ -127,7 +131,7 @@ export default function CustomWindow({ message, action='insert',subText = "Envia
               <input
                 type="time"
                 name="Horario"
-                value={FormattedHour(formData.horario) || ''}
+                value={FormattedHour(formData?.horario)}
                 onChange={(e) => setFormData({ ...formData, horario: e.target.value })}
                 className="w-full p-1 bg-gray-100 rounded shadow"
                 required
@@ -142,7 +146,7 @@ export default function CustomWindow({ message, action='insert',subText = "Envia
               <input
                 type="number"
                 name="Pedido"
-                value={formData.pedido || ''}
+                value={formData?.pedido}
                 onChange={(e) => setFormData({ ...formData, pedido: parseFloat(e.target.value) })}
                 className={`w-full p-1 bg-gray-100 rounded shadow ${errors.pedido ? 'border border-red-500 text-red-500' : ''}`}
                 required
@@ -154,7 +158,7 @@ export default function CustomWindow({ message, action='insert',subText = "Envia
               <input
                 type="number"
                 name="Quantidade"
-                value={formData.quantidade || ''}
+                value={formData?.quantidade}
                 onChange={(e) => setFormData({ ...formData, quantidade: parseFloat(e.target.value) })}
                 className={`bg-gray-100 w-full p-1 rounded shadow ${errors.quantidade ? 'border border-red-500 text-red-500' : ''}`}
                 required
@@ -166,7 +170,7 @@ export default function CustomWindow({ message, action='insert',subText = "Envia
               <input
                 type="number"
                 name="Valor"
-                value={formData.valor || ''}
+                value={formData?.valor}
                 onChange={(e) => setFormData({ ...formData, valor: parseFloat(e.target.value) })}
                 className={`bg-gray-100 w-full p-1 rounded shadow ${errors.valor ? 'border border-red-500 text-red-500' : ''}`}
                 required

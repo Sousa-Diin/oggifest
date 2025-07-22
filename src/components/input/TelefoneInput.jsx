@@ -1,9 +1,16 @@
 import React, { useEffect, useRef } from 'react';
 import Cleave from 'cleave.js';
 
-export default function TelefoneInput({ value = '', onChange }) {
+export default function TelefoneInput({ value, onChange }) {
   const inputRef = useRef(null);
   const cleaveRef = useRef(null);
+  const STORAGE_KEY = 'telefoneInput';
+
+  // Salva no localStorage ao alterar
+  const handleValueChange = (rawValue) => {
+    localStorage.setItem(STORAGE_KEY, rawValue);
+    onChange(rawValue);
+  };
 
   useEffect(() => {
     if (inputRef.current) {
@@ -12,18 +19,24 @@ export default function TelefoneInput({ value = '', onChange }) {
         blocks: [0, 2, 5, 4],
         numericOnly: true,
         onValueChanged: (e) => {
-          onChange(e.target.rawValue); // chama apenas o valor limpo
+          handleValueChange(e.target.rawValue); // valor limpo
         }
       });
+
+      // Carrega valor salvo se o `value` estiver vazio
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (!value && saved) {
+        cleaveRef.current.setRawValue(saved);
+        onChange(saved);
+      }
     }
 
     return () => {
       cleaveRef.current?.destroy();
     };
-  }, []); // <-- só monta uma vez (sem dependências)
+  }, []);
 
   useEffect(() => {
-    // Atualiza o valor se mudar externamente
     if (cleaveRef.current && value !== cleaveRef.current.getRawValue()) {
       cleaveRef.current.setRawValue(value);
     }
@@ -32,7 +45,6 @@ export default function TelefoneInput({ value = '', onChange }) {
   return (
     <input
       ref={inputRef}
-      defaultValue={value}
       type="text"
       placeholder="(00) 00000-0000"
       className="w-full p-1 bg-gray-100 rounded shadow"
@@ -40,3 +52,4 @@ export default function TelefoneInput({ value = '', onChange }) {
     />
   );
 }
+

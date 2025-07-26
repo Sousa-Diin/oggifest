@@ -60,7 +60,7 @@ const AuthContextProvider = ({ children }) => {
       return;
     }
   
-    const statusValido = ["Agendado", "Entrada", "Pago"];
+    const statusValido = ["Agendado", "Entrada", "Pago", "Cancelado"];
     if (!statusValido.includes(ev.status)) {
       Notie.alert("Erro ao adicionar evento: status inválido.");
       console.error("Evento inválido:", ev);

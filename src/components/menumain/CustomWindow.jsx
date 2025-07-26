@@ -27,6 +27,15 @@ export default function CustomWindow({ message, action='insert',subText = "Envia
 
   const validate = () => {
     const newErrors = {};
+    formData.telefone = formData.telefone.toString().trim();
+    const digits = formData.telefone.replace(/\D/g, '');
+
+    if (digits.length > 11) {
+      newErrors.telefone = "O telefone não pode ter mais de 11 dígitos.";
+    } else if (!/^\d+$/.test(digits)) {
+      newErrors.telefone = "O telefone deve conter apenas números.";
+    }
+
     if (formData.valor < 0) {
       newErrors.valor = "Valor não pode ser negativo.";
     }
@@ -90,13 +99,15 @@ export default function CustomWindow({ message, action='insert',subText = "Envia
               <label htmlFor="Phone" className="block font-semibold">Telefone</label>
               <input
                 type="text"
-                name="Phone"
-                value={formData.telefone ?? ''}  
-                placeholder="(00) 00000-0000"              
+                name="Phone"                
+                value={formData.telefone ?? ''} 
+                placeholder="Ex: 11987654321"           
                 onChange={(e) => setFormData({ ...formData, telefone: e.target.value })}
-                className=" bg-gray-100 w-full p-1 text-center rounded shadow"
+                className={` bg-gray-100 w-full p-1 text-center rounded shadow ${errors.pedido ? 'border border-red-500 text-red-500' : ''}`}
                 required
+                maxLength={11}
               />
+               {errors.telefone && <p className="text-red-500 text-xs mt-1">{errors.telefone}</p>}
             </div>
             <div className="flex-1 min-w-[180px]">
               <label htmlFor="Cliente" className="block font-semibold">Nome do Cliente</label>
@@ -104,6 +115,7 @@ export default function CustomWindow({ message, action='insert',subText = "Envia
                 type="text"
                 name="Cliente"
                 value={formData.cliente || ''}
+                placeholder="ex: Maria da Silva"
                 onChange={(e) => setFormData({ ...formData, cliente: e.target.value })}
                 className="w-full p-1 bg-gray-100 rounded shadow"
                 required
@@ -148,6 +160,7 @@ export default function CustomWindow({ message, action='insert',subText = "Envia
                 onChange={(e) => setFormData({ ...formData, pedido: parseFloat(e.target.value) })}
                 className={`w-full p-1 bg-gray-100 rounded shadow ${errors.pedido ? 'border border-red-500 text-red-500' : ''}`}
                 required
+                maxLength={3}
               />
               {errors.pedido && <p className="text-red-500 text-xs mt-1">{errors.pedido}</p>}
             </div>
@@ -160,6 +173,7 @@ export default function CustomWindow({ message, action='insert',subText = "Envia
                 onChange={(e) => setFormData({ ...formData, quantidade: parseFloat(e.target.value) })}
                 className={`bg-gray-100 w-full p-1 rounded shadow ${errors.quantidade ? 'border border-red-500 text-red-500' : ''}`}
                 required
+                maxLength={4}
               />
               {errors.quantidade && <p className="text-red-500 text-xs mt-1">{errors.quantidade}</p>}
             </div>

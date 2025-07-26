@@ -11,7 +11,7 @@ import car from '../assets/carrinho-oggi-front.png'
 import PasswordModal from '../components/PasswordModal.jsx';
 import Notie from '../service/notieService.js';
 import { useState } from 'react';
-import { FormattedDate, FormattedHour } from "../util/FormattedDate.js"; // Importando a função de formatação de hora
+import { FormattedDate, FormattedHour, formatarTelefone } from "../util/FormattedDate.js"; // Importando a função de formatação de hora
 import { deleteAppointment } from '../service/AppointmentsService.js'; // Importando a função de exclusão de agendamento
 import { PASSWORD_DELETE, PASSWORD_EDIT } from '../service/authSheets.js';
 
@@ -70,7 +70,7 @@ const Agendamentos = ({ setActiveComponent }) => {
           setSearchTerm('');
           setPendingDelete(null);
         });
-        window.location.reload(); // Recarrega a página para refletir as mudanças
+        //window.location.reload(); // Recarrega a página para refletir as mudanças
       },
       () => {
         Notie.info('Ação cancelada!');
@@ -107,7 +107,8 @@ const Agendamentos = ({ setActiveComponent }) => {
               { label: 'Todos', value: null },
               { label: 'Pago', value: 'Pago' },
               { label: 'Entrada', value: 'Entrada' },
-              { label: 'Agendado', value: 'Agendado' }
+              { label: 'Agendado', value: 'Agendado' },
+              { label: 'Cancelado', value: 'Cancelado' }
             ],
               (selected) => setFiltroStatus(selected.value)
             );
@@ -165,7 +166,7 @@ const Agendamentos = ({ setActiveComponent }) => {
             ) : (
               eventFilter.map((appointment) => (
                 <tr key={appointment.id} className="field-table-son text-zinc-700">
-                  <td className="w-30 text-center p-1 shadow">{appointment.telefone}</td>
+                  <td className="w-40 text-center p-1 shadow">{formatarTelefone(appointment.telefone)}</td>
                   <td className="w-30 p-1 shadow">  {FormattedDate(appointment.saida)}</td>
                   <td className="w-19 p-1 shadow">{FormattedHour(appointment.horario)}</td>
                   <td className="w-60 p-1 shadow font-bold">{appointment.cliente}</td>

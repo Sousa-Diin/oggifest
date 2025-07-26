@@ -103,7 +103,7 @@ export default function CustomWindow({ message, action='insert',subText = "Envia
                 value={formData.telefone ?? ''} 
                 placeholder="Ex: 11987654321"           
                 onChange={(e) => setFormData({ ...formData, telefone: e.target.value })}
-                className={` bg-gray-100 w-full p-1 text-center rounded shadow ${errors.pedido ? 'border border-red-500 text-red-500' : ''}`}
+                className={` bg-gray-100 w-full p-1 rounded shadow ${errors.pedido ? 'border border-red-500 text-red-500' : ''}`}
                 required
                 maxLength={11}
               />
@@ -115,7 +115,7 @@ export default function CustomWindow({ message, action='insert',subText = "Envia
                 type="text"
                 name="Cliente"
                 value={formData.cliente || ''}
-                placeholder="ex: Maria da Silva"
+                placeholder="Fulano da Silva"
                 onChange={(e) => setFormData({ ...formData, cliente: e.target.value })}
                 className="w-full p-1 bg-gray-100 rounded shadow"
                 required
@@ -152,11 +152,12 @@ export default function CustomWindow({ message, action='insert',subText = "Envia
           {/* Pedido, Quantidade, Valor */}
           <div className="flex flex-wrap gap-2 w-full">
             <div className="flex-1 min-w-[100px]">
-              <label htmlFor="Pedido" className="block font-semibold">Pedido</label>
+              <label htmlFor="Pedido" className="block font-semibold">Pedido/Venda</label>
               <input
                 type="number"
                 name="Pedido"
                 value={formData.pedido || ''}
+                placeholder="15"
                 onChange={(e) => setFormData({ ...formData, pedido: parseFloat(e.target.value) })}
                 className={`w-full p-1 bg-gray-100 rounded shadow ${errors.pedido ? 'border border-red-500 text-red-500' : ''}`}
                 required
@@ -165,11 +166,12 @@ export default function CustomWindow({ message, action='insert',subText = "Envia
               {errors.pedido && <p className="text-red-500 text-xs mt-1">{errors.pedido}</p>}
             </div>
             <div className="flex-1 min-w-[100px]">
-              <label htmlFor="Quantidade" className="block font-semibold">Quantidade</label>
+              <label htmlFor="Quantidade" className="block font-semibold">Quantidade/itens</label>
               <input
                 type="number"
                 name="Quantidade"
                 value={formData.quantidade || ''}
+                placeholder="125"
                 onChange={(e) => setFormData({ ...formData, quantidade: parseFloat(e.target.value) })}
                 className={`bg-gray-100 w-full p-1 rounded shadow ${errors.quantidade ? 'border border-red-500 text-red-500' : ''}`}
                 required
@@ -183,6 +185,7 @@ export default function CustomWindow({ message, action='insert',subText = "Envia
                 type="number"
                 name="Valor"
                 value={formData.valor || ''}
+                placeholder="187.50"
                 onChange={(e) => setFormData({ ...formData, valor: parseFloat(e.target.value) })}
                 className={`bg-gray-100 w-full p-1 rounded shadow ${errors.valor ? 'border border-red-500 text-red-500' : ''}`}
                 required
@@ -210,6 +213,7 @@ export default function CustomWindow({ message, action='insert',subText = "Envia
               <option value="Agendado" disabled={formData.valor > 0}>Agendado</option>
               <option value="Entrada" disabled={formData.valor >= 200}>Entrada</option>
               <option value="Pago" disabled={formData.valor < 200}>Pago</option>
+              {action === "edit" ? <option value="Cancelado">Cancelado</option>: ""}
             </select>
             {errors.status && <p className="text-red-500 text-xs mt-1">{errors.status}</p>}
           </div>

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { getAllAppointments, createAppointment, updateAppointment } from "../service/AppointmentsService"; // Importando o serviço de agendamentos
 import Notie from "../service/notieService"; // Importando o serviço de notificação
+import { formatarDataHoraParaEnvio } from "../util/FormattedDate"; // Importando a função de formatação de data
 import { Result } from "postcss";
 
 const AuthContext = createContext({});
@@ -76,9 +77,14 @@ const AuthContextProvider = ({ children }) => {
 
     }
   
-    const prevList = [...evento];
+    /* const prevList = [...evento];
     const newEvent = { ...ev };
+    const newList = [...prevList]; */
+   
+    const prevList = [...evento];
+    const newEvent = formatarDataHoraParaEnvio({ ...ev });
     const newList = [...prevList];
+    
 
     let result = null;
 

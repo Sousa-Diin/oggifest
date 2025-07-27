@@ -14,7 +14,6 @@ import { useState } from 'react';
 import { FormattedDate, FormattedHour, formatarTelefone } from "../util/FormattedDate.js"; // Importando a função de formatação de hora
 import { deleteAppointment } from '../service/AppointmentsService.js'; // Importando a função de exclusão de agendamento
 import { PASSWORD_DELETE, PASSWORD_EDIT } from '../service/authSheets.js';
-import formatarTelefone from '../util/formatarTelefone.js'; // Importando a função de formatação de telefone
 
 const Agendamentos = ({ setActiveComponent }) => {
   const { evento } = useAuth();
@@ -73,12 +72,8 @@ const Agendamentos = ({ setActiveComponent }) => {
           setSearchTerm('');
           setPendingDelete(null);
         });
-<<<<<<< HEAD
-        //window.location.reload(); // Recarrega a página para refletir as mudanças
-=======
 
         
->>>>>>> b06e207764bffc28d300bb51dd561164c655faa7
       },
       () => {
         Notie.info('Ação cancelada!');
@@ -173,11 +168,7 @@ const Agendamentos = ({ setActiveComponent }) => {
             ) : (
               eventFilter.map((appointment) => (
                 <tr key={appointment.id} className="field-table-son text-zinc-700">
-<<<<<<< HEAD
                   <td className="w-40 text-center p-1 shadow">{formatarTelefone(appointment.telefone)}</td>
-=======
-                  <td className="w-38 text-center p-1 shadow">{formatarTelefone(appointment.telefone)}</td>
->>>>>>> b06e207764bffc28d300bb51dd561164c655faa7
                   <td className="w-30 p-1 shadow">  {FormattedDate(appointment.saida)}</td>
                   <td className="w-19 p-1 shadow">{FormattedHour(appointment.horario)}</td>
                   <td className="w-60 p-1 shadow font-bold">{appointment.cliente}</td>

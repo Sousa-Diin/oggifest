@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../../provider/AuthContextProvider";
 import { X } from "lucide-react";
 import Notie from "../../service/notieService";
+import TelefoneInput from "../input/TelefoneInput.jsx";
 import { FormattedDate, FormattedHour } from "../../util/FormattedDate";
 
 export default function CustomWindow({ message, action='insert',subText = "Enviando...", setOpenWindowEdit, appointment }) {
@@ -93,7 +94,7 @@ export default function CustomWindow({ message, action='insert',subText = "Envia
           <div className="flex flex-wrap gap-2 w-full">
             <div className="flex-1 min-w-[90px]">
               <label htmlFor="Phone" className="block font-semibold">Telefone</label>
-              <input
+                <input
                 type="text"
                 name="Phone"                
                 value={formData.telefone ?? ''} 
@@ -126,7 +127,7 @@ export default function CustomWindow({ message, action='insert',subText = "Envia
               <input
                 type="date"
                 name="Saida"
-                value={FormattedDate(formData.saida) || ''}
+                value={FormattedDate(formData?.saida)}
                 onChange={(e) => setFormData({ ...formData,saida: e.target.value })}
                 className="w-full p-1 bg-gray-100 rounded shadow"
                 required
@@ -153,7 +154,7 @@ export default function CustomWindow({ message, action='insert',subText = "Envia
               <input
                 type="time"
                 name="Horario"
-                value={FormattedHour(formData.horario) || ''}
+                value={FormattedHour(formData?.horario)}
                 onChange={(e) => setFormData({ ...formData, horario: e.target.value })}
                 className="w-full p-1 bg-gray-100 rounded shadow"
                 required
@@ -222,8 +223,9 @@ export default function CustomWindow({ message, action='insert',subText = "Envia
               required
             >
               <option value="" disabled>Selecione o status</option>
-              <option value="Agendado" disabled={formData.valor > 0}>Agendado</option>
-              <option value="Entrada" disabled={formData.valor >= 200}>Entrada</option>
+              {action === 'edit' ? <option value="Cancelado" >Cancelado</option>: ""}
+              <option value="Agendado" >Agendado</option>
+              <option value="Entrada" disabled={formData.valor >= 600}>Entrada</option>
               <option value="Pago" disabled={formData.valor < 200}>Pago</option>
               {action === "edit" ? <option value="Cancelado">Cancelado</option>: ""}
             </select>

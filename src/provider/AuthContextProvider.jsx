@@ -1,5 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { getAllAppointments, createAppointment, updateAppointment } from "../service/AppointmentsService"; // Importando o serviço de agendamentos
+import { 
+  getAllAppointments, 
+  createAppointment, 
+  updateAppointment 
+} from "../service/AppointmentsService"; // Importando o serviço de agendamentos
 import Notie from "../service/notieService"; // Importando o serviço de notificação
 import { formatarDataHoraParaEnvio } from "../util/FormattedDate"; // Importando a função de formatação de data
 import { Result } from "postcss";
@@ -51,7 +55,7 @@ const AuthContextProvider = ({ children }) => {
     };
 
     loadData();
-  }, []);
+  }, [evento]);
 
   const addEvento = async (ev, action) => {
     if (!ev || !ev.cliente || !ev.pedido || !ev.horario || !ev.saida ) {

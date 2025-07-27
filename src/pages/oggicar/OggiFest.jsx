@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaSearch, FaPlus } from "react-icons/fa";
 import { MdClose } from "react-icons/md";
 import { LuRefreshCcw } from "react-icons/lu";
@@ -6,6 +6,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import './OggiFest.css';
 import CustomWindow from "../../components/menumain/CustomWindow";
+import LoadSplash from "../splash/LoadSplash";
 import { useAuth } from '../../provider/AuthContextProvider';
 import Notie from "../../service/notieService";
 import { FormattedDate, FormattedHour } from "../../util/FormattedDate"; // Importando a função de formatação de hora
@@ -16,6 +17,16 @@ export default function OggiFest() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [termoBusca, setTermoBusca] = useState("");
   const [open, handleOpenMenu] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (evento ){
+      setLoading(false);
+      
+    }else {
+      setLoading(true);
+    }  
+  }, [evento]);
 
   const message = {
     title: "Agendar Carrinho",
@@ -102,11 +113,11 @@ const agendamentosFiltrados = evento
                 style={{backgroundColor:"rgba(0,0,0,.5)", width:"100%"}}>
                 <div className='flex w-[50%] min-h-[100dvh]  items-center justify-center rounded shadow '>
                   <CustomWindow 
+                    action={'insert'}
+                    message={message}
                     openWindowEdit={open} 
                     setOpenWindowEdit={handleOpenMenu}
                     appointment={evento} // Envia os dados para edição
-                    message={message}
-                    action={'insert'}
                   /> 
                 </div>
             </aside> : ''
@@ -136,12 +147,16 @@ const agendamentosFiltrados = evento
             </p>
 
 
-            {agendamentosFiltrados.length > 0 ? (
+            {loading ? (
+              <div className="flex justify-center items-center mt-4">
+                <LoadSplash />
+              </div>
+            ) : agendamentosFiltrados.length > 0 ? (
               <ul className="w-full flex flex-col items-center justify-center">
                 {agendamentosFiltrados.map((ev) => (
                   <div key={ev.id} 
-                  className="w-full flex flex-row items-center justify-between border-0 p-1 m-1 rounded-lg shadow-sm"
-                  style={{ backgroundColor: ev.status === "Pago" ? "#7CFC50" : "#FEE2E2"}}>
+                    className="w-full flex flex-row items-center justify-between border-0 p-1 m-1 rounded-lg shadow-sm"
+                    style={{ backgroundColor: ev.status === "Pago" ? "#7CFC50" : "#FEE2E2"}}>
                     <div className="w-2 h-8 rounded-bl rounded-tl bg-yellow-500 "></div>
                     <span className="">⌚{FormattedHour(ev.horario)}</span>
                     <span className="">{ev.cliente}</span>
@@ -156,6 +171,7 @@ const agendamentosFiltrados = evento
             ) : (
               <p className="text-gray-500 text-center mt-2">Nenhum agendamento</p>
             )}
+
           </div>
           
         </div>

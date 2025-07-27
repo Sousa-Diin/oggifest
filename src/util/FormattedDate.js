@@ -43,7 +43,7 @@ export const formatarTelefone = (telefone) => {
   
 }
 
-const formatarHorario = (date) => {
+export const formatarHorario = (date) => {
   if (!(date instanceof Date) || isNaN(date)) {
     return "";
   }
@@ -69,19 +69,23 @@ export function formatarData(data, comHora = false) {
 }
 
 
-export const formatarDataHoraParaEnvio = (evento) => {
+// FormattedDate.js ou formatarDataHoraParaEnvio.js
+export function formatarDataHoraParaEnvio(evento) {
   const novoEvento = { ...evento };
 
-  const saida = new Date(novoEvento.saida);
-  const horario = new Date(novoEvento.horario);
-
-  if (!isNaN(saida)) {
-    novoEvento.saida = formatarData(saida);
+  if (evento.saida) {
+    const date = new Date(evento.saida);
+    // Adiciona 3 horas para compensar UTC (Brasil = UTC-3 normalmente)
+    date.setHours(date.getHours() + 3);
+    novoEvento.saida = date.toISOString();
   }
 
-  if (!isNaN(horario)) {
-    novoEvento.horario = formatarHorario(horario);
+  if (evento.entrega) {
+    const entrega = new Date(evento.entrega);
+    entrega.setHours(entrega.getHours() + 3);
+    novoEvento.entrega = entrega.toISOString();
   }
 
   return novoEvento;
-};
+}
+

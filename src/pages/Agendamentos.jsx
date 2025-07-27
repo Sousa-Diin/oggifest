@@ -222,12 +222,12 @@ const Agendamentos = ({ setActiveComponent }) => {
         <aside className='flex items-center justify-center w-[96dvw] z-0 h-[100dvh] absolute top-0' style={{ backgroundColor: "rgba(0,0,0,.5)" }}>
           <div className='flex w-[50%] h-[65%] z-1 items-center justify-center rounded shadow'>
             <CustomWindow
+              message={message}
+              action={'edit'}
               title={'Editar Agendamento'}
               openWindowEdit={openWindowEdit}
               setOpenWindowEdit={setOpenWindowEdit}
               appointment={selectedAppointment}
-              message={message}
-              action={'edit'}
             />
           </div>
         </aside>

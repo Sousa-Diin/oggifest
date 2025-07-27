@@ -8,7 +8,8 @@
 :root {
   --color-primary: #E52C66;
   --color-primary-cc: rgb(229, 44, 102,.5);
-  --color-secondary: #37A2C2;
+  --color-secondary: #37a2c2;
+  --color-secondary-cc: rgb(55, 162, 194.5);
   --color-purple: #963584;
   --color-orange: #E59E07;
   --color-white: #EAE8E1;

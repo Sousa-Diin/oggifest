@@ -54,7 +54,7 @@ const AuthContextProvider = ({ children }) => {
   }, []);
 
   const addEvento = async (ev, action) => {
-    if (!ev || !ev.cliente || !ev.pedido || !ev.horario || !ev.saida) {
+    if (!ev || !ev.cliente || !ev.pedido || !ev.horario || !ev.saida ) {
       Notie.alert("Erro ao adicionar evento: dados inválidos.");
       console.error("Erro ao adicionar evento: dados inválidos.", ev);
       console.error("Ação[insert|edit]=> ", action);
@@ -88,8 +88,10 @@ const AuthContextProvider = ({ children }) => {
 
     let result = null;
 
-    if (action === "insert") { 
-      result = await createAppointment(newEvent);
+    if (action === "insert") {
+      const tempEvento = { ...newEvent, entrega: newEvent.saida };
+
+      result = await createAppointment(tempEvento);
     }
     else if (action === "edit") {
       result = await updateAppointment(newEvent);
@@ -110,7 +112,7 @@ const AuthContextProvider = ({ children }) => {
     localStorage.removeItem("agendamentos");
     setLocalStorage("agendamentos", newList);
     setEvento(newList);
-    window.location.reload(); // Recarrega a página para refletir as mudanças
+    //window.location.reload(); // Recarrega a página para refletir as mudanças
   
     console.log("Evento adicionado com sucesso:");
   };

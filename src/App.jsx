@@ -4,14 +4,16 @@ import React, { useState } from 'react';
 import { SideBar } from './components/siderBar/SideBar'
 import OggiFest from './pages/oggicar/OggiFest'
 import Agendamentos from './pages/Agendamentos'
+import LoadSplash from './pages/splash/LoadSplash';
 
 function App() {
   
   /* const [openPage, setOpenPage] = useState('OggiFest'); //muda de pagina */
-  const [activeComponent, setActiveComponent] = useState('oggifest'); 
+  const [activeComponent, setActiveComponent] = useState('oggifest'); // Estado para o componente ativo
 
   const stackComponent = {
     oggifest: <OggiFest/>,
+    load: <LoadSplash/>,
     appointments: <Agendamentos setActiveComponent={setActiveComponent}/>,
   };
 

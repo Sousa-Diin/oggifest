@@ -65,11 +65,7 @@ export default function CustomWindow({ message, action='insert',subText = "Envia
         //return;
       }
 
-      let preencheDataEntrega = new Date(formData.saida);
-      preencheDataEntrega.setDate(preencheDataEntrega.getDate() + 1);
-      formData.entrega = FormattedDate(formData.saida);
-
-      //seta o carregamento para true
+  
       setLoading(true);
       // Envia os dados do formulário para o serviço de adição de evento
       result = await addEvento(formData, action);
@@ -78,7 +74,7 @@ export default function CustomWindow({ message, action='insert',subText = "Envia
       Notie.error(error ||result.message || "Erro ao salvar o evento.");
     }finally {
       setLoading(false);
-      Notie.success(result.message || "Evento salvo com sucesso!");
+      Notie.success(result || "Evento salvo com sucesso!");
     }
   };
 
@@ -136,6 +132,22 @@ export default function CustomWindow({ message, action='insert',subText = "Envia
                 required
               />
             </div>
+            {
+              action === "edit" ? (
+                <div className="flex-1 min-w-[160px]">
+              <label htmlFor="Enterga" className="block font-semibold">Data da entrega</label>
+              <input
+                type="date"
+                name="Enterga"
+                value={FormattedDate(formData.entrega) || ''}
+                onChange={(e) => setFormData({ ...formData,entrega: e.target.value })}
+                className="w-full p-1 bg-gray-100 rounded shadow"
+                required
+              />
+            </div>
+              ): ""
+            }
+            
             <div className="flex-1 min-w-[100px]">
               <label htmlFor="Horario" className="block font-semibold">Horário</label>
               <input

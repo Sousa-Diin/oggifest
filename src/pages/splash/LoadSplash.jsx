@@ -1,6 +1,6 @@
 import "./loadsplash.css";
 
-const LoginSplash = () => {
+const LoadSplash = () => {
  
   return (
     <div className="body-spin">
@@ -12,4 +12,4 @@ const LoginSplash = () => {
   );
 }
 
-export default LoginSplash;
+export default LoadSplash;

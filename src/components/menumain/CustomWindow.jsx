@@ -23,7 +23,7 @@ export default function CustomWindow({ message, action='insert',subText = "Envia
     setFormData({});
   }
   setErrors({});
-}, [appointment, evento]);
+}, []); // BUG atualizando os dados do evento 01/08/2025
 
 
   const validate = () => {

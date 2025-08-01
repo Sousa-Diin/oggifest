@@ -3,6 +3,7 @@ import { VscAccount } from "react-icons/vsc";
 import { FaRegCalendarCheck } from "react-icons/fa";
 import { TfiAgenda } from "react-icons/tfi";
 import { IoBarChartSharp } from "react-icons/io5";
+import { LuSettings } from "react-icons/lu";
 import { TbLogout2 } from "react-icons/tb";
 import Notie from '../../service/notieService.js';
 import '../../pages/oggicar/OggiFest.css';
@@ -18,7 +19,7 @@ export const SideBar = ({setActiveComponent }) => {
     {
       name: <VscAccount />,
       label: "Account",
-      action: () => {handleChangePages('account'); Notie.warning('Aviso! Pagina em desenvolvimento...')},
+      action: () => {handleChangePages('account'); Notie.warning('Aviso! Pagina em desenvolvimento...');},
     },
     {
       name: <FaRegCalendarCheck />,
@@ -34,6 +35,11 @@ export const SideBar = ({setActiveComponent }) => {
       name: <IoBarChartSharp />,
       label: "Gráficos",
       action: () => {handleChangePages('chart');{Notie.error('Atenção! Seu perfil não tem acesso a essa página.')}},
+    },
+    {
+      name: <LuSettings />,
+      label: "Configurações",
+      action: () => {handleChangePages('config');{Notie.error('Atenção! Seu perfil não tem acesso a essa página.')}},
     },
     {
       name: <TbLogout2 />,

@@ -13,6 +13,7 @@ import Notie from '../service/notieService.js';
 import { FormattedDate, FormattedHour, formatarTelefone } from "../util/FormattedDate.js";
 import { deleteAppointment } from '../service/AppointmentsService.js';
 import { PASSWORD_DELETE, PASSWORD_EDIT } from '../service/authSheets.js';
+import monthOfYear from '../util/date.js';
 
 const Agendamentos = ({ setActiveComponent }) => {
   const { evento } = useAuth();
@@ -25,9 +26,10 @@ const Agendamentos = ({ setActiveComponent }) => {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filtroStatus, setFiltroStatus] = useState(null);
+  const [currentDate, setCurrentDate] = useState(new Date());
 
-  const currentDate = new Date();
-  const nomeMes = currentDate.toLocaleString('default', { month: 'long' });
+  
+  //const nomeMes = currentDate.toLocaleString('default', { month: 'long' });
 
   
   const matchesSearch = (appointment) => {
@@ -48,8 +50,8 @@ const Agendamentos = ({ setActiveComponent }) => {
   .filter((ev) => {
     const dataEvento = new Date(ev.saida);
     return (
-      dataEvento.getMonth() === currentDate.getMonth() &&
-      dataEvento.getFullYear() === currentDate.getFullYear()
+      dataEvento.getMonth() === currentDate.getMonth() /* && */
+      /* dataEvento.getFullYear() === currentDate.getFullYear() */
     );
   })
   .filter(matchesSearch)
@@ -101,8 +103,24 @@ const Agendamentos = ({ setActiveComponent }) => {
       <div className='flex w-full justify-between p-2'>
         <section className='flex gap-2 items-center w-[90%]'>
           <button onClick={handleChangePage}><IoMdArrowBack /></button>
-          <p>Agendamentos no mês de</p>
-          <p className='font-bold text-[#963584] capitalize'>{nomeMes}</p>
+          <label htmlFor="months">Agendamentos no mês de </label>
+          <select 
+            className='select-months font-bold text-[#963584] capitalize'
+            name="months" id="months" 
+            defaultValue={monthOfYear()[currentDate.getMonth()]}
+            onChange={(e) => {
+              const monthIndex = monthOfYear().indexOf(e.target.value);
+              setCurrentDate(new Date(currentDate.getFullYear(), monthIndex, 1));}
+            }
+          >
+
+            {monthOfYear().map((month, index) => (
+              <option key={index} className='font-bold text-[#963584] capitalize' value={month}>
+                {month}
+              </option>
+            ))}
+          </select>         
+          {/* {currentDate.getFullYear()} */}
         </section>
         <IoFilter
           onClick={() => {

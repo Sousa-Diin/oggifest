@@ -2,7 +2,7 @@ function handleCreate (e){
 
     const data = e.parameter;
    // Validação básica
-    const requiredFields = ['Telefone','Cliente', 'Pedido', 'Saida', 'Horario', 'Entrega', 'Status', 'Quantidade', 'Valor'];
+    const requiredFields = ['telefone','cliente', 'pedido', 'saida', 'horario', 'entrega', 'status', 'quantidade', 'valor'];
     const missing = requiredFields.filter(key => !data[key]);
 
     if (missing.length > 0) {
@@ -44,12 +44,19 @@ function handleDelete(e) {
         message: 'ID não encontrado.',
         id
       });
+    }else if(found === 403){
+      return response({
+        status: 403,
+        message: "Acesso Negado"        
+      });
+    }else{
+      return response({
+        status: 200,
+        message: 'Item deletado com sucesso.',
+        id
+      });
+
     }
-    return response({
-      status: 200,
-      message: 'Item deletado com sucesso.',
-      id
-    });
 
   } catch (error) {
     return response({
@@ -97,4 +104,5 @@ function handleUpdate(e) {
     });
   }
 }
+
 

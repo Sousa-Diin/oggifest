@@ -147,37 +147,37 @@ class BaseRepository {
     return headers;
   }
 
-/**
- * Converte um objeto de dados em um array ordenado conforme os cabeçalhos da planilha.
- * @private
- * @param {Object} data - Objeto com os dados a serem formatados.
- * @returns {Array} Array representando a linha a ser inserida na planilha.
- */
-__convertObjToRow(data) {
-  const headers = this.getHeader();
+  /**
+   * Converte um objeto de dados em um array ordenado conforme os cabeçalhos da planilha.
+   * @private
+   * @param {Object} data - Objeto com os dados a serem formatados.
+   * @returns {Array} Array representando a linha a ser inserida na planilha.
+   */
+  __convertObjToRow(data) {
+    const headers = this.getHeader();
 
-  const newObjRow = headers.map(columnsName => {
-    const lowerHeader = columnsName.toLowerCase();
+    const newObjRow = headers.map(columnsName => {
+      const lowerHeader = columnsName.toLowerCase();
 
-    if (lowerHeader === 'id') {
-      // Usa o ID existente, ou cria um novo se não tiver
-      const idKey = Object.keys(data).find(k => k.toLowerCase() === 'id');
-      return idKey && data[idKey] ? data[idKey] : Utilities.getUuid();
-    }
+      if (lowerHeader === 'id') {
+        // Usa o ID existente, ou cria um novo se não tiver
+        const idKey = Object.keys(data).find(k => k.toLowerCase() === 'id');
+        return idKey && data[idKey] ? data[idKey] : Utilities.getUuid();
+      }
 
-    if (lowerHeader === 'criacao') {
-      // Usa data existente ou gera nova se não tiver
-      const dateKey = Object.keys(data).find(k => k.toLowerCase() === 'criacao');
-      return dateKey && data[dateKey] ? new Date(data[dateKey]) : new Date();
-    }
+      if (lowerHeader === 'criacao') {
+        // Usa data existente ou gera nova se não tiver
+        const dateKey = Object.keys(data).find(k => k.toLowerCase() === 'criacao');
+        return dateKey && data[dateKey] ? new Date(data[dateKey]) : new Date();
+      }
 
-    const key = Object.keys(data).find(k => k.toLowerCase() === lowerHeader.toLowerCase());
-    return key ? data[key] : '';
-  });
+      const key = Object.keys(data).find(k => k.toLowerCase() === lowerHeader.toLowerCase());
+      return key ? data[key] : '';
+    });
 
-  Logger.log('Nova linha formatada: ' + JSON.stringify(newObjRow));
-  return newObjRow;
-}
+    Logger.log('Nova linha formatada: ' + JSON.stringify(newObjRow));
+    return newObjRow;
+  }
 
 
 
@@ -207,7 +207,7 @@ __convertObjToRow(data) {
   * @returns {Object|null} Objeto inserido ou null se já existir.
   */
   create(data, uniqueField) {
-    const idKey = Object.keys(data).find(k => k.toLowerCase() === 'Id');
+    const idKey = Object.keys(data).find(k => k.toLowerCase() === 'id');
     const idValue = idKey && data[idKey];
   
     // 1. Verifica se o ID já existe
@@ -244,7 +244,7 @@ __convertObjToRow(data) {
    * @private
    * @params {*} element - Valor a ser procurado.
    * @params {string} field - Nome do campo (coluna).
-   * @returns {Array|null} Linha correspondente, se encontrada; caso contrário, null.
+   * @returns {Object|null} Objeto correspondente, se encontrada; caso contrário, null.
    */
   __findElementInFieldByRow(element, field) {
     const data = this.__sheetTable.getDataRange().getValues();
@@ -259,9 +259,14 @@ __convertObjToRow(data) {
     }
 
     for (let i = 1; i < data.length; i++) {
-      const row = data[i];
+      const row = data[i]; //Retorna apenas os campos 15/07/2025 17:31
       if (String(row[fieldIndex]) === String(element)) {
-        return row;
+         // Converte array da linha em objeto usando os headers
+        const result = {};
+        headers.forEach((key, index) => {
+          result[key] = row[index];
+        });
+        return result;
       }
 
     }
@@ -364,10 +369,9 @@ __convertObjToRow(data) {
       }
     }
 
-    return JSON.stringify(result);
+    return result;
   }
 
-  
    /**
    * Atualiza um registro com base no ID.
    *
@@ -425,9 +429,12 @@ __convertObjToRow(data) {
     const data = this.__sheetTable.getDataRange().getValues();
 
     for (let i = 1; i < data.length; i++) {
-      if (data[i][fieldIndex] === id) {
-        this.__sheetTable.deleteRow(i + 1); // +1 porque os dados começam da linha 2
-        Logger.log(`Registro com ID ${id} removido com sucesso.`);
+      const rowId = String(data[i][fieldIndex]).trim().toLowerCase();
+      const inputId = String(id).trim().toLowerCase();
+
+      if (rowId === inputId) {
+        this.__sheetTable.deleteRow(i + 1); // +1 porque a planilha começa na linha 1
+        Logger.log(`Registro com ID ${id} encontrado para exclusão.`);
         return true;
       }
     }
@@ -435,6 +442,5 @@ __convertObjToRow(data) {
     Logger.log(`Registro com ID ${id} não encontrado para exclusão.`);
     return false;
   }
-
-
 }
+

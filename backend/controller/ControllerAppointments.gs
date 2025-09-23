@@ -21,12 +21,34 @@ function handleCreate (e){
         message: `Produto com código "${data.Id}" já existe.`
       });
     }
-    
-    return response({
-      status: 200,
-      message: "Produto adicionado com sucesso.",
-      data: appointmentCreated
-    });
+
+
+    // Atualiza apenas a data do item recém-adicionado
+    const repoRent = new CartRentalCalendarRepository();
+    const findExistente = repoRent.getAllAsObject()
+    const existente = findExistente.find(find => toDateString(find.saida) === toDateString(data.saida));
+
+        // se data.saida já vem "2026-01-21", salve exatamente assim:
+    if (existente) {
+      existente.quantidade++;
+      repoRent.update(existente.id, existente); // corrige incremento também
+      return response({
+        status: 201,
+        messagem: `Item atualizado in TABLE[RENTS].`,
+        data: existente
+      });
+    } else {
+      repoRent.create({
+        ...data,
+        quantidade: 1
+      });
+
+      return response({
+        status: 200,
+        message: "Produto adicionado com sucesso.",
+        data: appointmentCreated
+      });
+    }    
 }
 
 

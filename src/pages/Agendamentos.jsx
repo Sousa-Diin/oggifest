@@ -67,17 +67,27 @@ const Agendamentos = ({ setActiveComponent }) => {
 
   const handleDeleteAppointment = () => {
     const id = pendingDelete;
-    Notie.confirm('Deseja mesmo excluir este agendamento?', () => {
-      const cleanId = String(id).trim();
-      deleteAppointment(cleanId).then((res) => {
-        res.status === 200 ? Notie.success(res.message) : Notie.error(res.message);
+    
+    Notie.confirm(
+      'Deseja mesmo excluir este agendamento?',
+      () => {
+        const cleanId = String(id).trim();
+
+        const appointmentDeleted = deleteAppointment(cleanId);
+
+        appointmentDeleted.then((res)=> {
+          (res.status === 200) ? Notie.success(res.message) : Notie.error(res.message);
+          setSearchTerm('');
+          setPendingDelete(null);
+        });
+
+        
+      },
+      () => {
+        Notie.info('Ação cancelada!');
         setSearchTerm('');
-        setPendingDelete(null);
-      });
-    }, () => {
-      Notie.info('Ação cancelada!');
-      setSearchTerm('');
-    });
+      }
+    );
   };
 
   const handleChangePage = () => {
@@ -92,12 +102,7 @@ const Agendamentos = ({ setActiveComponent }) => {
     error: "Erro ao editar."
   };
 
-  if (loading) {
-    return (
-       <LoadSplash/>
-    );
-  }
-
+  //console.log("Eventos.: ", evento);
   return (
     <div className='container-data z-0'>
       <div className='flex w-full justify-between p-2'>
@@ -263,7 +268,6 @@ const Agendamentos = ({ setActiveComponent }) => {
                 setOpenWindowEdit(true);
                 setSelectedAppointment(pendingEdit);
                 setShowPasswordModal(false);
-                return;
               } else if (atributePassword === 'deletar' && value === PASSWORD_DELETE) {
                 handleDeleteAppointment();
               } else if (!value || value.trim() === '') {

@@ -75,7 +75,9 @@ export default function CustomWindow({ message, action='insert',subText = "Envia
       Notie.error(error ||result.message || "Erro ao salvar o evento.");
     }finally {
       setLoading(false);
-      Notie.success(result || "Evento salvo com sucesso!");
+
+      Notie.success(result);
+      console.log("Result: ", result);
     }
   };
 

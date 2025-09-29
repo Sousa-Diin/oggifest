@@ -10,11 +10,14 @@ import { LuSettings } from "react-icons/lu";
 import { TbLogout2 } from "react-icons/tb";
 import { LiaLocationArrowSolid } from "react-icons/lia";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { useAuth } from '../../provider/AuthContextProvider';
 import { IoMdClose } from "react-icons/io";
 import Notie from "../../service/notieService.js";
 import "../../pages/oggicar/OggiFest.css";
 
 export const SideBar = ({ setActiveComponent }) => {
+  
+  const { evento } = useAuth();
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [arrowTop, setArrowTop] = useState(null);
   const [isOpen, setIsOpen] = useState(false); // controla sidebar no mobile
@@ -76,7 +79,7 @@ export const SideBar = ({ setActiveComponent }) => {
       const rect = el.getBoundingClientRect();
       setArrowTop(rect.top + rect.height / 2 - 10);
     }
-  }, [selectedIndex]);
+  }, [selectedIndex,evento]);
 
   return (
     <>

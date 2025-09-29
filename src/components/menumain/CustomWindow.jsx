@@ -75,8 +75,13 @@ export default function CustomWindow({ message, action='insert',subText = "Envia
       Notie.error(error ||result.message || "Erro ao salvar o evento.");
     }finally {
       setLoading(false);
-
-      Notie.success(result);
+      if ( result.status === 409){ 
+        Notie.warning(result.message);
+      }else if (result.status === 200){
+        Notie.success(result.message);
+      }else{
+        Notie.error(result.message);
+      }
       console.log("Result: ", result);
     }
   };

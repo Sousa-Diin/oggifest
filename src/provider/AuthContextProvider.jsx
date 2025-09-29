@@ -2,7 +2,6 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { getAllAppointments, createAppointment, updateAppointment } from "../service/AppointmentsService"; // Importando o serviço de agendamentos
 import Notie from "../service/notieService"; // Importando o serviço de notificação
 import { formatarDataHoraParaEnvio } from "../util/FormattedDate"; // Importando a função de formatação de data
-import { Result } from "postcss";
 
 const AuthContext = createContext({});
 
@@ -51,7 +50,7 @@ const AuthContextProvider = ({ children }) => {
     };
 
     loadData();
-  }, []);
+  }, [evento]);
 
   const addEvento = async (ev, action) => {
     if (!ev || !ev.cliente || !ev.pedido || !ev.horario || !ev.saida ) {
@@ -97,9 +96,8 @@ const AuthContextProvider = ({ children }) => {
       result = await updateAppointment(newEvent);
 
     }else {
-      Notie.alert("Ação inválida. Use 'insert' ou 'edit'.", result || result.message);
+      Notie.alert("Ação inválida. Use 'insert' ou 'edit'.", result );
       console.error("Ação inválida:", action);
-      throw new Error(result.message);
       return;
     }
   
@@ -109,12 +107,17 @@ const AuthContextProvider = ({ children }) => {
       console.error("Erro ao enviar dados para a planilha:", result);
       return;
     }
-    Notie.success(result.message);
-    console.log(result.message || result);
+    if ( result.status === 409){ 
+      Notie.warning(result.message);
+    }else if (result.status === 200){
+      Notie.success(result.message);
+    }else{
+      Notie.error(result.message);
+    } //É aqui que aparece a menssagem na tela
+    console.log(result.message);
     localStorage.removeItem("agendamentos");
     setLocalStorage("agendamentos", newList);
     setEvento(newList);
-    //window.location.reload(); // Recarrega a página para refletir as mudanças
   
     //console.log("Evento adicionado com sucesso:");
   };

@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
-import CustomWindow  from '../components/menumain/CustomWindow.jsx';
+import CustomWindow from '../components/menumain/CustomWindow.jsx';
 import { IoMdArrowBack } from "react-icons/io";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdOutlineModeEditOutline, MdOutlineFilterListOff, MdClose } from "react-icons/md";
 import { IoFilter } from "react-icons/io5";
+import { Sun, Moon } from "lucide-react"; // Ícones para toggle
 import { useAuth } from '../provider/AuthContextProvider.jsx';
 import './Agendamentos.css';
 import car from '../assets/carrinho-oggi-front.png';
 import PasswordModal from '../components/PasswordModal.jsx';
-import LoadSplash  from "../pages/splash/LoadSplash.jsx";
+import LoadSplash from "../pages/splash/LoadSplash.jsx";
 import Notie from '../service/notieService.js';
 import { FormattedDate, FormattedHour, formatarTelefone } from "../util/FormattedDate.js";
 import { deleteAppointment } from '../service/AppointmentsService.js';
@@ -27,11 +28,38 @@ const Agendamentos = ({ setActiveComponent }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filtroStatus, setFiltroStatus] = useState(null);
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [sortConfig, setSortConfig] = useState({ key: "saida", direction: "asc" });
 
-  
-  //const nomeMes = currentDate.toLocaleString('default', { month: 'long' });
 
-  
+  // Tema dark/light
+  const [theme, setTheme] = useState("light");
+
+  // Carrega tema do localStorage
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "light";
+    setTheme(savedTheme);
+    document.documentElement.classList.toggle("dark", savedTheme === "dark");
+  }, []);
+
+  const handleSort = (key) => {
+    setSortConfig((prev) => {
+      if (prev.key === key) {
+        // alterna entre asc e desc
+        return { key, direction: prev.direction === "asc" ? "desc" : "asc" };
+      }
+      return { key, direction: "asc" };
+    });
+  };
+
+
+  // Alternar tema
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    document.documentElement.classList.toggle("dark", newTheme === "dark");
+    localStorage.setItem("theme", newTheme);
+  };
+
   const matchesSearch = (appointment) => {
     if (!searchTerm.trim()) return true;
     const search = searchTerm.toLowerCase();
@@ -40,48 +68,64 @@ const Agendamentos = ({ setActiveComponent }) => {
       appointment.saida.toLowerCase().includes(search)
     );
   };
-  
+
   const matchesFilter = (appointment) => {
     if (!filtroStatus) return true;
     return appointment.status.toLowerCase() === filtroStatus.toLowerCase();
   };
-  
+
   const eventFilter = evento
-  .filter((ev) => {
-    const dataEvento = new Date(ev.saida);
-    return (
-      dataEvento.getMonth() === currentDate.getMonth() /* && */
-      /* dataEvento.getFullYear() === currentDate.getFullYear() */
-    );
-  })
-  .filter(matchesSearch)
-  .filter(matchesFilter)
-  .sort((a, b) => a.horario.localeCompare(b.horario));
-  
+    .filter((ev) => {
+      const dataEvento = new Date(ev.saida);
+      return (
+        dataEvento.getMonth() === currentDate.getMonth() &&
+        dataEvento.getFullYear() === currentDate.getFullYear()
+      );
+    })
+    .filter(matchesSearch)
+    .filter(matchesFilter)
+    /* .sort((a, b) => a.horario.localeCompare(b.horario)); */
+    .sort((a, b) => {
+      if (!sortConfig.key) return 0;
+
+      let valA, valB;
+      if (sortConfig.key === "saida") {
+        valA = new Date(a.saida);
+        valB = new Date(b.saida);
+      } else if (sortConfig.key === "horario") {
+        valA = a.horario;
+        valB = b.horario;
+      }
+    
+      if (valA < valB) return sortConfig.direction === "asc" ? -1 : 1;
+      if (valA > valB) return sortConfig.direction === "asc" ? 1 : -1;
+      return 0;
+    });
+
+
   useEffect(() => {
-    if (evento && eventFilter.length > 0) {
+    // Se evento ainda não veio ou é indefinido, mantemos carregando
+    if (!evento || evento.length === 0) {
+      setLoading(true);
+    } else {
+      // Quando já temos dados, desativa o loading
       setLoading(false);
     }
-   
-  }, [evento, eventFilter]);
+  }, [evento]);
+
 
   const handleDeleteAppointment = () => {
     const id = pendingDelete;
-    
     Notie.confirm(
       'Deseja mesmo excluir este agendamento?',
       () => {
         const cleanId = String(id).trim();
-
         const appointmentDeleted = deleteAppointment(cleanId);
-
-        appointmentDeleted.then((res)=> {
-          (res.status === 200) ? Notie.success(res.message) : Notie.error(res.message);
+        appointmentDeleted.then((res) => {
+          res.status === 200 ? Notie.success(res.message) : Notie.error(res.message);
           setSearchTerm('');
           setPendingDelete(null);
         });
-
-        
       },
       () => {
         Notie.info('Ação cancelada!');
@@ -102,147 +146,186 @@ const Agendamentos = ({ setActiveComponent }) => {
     error: "Erro ao editar."
   };
 
-  //console.log("Eventos.: ", evento);
   return (
-    <div className='container-data z-0'>
-      <div className='flex w-full justify-between p-2'>
-        <section className='flex gap-2 items-center w-[90%]'>
-          <button onClick={handleChangePage}><IoMdArrowBack /></button>
-          <label htmlFor="months">Agendamentos no mês de </label>
-          <select 
-            className='select-months font-bold text-[#963584] capitalize'
-            name="months" id="months" 
-            defaultValue={monthOfYear()[currentDate.getMonth()]}
-            onChange={(e) => {
-              const monthIndex = monthOfYear().indexOf(e.target.value);
-              setCurrentDate(new Date(currentDate.getFullYear(), monthIndex, 1));}
-            }
-          >
-
-            {monthOfYear().map((month, index) => (
-              <option key={index} className='font-bold text-[#963584] capitalize' value={month}>
-                {month}
-              </option>
-            ))}
-          </select>         
-          {/* {currentDate.getFullYear()} */}
-        </section>
-        <IoFilter
-          onClick={() => {
-            Notie.select("Filtrar por status...", [
-              { label: 'Todos', value: null },
-              { label: 'Pago', value: 'Pago' },
-              { label: 'Entrada', value: 'Entrada' },
-              { label: 'Agendado', value: 'Agendado' },
-              { label: 'Cancelado', value: 'Cancelado' }
-            ], (selected) => setFiltroStatus(selected.value));
-          }}
-          className='hover:text-[#E52C66]'
-        />
-      </div>
-
-      <div className="flex w-full px-4 pb-2">
-        <input
-          type="text"
-          placeholder="Buscar por, Cliente ou dia"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          autoComplete="off"
-          className="w-full p-2 border rounded shadow"
-        />
-        {searchTerm && (
-          <MdClose className="relative right-7 top-3 text-pink-600 cursor-pointer" onClick={() => setSearchTerm('')} />
-        )}
-      </div>
-
-      {filtroStatus && (
-        <div className="flex items-center gap-2 text-sm text-gray-600 px-4 pb-2">
-          Filtro ativo: <strong>{filtroStatus}</strong>
-          <MdOutlineFilterListOff onClick={() => setFiltroStatus(null)} className='text-pink-600 cursor-pointer' />
+    <div className={`${theme === "dark" ? "bg-gray-900 text-gray-100" : "bg-gray-50 text-gray-800"} container-data min-h-screen`}>
+      
+      {/* Loading */}
+      {loading ? (
+        <div className="flex items-center justify-center h-[96dvh]">
+          <LoadSplash />
         </div>
+      ) : (
+        <>
+          {/* Header */}
+          <div className="flex flex-wrap w-full justify-between items-center gap-2 p-2">
+            <section className="flex flex-wrap gap-2 items-center">
+              <button 
+                onClick={handleChangePage} 
+                className="text-lg hover:text-[#E52C66]"
+              >
+                <IoMdArrowBack />
+              </button>
+              <label htmlFor="months" className="font-medium">Agendamentos de</label>
+              <select
+                className="font-bold text-[#963584] capitalize border rounded px-2 py-1"
+                defaultValue={monthOfYear()[currentDate.getMonth()]}
+                onChange={(e) => {
+                  const monthIndex = monthOfYear().indexOf(e.target.value);
+                  setCurrentDate(new Date(currentDate.getFullYear(), monthIndex, 1));
+                }}
+              >
+                {monthOfYear().map((month, index) => (
+                  <option key={index} className="capitalize" value={month}>
+                    {month}
+                  </option>
+                ))}
+              </select>
+
+              {/* Seleção de Ano */}
+              <select
+                className="ml-2 font-bold text-[#963584] border rounded px-2 py-1"
+                value={currentDate.getFullYear()}
+                onChange={(e) =>
+                  setCurrentDate(new Date(parseInt(e.target.value), currentDate.getMonth(), 1))
+                }
+              >
+                {Array.from({ length: 6 }, (_, i) => new Date().getFullYear() - 2 + i).map((year) => (
+                  <option key={year} value={year}>{year}</option>
+                ))}
+              </select>
+            </section>
+
+            <div className="flex items-center gap-3">
+              {/* Toggle Dark/Light */}
+              <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+                {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
+              </button>
+
+              {/* Filtro */}
+              <IoFilter
+                onClick={() => {
+                  Notie.select("Filtrar por status...", [
+                    { label: 'Todos', value: null },
+                    { label: 'Pago', value: 'Pago' },
+                    { label: 'Entrada', value: 'Entrada' },
+                    { label: 'Agendado', value: 'Agendado' },
+                    { label: 'Cancelado', value: 'Cancelado' }
+                  ], (selected) => setFiltroStatus(selected.value));
+                }}
+                className="text-xl hover:text-[#E52C66] cursor-pointer"
+              />
+            </div>
+          </div>
+
+          {/* Campo de busca */}
+          <div className="flex w-full gap-2 px-2 mb-3">
+            <input
+              type="text"
+              placeholder="Buscar cliente ou dia..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              autoComplete="off"
+              className="w-full p-2 border rounded shadow-sm"
+            />
+            {searchTerm && (
+              <MdClose 
+                className="text-xl text-pink-600 cursor-pointer self-center" 
+                onClick={() => setSearchTerm('')} 
+              />
+            )}
+          </div>
+
+          {/* Filtro ativo */}
+          {filtroStatus && (
+            <div className="flex items-center gap-2 text-sm text-gray-600 px-4 pb-2">
+              Filtro ativo: <strong>{filtroStatus}</strong>
+              <MdOutlineFilterListOff onClick={() => setFiltroStatus(null)} className='text-pink-600 cursor-pointer' />
+            </div>
+          )}
+
+          {/* Tabela */}
+          <div className="overflow-x-auto px-2 pb-4">
+            <table className="w-[93dvw] border-collapse rounded-lg overflow-hidden shadow-sm">
+              <thead className={`${theme === "dark" ? "bg-gray-700" : "bg-gray-800"} text-white text-sm uppercase tracking-wider`}>
+                <tr>
+                  <th className="px-4 py-2 text-center min-w-[120px]">Telefone</th>
+                  <th className="px-4 py-2 text-center min-w-[120px] cursor-pointer select-none"
+                    onClick={() => handleSort("saida")}
+                  >
+                    Saída {sortConfig.key === "saida" && (sortConfig.direction === "asc" ? "↑" : "↓")}
+                  </th>
+                  <th 
+                    className="px-4 py-2 text-center min-w-[100px] cursor-pointer select-none"
+                    onClick={() => handleSort("horario")}
+                  >
+                    Horário {sortConfig.key === "horario" && (sortConfig.direction === "asc" ? "↑" : "↓")}
+                  </th>
+
+                  <th className="px-4 py-2 text-center min-w-[160px]">Cliente</th>
+                  <th className="px-4 py-2 text-center min-w-[80px]">Qtd</th>
+                  <th className="px-4 py-2 text-center min-w-[120px]">Valor</th>
+                  <th className="px-4 py-2 text-center min-w-[120px]">Pedido</th>
+                  <th className="px-4 py-2 text-center min-w-[140px]">Status</th>
+                  <th className="px-4 py-2 text-center min-w-[120px]">Ações</th>
+                </tr>
+              </thead>
+
+              <tbody className={`${theme === "dark" ? "bg-gray-800" : "bg-white"} divide-y`}>
+                {eventFilter.length === 0 ? (
+                  <tr>
+                    <td colSpan="9" className="py-8 text-center text-gray-500">
+                      <img src={car} alt="" className="w-16 mx-auto opacity-50 mb-2" />
+                      Nenhum agendamento encontrado.
+                    </td>
+                  </tr>
+                ) : (
+                  eventFilter.map((appointment) => (
+                    <tr key={appointment.id} className="hover:bg-gray-50 text-sm">
+                      <td className="px-4 py-2 text-center">{formatarTelefone(appointment.telefone)}</td>
+                      <td className="px-4 py-2 text-center">{FormattedDate(appointment.saida)}</td>
+                      <td className="px-4 py-2 text-center">{FormattedHour(appointment.horario)}</td>
+                      <td className="px-4 py-2 font-medium">{appointment.cliente}</td>
+                      <td className="px-4 py-2 text-center">{appointment.quantidade}</td>
+                      <td className={`px-4 py-2 text-center font-semibold ${Number(appointment.valor) < 250 ? 'text-red-600' : 'text-gray-800'}`}>
+                        R$ {appointment.valor}
+                      </td>
+                      <td className="px-4 py-2 text-center">{appointment.pedido}</td>
+                      <td className="px-4 py-2 text-center">
+                        <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+                          appointment.status === "Pago" ? "bg-green-100 text-green-700" :
+                          appointment.status === "Entrada" ? "bg-yellow-100 text-yellow-700" :
+                          "bg-blue-100 text-blue-700"
+                        }`}>
+                          {appointment.status}
+                        </span>
+                      </td>
+                      <td className="px-4 py-2 flex gap-2 justify-center">
+                        <button 
+                          onClick={() => { setShowPasswordModal(true); setAtributePassword('editar'); setPendingEdit(appointment); }}
+                          className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        >
+                          <MdOutlineModeEditOutline />
+                        </button>
+                        <button 
+                          onClick={() => { setShowPasswordModal(true); setAtributePassword('deletar'); setPendingDelete(appointment.id); }}
+                          className="p-2 bg-red-500 text-white rounded hover:bg-red-600"
+                        >
+                          <RiDeleteBin6Line />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
 
-      <table className='container-data-table'>
-        <thead>
-          <tr className="flex title-cabecalho justify-between bg-[#E59E07]">
-            <th className="w-30 text-center">Telefone</th>
-            <th className="w-30 text-center">Saída</th>
-            <th className="w-19 text-center">Horário</th>
-            <th className="w-60 text-center">Cliente</th>
-            <th className="w-20 text-center">Quantidade</th>
-            <th className="w-35 text-center">Valor</th>
-            <th className="w-15 text-center">Pedido</th>
-            <th className="w-27 text-center">Status</th>
-            <th className="w-25 text-center">Ações</th>
-          </tr>
-        </thead>
-      </table>
-
-      <div className='h-[90dvh] p-0.3 overflow-y-auto'>
-        <table className='container-data-table'>
-          <tbody className='flex flex-col'>
-            {eventFilter.length === 0 ? (
-              <tr>
-                <td colSpan="9" className="bg-image-car no-items-animation h-[86.5dvh] flex flex-col gap-2 items-center justify-center text-center">
-                  <img src={car} alt="" className="w-20 opacity-70" />
-                  Nenhum agendamento encontrado.
-                </td>
-              </tr>
-            ) : (
-              eventFilter.map((appointment) => (
-                <tr key={appointment.id} className="field-table-son text-zinc-700">
-                  <td className="w-40 text-center p-1 shadow">{formatarTelefone(appointment.telefone)}</td>
-                  <td className="w-30 p-1 shadow">{FormattedDate(appointment.saida)}</td>
-                  <td className="w-19 p-1 shadow">{FormattedHour(appointment.horario)}</td>
-                  <td className="w-60 p-1 shadow font-bold">{appointment.cliente}</td>
-                  <td className="w-25 p-1 shadow">{appointment.quantidade}</td>
-                  <td className={`w-30 p-1 shadow ${Number(appointment.valor) < 250 ? 'text-[#ff0000]' : ''}`}>
-                    R$ {appointment.valor}
-                  </td>
-                  <td className="w-15 p-1 shadow">{appointment.pedido}</td>
-                  <td className={`w-29 text-center p-1 shadow ${
-                    appointment.status === "pago"
-                      ? "text-[#008000]"
-                      : appointment.status === "entrada"
-                      ? "text-[#e9be0b]"
-                      : "text-[#1E3A8A]"
-                  }`}>
-                    {appointment.status} {appointment.status === "Pago" ? '✔' : appointment.status === "Entrada" ? '⚠' : '❔'}
-                  </td>
-                  <td className="flex gap-2 justify-center items-center p-1">
-                    <button
-                      onClick={() => {
-                        setShowPasswordModal(true);
-                        setAtributePassword('editar');
-                        setSearchTerm(appointment.cliente);
-                        setPendingEdit(appointment);
-                      }}
-                      className="btn-edit p-2 bg-[#37A2C2] shadow cursor-pointer"
-                    >
-                      <MdOutlineModeEditOutline />
-                    </button>
-                    <button
-                      onClick={() => {
-                        setShowPasswordModal(true);
-                        setAtributePassword('deletar');
-                        setSearchTerm(appointment.cliente);
-                        setPendingDelete(appointment.id);
-                      }}
-                      className="btn-delete p-2 bg-[#37A2C2] shadow cursor-pointer"
-                    >
-                      <RiDeleteBin6Line />
-                    </button>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
-
+      {/* Modal edição */}
       {openWindowEdit && (
-        <aside className='flex items-center justify-center w-[96dvw] z-0 h-[100dvh] absolute top-0' style={{ backgroundColor: "rgba(0,0,0,.5)" }}>
-          <div className='flex w-[50%] h-[65%] z-1 items-center justify-center rounded shadow'>
+        <aside className='flex items-center justify-center w-[96dvw] z-50 h-[100dvh] absolute top-0 left-0 bg-black/50'>
+          <div className='flex w-[95%] md:w-[50%] h-[65%] items-center justify-center rounded shadow bg-white'>
             <CustomWindow
               message={message}
               action={'edit'}
@@ -255,6 +338,7 @@ const Agendamentos = ({ setActiveComponent }) => {
         </aside>
       )}
 
+      {/* Modal senha */}
       {showPasswordModal && (
         <PasswordModal
           message={{ title: `Digite a senha para ${atributePassword} o agendamento` }}

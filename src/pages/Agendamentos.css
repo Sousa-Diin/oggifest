@@ -1,93 +1,172 @@
-
-.btn-delete{
-  color: #8B0000;
-}
-.btn-edit{
-  color: var(--color-white);
-}
-
-.container-data,.container-data-table  {
+/* ======= LoadSplash ======= */
+.load-splash {
   width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: var(--color-gelo-white);
+  color: var(--color-primary);
+  font-size: 1.2rem;
+}
+.load-splash .spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(0,0,0,0.1);
+  border-left-color: var(--color-secondary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ======= Botões ======= */
+.btn-delete {
+  color: #8B0000;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+}
+.btn-delete:hover {
+  color: #FF4C4C;
+}
+.btn-edit {
+  color: var(--color-white);
+  cursor: pointer;
+  transition: opacity 0.2s ease-in-out;
+}
+.btn-edit:hover {
+  opacity: 0.8;
+}
+
+/* ======= Containers ======= */
+.container-data,
+.container-data-table {
+  width: 96.5dvw;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
-.container-data{
-  
-  padding: .2rem;
+.container-data {
+  padding: 0.5rem;
 }
-
 
 .title-cabecalho {
   width: 95dvw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-bottom: 0.8rem;
+  font-size: 1.4rem;
+  color: var(--color-primary);
 }
 
-.field-table{  
+/* Toggle de tema */
+.theme-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-primary);
+  padding: 0.4rem;
+  border-radius: 50%;
+  transition: background 0.2s ease;
+}
+.theme-toggle:hover {
+  background: rgba(0,0,0,0.05);
+}
+
+/* ======= Tabela ======= */
+.field-table {
+ /*  flex: 1; */
+  width: 100%;
+  max-width: 1220px;
   height: 500px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 0.5rem;
   overflow-y: auto;
+  padding: 0.5rem;
 }
 
-.field-table-son{
-  width: 95dvw;
+.field-table-son {
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content:space-around;
-  align-items: center;
-  overflow-y: auto;
-  /* margin-bottom: .1rem; */
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.8rem;
+  border-radius: 0.5rem;
   background-color: var(--color-gelo-white);
+  box-shadow: 0px 2px 4px rgba(0,0,0,0.05);
 }
 
-
-
+/* ======= Empty state ======= */
 .no-items-animation {
-  position: relative;
   width: 100%;
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: bold;
   color: #37A2C2;
   animation: fadeScaleIn 0.6s ease-out forwards;
   transform-origin: center;
   opacity: 0;
+  margin-top: 2rem;
 }
 
-/* Fade + Scale */
 @keyframes fadeScaleIn {
-  0% {
-    transform: scale(0.95);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
+  0% { transform: scale(0.95); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
 }
-.btn-table{
-  width: 100%;
-  height: 100%;
+
+/* ======= Botões tabela ======= */
+.btn-table {
+  min-width: 80px;
+  padding: 0.4rem 0.8rem;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: var(--color-secondary);
   color: var(--color-white);
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: bold;
-  border-radius: .5rem;
-  transition: all .3s ease-in-out;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+.btn-table:hover {
+  background-color: var(--color-primary);
+  
 }
 
+/* ======= Dark Mode ======= */
+.dark {
+  --color-primary: #f1f1f1;
+  --color-secondary: #37A2C2;
+  --color-gelo-white: #222;
+  --color-white: #fff;
+  background-color: #121212;
+  /* color: #f1f1f1; */
+}
 
+.dark .field-table-son {
+  background-color: #1e1e1e;
+}
+.dark .theme-toggle:hover {
+  background: rgba(255,255,255,0.1);
+}
 
-@media only screen and (min-width: 1440px) and (max-width:2560px){
-  .field-table{
+/* ======= Responsividade ======= */
+@media only screen and (min-width: 1440px) {
+  .field-table {
     max-height: 830px;
   }
 }

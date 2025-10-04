@@ -1,181 +1,253 @@
-import { useEffect, useState } from "react";
-import { FaSearch, FaPlus } from "react-icons/fa";
+// OggiFest.jsx
+import React, { useEffect, useState, useRef } from "react";
+import { FaPlus } from "react-icons/fa";
 import { MdClose } from "react-icons/md";
 import { LuRefreshCcw } from "react-icons/lu";
+import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi";
 import Calendar from "react-calendar";
+import { motion, AnimatePresence } from "framer-motion";
 import "react-calendar/dist/Calendar.css";
-import './OggiFest.css';
+import "./OggiFest.css";
+import { FormattedDate } from "../../util/FormattedDate";
+
 import CustomWindow from "../../components/menumain/CustomWindow";
 import LoadSplash from "../splash/LoadSplash";
-import { useAuth } from '../../provider/AuthContextProvider';
+import { useAuth } from "../../provider/AuthContextProvider";
 import Notie from "../../service/notieService";
-import { FormattedDate, FormattedHour } from "../../util/FormattedDate"; // Importando a função de formatação de hora
+import { FormattedHour } from "../../util/FormattedDate";
 
 export default function OggiFest() {
   const { evento, formatarData } = useAuth();
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [termoBusca, setTermoBusca] = useState("");
-  const [open, handleOpenMenu] = useState(false);
+  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [theme, setTheme] = useState(
+    () => localStorage.getItem("oggi-theme") || "light"
+  );
+  const mountedRef = useRef(false);
+
+  // --- Tema global
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("oggi-theme", theme);
+  }, [theme]);
+
+  // --- Controla splash até dados carregarem
+  useEffect(() => setLoading(!evento), [evento]);
 
   useEffect(() => {
-    if (evento ){
-      setLoading(false);
-      
-    }else {
-      setLoading(true);
-    }  
-  }, [evento]);
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
+  // --- Config modal
   const message = {
     title: "Agendar Carrinho",
     btnConfirm: "Salvar",
     btnCancel: "Cancelar",
     ok: "Carrinho agendado!",
-    error:"Erro ao agendar o carrinho.",
-  }
+    error: "Erro ao agendar o carrinho.",
+  };
 
-  const formattedDate = new Intl.DateTimeFormat("pt-BR", {
-    weekday: "long",
-    day: "2-digit",
-    month: "long",
-    year: "numeric"
-  }).format(selectedDate);
+  // --- Marcações no calendário
+  const diasComAgendamento = (evento || [])
+    .map((ev) => (ev?.saida ? formatarData(new Date(ev.saida)) : null))
+    .filter(Boolean);
 
-  // 🔍 Filtro por data e termo de busca
-const agendamentosFiltrados = evento
-  .filter((ev) => {
-    const termoLower = (termoBusca || "").toLowerCase();
-
-    // Garante que ev.Saida e selectedDate sejam datas válidas
+  // --- Filtro de busca e data
+  const agendamentosFiltrados = (evento || [])
+    .filter((ev) => {
+    const termo = (termoBusca || "").toLowerCase();
     const dataSaida = ev?.saida ? new Date(ev.saida) : null;
     const dataSelecionada = selectedDate ? new Date(selectedDate) : null;
-
     const dataFormatada = dataSaida ? formatarData(dataSaida) : "";
-    const dataSelecionadaFormatada = dataSelecionada ? formatarData(dataSelecionada) : "";
+    const dataSelecionadaFormatada = dataSelecionada
+      ? formatarData(dataSelecionada)
+      : "";
 
-    const correspondeDataSelecionada = dataFormatada === dataSelecionadaFormatada;
-    const correspondeCliente = (ev?.cliente || "").toLowerCase().includes(termoLower);
-    const correspondeDataBusca = dataFormatada.includes(termoLower);
+    const mesmaData = dataFormatada === dataSelecionadaFormatada;
 
-    if (termoLower.trim() === "") {
-      return correspondeDataSelecionada;
-    } else {
-      return correspondeCliente || correspondeDataBusca;
-    }
+    // Conversões seguras
+    const cliente = String(ev?.cliente ?? "").toLowerCase();
+    const pedido = String(ev?.pedido ?? "").toLowerCase();
+    const id = String(ev?.id ?? "").toLowerCase();
+
+    const matchBusca =
+      cliente.includes(termo) ||
+      pedido.includes(termo) ||
+      id.includes(termo);
+
+    return termo ? matchBusca : mesmaData;
   })
-  .sort((a, b) => {
-    const horaA = a?.horario?.toString() || "";
-    const horaB = b?.horario?.toString() || "";
-    return horaA.localeCompare(horaB);
-  });
+   .sort((a, b) => {
+      const [haH, haM] = (a.horario || "00:00").split(":").map(Number);
+      const [hbH, hbM] = (b.horario || "00:00").split(":").map(Number);
+      return haH === hbH ? haM - hbM : haH - hbH;
+    });
 
-
-  
-  // 🗑 Função para limpar agendamentos
+  // --- Limpa localStorage e aciona atualização
   const limparAgendamentos = () => {
-    localStorage.removeItem('agendamentos');
-    window.location.reload();
-    Notie.success("Dados atualizados com sucesso!");
+    try {
+      localStorage.removeItem("agendamentos");
+      window.dispatchEvent(new CustomEvent("agendamentos:updated"));
+      setLoading(true);
+      setTimeout(() => {
+        if (mountedRef.current) setLoading(false);
+        Notie.success("Dados atualizados com sucesso!");
+      }, 650);
+    } catch (err) {
+      console.error(err);
+      Notie.error("Erro ao limpar agendamentos.");
+    }
   };
 
   return (
-    <div className="bg-[#EAE8E1] flex h-dvh p-2">
-      <section className=" w-[94dvw] flex flex-col items-center  ">
-        <h1 className=" text-center font-bold text-xl text-pink-600" style={{ backgroundColor: '#EAE8E1' }}>
-          CARRINHO - OGGI FEST
-        </h1>
-        <div className="w-[100%] flex flex-col  p-1">
-          <header className="flex w-[100%] p-1 items-center justify-between border-b">
-            <div className="w-[50%] relative bg-blue-50">
-            <input 
+    <main className="oggiFest">
+      {/* Header fixo */}
+      <header className="oggiFest-header">
+        <h1 className="text-2xl">CARRINHO DE PICOLÉ - OGGI FEST</h1>
+
+        <div className="header-actions">
+          <div className="search-box">
+            <input
+              type="search"
+              placeholder="Buscar cliente, pedido ou id"
               value={termoBusca}
               onChange={(e) => setTermoBusca(e.target.value)}
-              type="text"
-              placeholder="Buscar por, Cliente ou dia"
-              className="w-full border focus:border-amber-300 sm:font-medium p-1 rounded"
             />
-
-              { termoBusca ? <MdClose className="absolute right-3 top-2 text-pink-600 " onClick={()=>{setTermoBusca('')}} /> : ""}
-            </div>
-            <div className="flex gap-1">
-              <button onClick={() => handleOpenMenu(!open)} className="bg-pink-600 text-white p-2 rounded-full">
-                <FaPlus />
+            {termoBusca && (
+              <button onClick={() => setTermoBusca("")} aria-label="Limpar">
+                <MdClose />
               </button>
-              <button onClick={limparAgendamentos} className="bg-red-500 text-white p-2 rounded-full">
-                <LuRefreshCcw className=""/>
-              </button>
-            </div>
-          </header>
-          { open ?
-             <aside className='inset-0  bg-opacity-50 z-50 flex items-center justify-center w-[94dvw]  min-h-full absolute top-0'
-                style={{backgroundColor:"rgba(0,0,0,.5)", width:"100%"}}>
-                <div className='flex w-[50%] min-h-[100dvh]  items-center justify-center rounded shadow '>
-                  <CustomWindow 
-                    action={'insert'}
-                    message={message}
-                    openWindowEdit={open} 
-                    setOpenWindowEdit={handleOpenMenu}
-                    appointment={evento} // Envia os dados para edição
-                  /> 
-                </div>
-            </aside> : ''
-          }
-          
-          <div className="w-full flex flex-col bg-white mt-1 p-1 shadow">
-            <aside className="flex w-3/4 justify-between">
-              <p className="text-purple-600 italic">{formattedDate}</p>
-              <p className="count">Alugados: {agendamentosFiltrados.length}</p>
-            </aside>
-            <div className="flex h-[90%] min-h-[15dvw] justify-center my-1">
-              <Calendar 
-                onChange={setSelectedDate} 
-                value={selectedDate} 
-                className="react-calendar max-w-full " 
-              />
-            </div>
+            )}
           </div>
 
-          <div className="mt-1 agendamento bg-white p-1">
-            <p className="text-lg font-semibold">
+          <div className="btn-group">
+            <button
+              className="btn-circle"
+              onClick={() =>
+                setTheme((t) => (t === "light" ? "dark" : "light"))
+              }
+              title="Alternar tema"
+            >
+              {theme === "light" ? <HiOutlineMoon /> : <HiOutlineSun />}
+            </button>
+
+            <button
+              onClick={() => setOpen(true)}
+              className="btn-circle btn-primary"
+              title="Novo agendamento"
+            >
+              <FaPlus />
+            </button>
+
+            <button
+              onClick={limparAgendamentos}
+              className="btn-circle btn-danger"
+              title="Limpar agendamentos"
+            >
+              <LuRefreshCcw />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Conteúdo principal */}
+      <section className="oggiFest-body">
+        <div className="oggiFest-grid">
+          {/* Calendário */}
+          <article className="oggiFest-calendar ">
+            <Calendar
+              onChange={setSelectedDate}
+              value={selectedDate}
+              className="custom-calendar"
+              tileContent={({ date, view }) =>
+                view === "month" &&
+                diasComAgendamento.includes(formatarData(date)) ? (
+                  <span className="dot-indicator" aria-hidden></span>
+                ) : null
+              }
+              minDetail="month"
+              showNeighboringMonth={false}
+            />
+          </article>
+
+          {/* Lista de agendamentos */}
+          <aside className="oggiFest-list">
+            <p className="list-title">
               {termoBusca
                 ? `Resultados para: "${termoBusca}"`
-                : new Date().toDateString() === selectedDate.toDateString()
-                  ? 'Hoje'
-                  : `Agendamentos para ${selectedDate.toLocaleDateString("pt-BR")}`}
+                : `Agendamentos em ${selectedDate.toLocaleDateString("pt-BR")}`}
             </p>
 
-
             {loading ? (
-              <div className="flex justify-center items-center mt-4">
+              <div className="loading">
                 <LoadSplash />
               </div>
-            ) : agendamentosFiltrados.length > 0 ? (
-              <ul className="w-full flex flex-col items-center justify-center">
+            ) : agendamentosFiltrados.length ? (
+              <ul>
                 {agendamentosFiltrados.map((ev) => (
-                  <div key={ev.id} 
-                    className="w-full flex flex-row items-center justify-between border-0 p-1 m-1 rounded-lg shadow-sm"
-                    style={{ backgroundColor: ev.status === "Pago" ? "#7CFC50" : "#FEE2E2"}}>
-                    <div className="w-2 h-8 rounded-bl rounded-tl bg-yellow-500 "></div>
-                    <span className="">⌚{FormattedHour(ev.horario)}</span>
-                    <span className="">{ev.cliente}</span>
-                    <span className="font-bold">UN: {ev.quantidade}</span>
-                    <span className="font-bold">Pedido: {ev.pedido}</span>
-                    <span className="text-sm text-gray-500">
-                      {ev.status} {ev.status === "Pago" ? '✔' : ev.status === "Entrada" ? '⚠' : '❓'}
-                    </span>
-                  </div>
+                  <motion.li
+                    key={ev.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    className={`item status-${ev.status?.toLowerCase() || "pendente"}`}
+                  >
+                    <div className="left">
+                      <span className="time">{FormattedHour(ev.horario)}</span>
+                      <div className="client">
+                        <strong>{ev.cliente}</strong>
+                        <small>Pedido: {ev.pedido || "—"}</small>
+                      </div>
+                    </div>
+                    <div className="right p-2 flex gap-4">
+                      <span>Entrega: {FormattedDate(ev.entrega)}</span>
+                      <span>UN: {ev.quantidade}</span>
+                      <span className="status">{ev.status}</span>
+                    </div>
+                  </motion.li>
                 ))}
               </ul>
             ) : (
-              <p className="text-gray-500 text-center mt-2">Nenhum agendamento</p>
+              <p className="empty">Nenhum agendamento</p>
             )}
-
-          </div>
-          
+          </aside>
         </div>
       </section>
-    </div>
+
+      {/* Modal animado */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            className="oggiFest-modal"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <div className="modal-content">
+              <button
+                className="modal-close"
+                onClick={() => setOpen(false)}
+                aria-label="Fechar"
+              >
+                <MdClose />
+              </button>
+              <CustomWindow
+                action="insert"
+                message={message}
+                openWindowEdit={open}
+                setOpenWindowEdit={setOpen}
+                appointment={evento}
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </main>
   );
 }

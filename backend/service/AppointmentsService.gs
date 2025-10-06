@@ -95,14 +95,54 @@ class AppointmentsService {
     
   }
 
-  updateAppointment(id, data){
-    return this.appointmentsRepository.update(id, data);
+  updateAppointment(id, data) {
+    const today = new Date();
+     const appointment = this.appointmentsRepository.getById(id); // Busca o agendamento pelo ID
+
+    if (!appointment) {
+      return { status: 404 };
+    }
+
+    const dataSaida = new Date(data.saida);
+    if (dataSaida < today) {
+      return { status: 403 };
+    }
+
+    this.appointmentsRepository.update(id, data);
+
+    return { status: 200, updated: data };
   }
+
+
 
   removeAppointment(){}
 
   deleteAppointment(id){
-    
-    return this.appointmentsRepository.delete(id);
+    const appointment = this.appointmentsRepository.getById(id); // Busca o agendamento pelo ID
+    const appointmentRents = this.rentalCountPerDayRepository.getAllAsObject();
+  
+    const found = appointmentRents.find(prod => toDateString(prod.saida) === toDateString(appointment.saida));
+
+    if (!appointment) {
+      return null; // Agendamento não encontrado
+    }
+
+    const allowedUser = false; // Exemplo: getPermission(userID) === 'sudo'
+
+    if (allowedUser) {
+      this.appointmentsRepository.delete(id); // Exclusão real permitida
+      return true;
+    }
+
+    // Usuário não é sudo: tentar cancelamento
+    if (appointment.status === "Agendado") {
+      appointment.status = "Cancelado"; // Altera o status
+      this.appointmentsRepository.update(id, appointment);     // Atualiza o registro
+      found.quantidade--;
+      this.rentalCountPerDayRepository.update(id, found);     // Atualiza o rents
+      return true; // Sucesso na mudança de status
+    }
+
+    return 403; // Acesso negado: não tem permissão e o status não é "Agendado"
   }
 }

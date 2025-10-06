@@ -70,7 +70,7 @@ class BaseRepository {
       sheetTable.appendRow(tableHeaderArray);
     }
 
-    Logger.log('Exists, ' + sheetTable);
+    Logger.log('Exists, ' + sheetTable.getSheetName());
     return sheetTable;
   }
 
@@ -231,6 +231,17 @@ class BaseRepository {
     }
   
     // 3. Insere nova linha
+    if (data.saida) {
+      data.saida = data.saida; // converte data
+    }
+
+    if (data.entrega) {
+      data.entrega = data.entrega; // converte data
+    }
+
+    /* if (data.horario) {
+      data.horario = ajustarHora(data.horario); // converte hora
+    } */
     const reqData = this.__convertObjToRow(data);
     this.__sheetTable.appendRow(reqData);
     Logger.log('[CREATE_ROW] ' + `[${this.getSheetTableName()}]: ` + JSON.stringify(reqData));
@@ -401,6 +412,19 @@ class BaseRepository {
         // Mantém o id original, mesmo se vier no newData
         const currentRowAsObject = this.convertRowToObject(data[i]);
         const mergedData = { ...currentRowAsObject, ...newDataNormalized, id }; // Garante o id
+        if (mergedData.saida) {
+          mergedData.saida = mergedData.saida; // converte data
+        }
+    
+        if (mergedData.entrega) {
+          mergedData.entrega = mergedData.entrega; // converte data
+        }
+
+        if (mergedData.horario) {
+          mergedData.horario = ajustarHora(mergedData.horario); // converte hora
+        }
+
+
         const updatedRow = this.__convertObjToRow(mergedData);
 
         this.__sheetTable.getRange(i + 1, 1, 1, updatedRow.length).setValues([updatedRow]);
@@ -443,4 +467,3 @@ class BaseRepository {
     return false;
   }
 }
-

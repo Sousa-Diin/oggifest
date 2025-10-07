@@ -85,7 +85,7 @@ export const SideBar = ({ setActiveComponent }) => {
     <>
       {/* 🔽 Botão hambúrguer (só aparece no mobile) */}
       <button
-        className="h-full md:hidden fixed top-4 left-4 z-20 bg-[#37A2C2] p-3 rounded text-white shadow-md"
+        className="md:h-full md:hidden  fixed top-4 left-4 z-20 bg-[#37A2C2] p-3 rounded text-white shadow-md"
         onClick={() => setIsOpen(!isOpen)}
       >
         {isOpen ? <IoMdClose size={24} /> : <GiHamburgerMenu size={24} />}
@@ -93,13 +93,13 @@ export const SideBar = ({ setActiveComponent }) => {
 
       {/* 🔽 Sidebar */}
       <aside
-        className={`pb-5 md:h-[85%] flex flex-col justify-between text-white fixed min-h-dvh z-10
-          w-56 sm:w-60 md:w-11 lg:w-24 xl:w-11
+        className={`pb-5 md:h-[90dvh] flex flex-col justify-between  text-white fixed md:min-h-dvh z-10
+          w-56  md:w-8 lg:w-24 xl:w-11
           bg-[#37A2C2] transform transition-transform duration-300
-          ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+          ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0 "}
         `}
       >
-        <ul className=" flex flex-col gap-6 md:gap-8 items-center pt-10">
+        <ul className="flex flex-col gap-6 md:gap-8 items-center pt-10">
           {listIcons.map((item, index) => (
             <li
               key={index}

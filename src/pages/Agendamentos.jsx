@@ -247,7 +247,7 @@ const Agendamentos = ({ setActiveComponent }) => {
           <div className="overflow-x-auto px-2 pb-4">
             <table className="w-[93dvw] border-collapse rounded-lg overflow-hidden shadow-sm">
               <thead className={`${theme === "dark" ? "bg-gray-700" : "bg-gray-800"} text-white text-sm uppercase tracking-wider`}>
-                <tr>
+                <tr >
                   <th className="px-4 py-2 text-center min-w-[120px]">Telefone</th>
                   <th className="px-4 py-2 text-center min-w-[120px] cursor-pointer select-none"
                     onClick={() => handleSort("saida")}
@@ -280,13 +280,13 @@ const Agendamentos = ({ setActiveComponent }) => {
                   </tr>
                 ) : (
                   eventFilter.map((appointment) => (
-                    <tr key={appointment.id} className="hover:bg-gray-50 text-sm">
+                    <tr key={appointment.id} className="content-table text-sm">
                       <td className="px-4 py-2 text-center">{formatarTelefone(appointment.telefone)}</td>
                       <td className="px-4 py-2 text-center">{FormattedDate(appointment.saida)}</td>
                       <td className="px-4 py-2 text-center">{FormattedHour(appointment.horario)}</td>
                       <td className="px-4 py-2 font-medium">{appointment.cliente}</td>
                       <td className="px-4 py-2 text-center">{appointment.quantidade}</td>
-                      <td className={`px-4 py-2 text-center font-semibold ${Number(appointment.valor) < 250 ? 'text-red-600' : 'text-gray-800'}`}>
+                      <td className={`px-4 py-2 text-center font-semibold ${Number(appointment.valor) < 250 ? 'text-red-600': Number(appointment.valor) > 250 ?'text-': 'text-white'}`}>
                         R$ {appointment.valor}
                       </td>
                       <td className="px-4 py-2 text-center">{appointment.pedido}</td>

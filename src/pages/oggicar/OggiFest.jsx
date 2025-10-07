@@ -11,7 +11,7 @@ import "./OggiFest.css";
 import { FormattedDate } from "../../util/FormattedDate";
 
 import CustomWindow from "../../components/menumain/CustomWindow";
-import LoadSplash from "../splash/LoadSplash";
+import LoadSplash from "../splash/LoadSplash.jsx"
 import { useAuth } from "../../provider/AuthContextProvider";
 import Notie from "../../service/notieService";
 import { FormattedHour } from "../../util/FormattedDate";
@@ -109,7 +109,7 @@ export default function OggiFest() {
     <main className="oggiFest">
       {/* Header fixo */}
       <header className="oggiFest-header">
-        <h1 className="text-2xl">CARRINHO DE PICOLÉ - OGGI FEST</h1>
+        <h1 className="text-2xl pl-10">CARRINHO DE PICOLÉ - OGGI FEST</h1>
 
         <div className="header-actions">
           <div className="search-box">

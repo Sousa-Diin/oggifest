@@ -65,6 +65,7 @@
   margin-bottom: 0.8rem;
   font-size: 1.4rem;
   color: var(--color-primary);
+
 }
 
 /* Toggle de tema */
@@ -142,9 +143,9 @@
   transition: all 0.3s ease-in-out;
   cursor: pointer;
 }
-.btn-table:hover {
+.btn-table:hover, .content-table:hover {
   background-color: var(--color-primary);
-  
+  color: #121212;
 }
 
 /* ======= Dark Mode ======= */
@@ -168,5 +169,11 @@
 @media only screen and (min-width: 1440px) {
   .field-table {
     max-height: 830px;
+  }
+}
+
+@media only screen and (min-width: 190px) and (max-width:650px){
+  .body-table{
+    width: 5dvw;
   }
 }

@@ -18,9 +18,9 @@ function App() {
   };
 
   return (
-    <section className='bg-[#EAE8E1] flex flex-row justify-between w-full gap-1 h-[90dvh ]capitalize'>
+    <section className=' flex flex-row justify-between w-[98dvw] gap-1 h-[99dvh] capitalize'>
       <SideBar  setActiveComponent={setActiveComponent}/>
-      <div className='ml-8'>
+      <div className='md:ml-8'>
        {stackComponent[activeComponent]}
       </div>
     </section>

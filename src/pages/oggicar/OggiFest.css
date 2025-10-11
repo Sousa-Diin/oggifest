@@ -252,11 +252,11 @@ header.oggiFest-header{
   }
 }
 
-@media only screen and (min-width: 190px) and (max-width:650px){
+@media only screen and (min-width: 190px) and (max-width:768px){
 
   .siderBar{
     width: 100dvw;
-    min-height: 800px;
+    height: 100%;
     z-index: 1;
     position: absolute;
     /* background-color: #dc2626; */

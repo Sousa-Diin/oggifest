@@ -93,8 +93,8 @@ export const SideBar = ({ setActiveComponent }) => {
 
       {/* 🔽 Sidebar */}
       <aside
-        className={`pb-5 md:h-[90dvh] flex flex-col justify-between  text-white fixed md:min-h-dvh z-10
-          w-56  md:w-8 lg:w-24 xl:w-11
+        className={`pb-5 h-[100dvh] lg:h-full  flex flex-col justify-between  text-white fixed md:min-h-dvh z-10
+          w-85  md:w-8 lg:w-12 xl:w-11
           bg-[#37A2C2] transform transition-transform duration-300
           ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0 "}
         `}

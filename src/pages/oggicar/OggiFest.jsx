@@ -24,7 +24,7 @@ export default function OggiFest() {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [theme, setTheme] = useState(
-    () => localStorage.getItem("oggi-theme") || "light"
+    () => localStorage.getItem("theme") || "light"
   );
   const mountedRef = useRef(false);
 

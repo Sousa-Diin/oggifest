@@ -170,10 +170,64 @@
   .field-table {
     max-height: 830px;
   }
+
+  
 }
 
-@media only screen and (min-width: 190px) and (max-width:650px){
+@media only screen and (min-width: 190px) and (max-width:768px){
   .body-table{
     width: 5dvw;
+  }
+
+  .smartphone{
+    
+    width: 100%;
+    max-height: 100%;
+  }
+
+   /* Remove comportamento horizontal padrão */
+  .smartphone table,
+  .smartphone thead,
+  .smartphone tbody,
+  .smartphone th,
+  .smartphone td,
+  .smartphone tr {
+    display: block;
+    width: 100%;
+  }
+
+  .smartphone thead {
+    display: none; /* Esconde cabeçalho em mobile */
+    
+  }
+
+  .smartphone tr {
+    margin-bottom: 1rem;
+    background: var(--color-bg );
+    border-radius: 0.75rem;
+    color: var(--color-secondary);
+    /* box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08); */
+    overflow: hidden;
+    padding: 1rem;
+  }
+
+  .smartphone td {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    font-size: 0.95rem;
+    border: none !important;
+  }
+
+  .smartphone td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    color: #6b7280; /* cinza Tailwind */
+  }
+
+  .smartphone td:last-child {
+    justify-content: center;
   }
 }

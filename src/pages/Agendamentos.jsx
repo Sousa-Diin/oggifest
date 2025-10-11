@@ -157,7 +157,7 @@ const Agendamentos = ({ setActiveComponent }) => {
       ) : (
         <>
           {/* Header */}
-          <div className="flex flex-wrap w-full justify-between items-center gap-2 p-2">
+          <div className="flex flex-wrap w-full justify-between items-center mt-15 gap-2 p-2">
             <section className="flex flex-wrap gap-2 items-center">
               <button 
                 onClick={handleChangePage} 
@@ -244,9 +244,11 @@ const Agendamentos = ({ setActiveComponent }) => {
           )}
 
           {/* Tabela */}
-          <div className="overflow-x-auto px-2 pb-4">
-            <table className="w-[93dvw] border-collapse rounded-lg overflow-hidden shadow-sm">
-              <thead className={`${theme === "dark" ? "bg-gray-700" : "bg-gray-800"} text-white text-sm uppercase tracking-wider`}>
+          <div
+          className="flex overflow-x-auto px-2 pb-4 smartphone"
+          >
+            <table className="w-[94dvw] border-collapse rounded-lg overflow-hidden shadow-sm  ">
+              <thead className={`${theme === "dark" ? "bg-gray-700 " : "bg-gray-800  text-amber-50" }  text-sm uppercase tracking-wider`}>
                 <tr >
                   <th className="px-4 py-2 text-center min-w-[120px]">Telefone</th>
                   <th className="px-4 py-2 text-center min-w-[120px] cursor-pointer select-none"
@@ -270,53 +272,54 @@ const Agendamentos = ({ setActiveComponent }) => {
                 </tr>
               </thead>
 
-              <tbody className={`${theme === "dark" ? "bg-gray-800" : "bg-white"} divide-y`}>
-                {eventFilter.length === 0 ? (
-                  <tr>
-                    <td colSpan="9" className="py-8 text-center text-gray-500">
-                      <img src={car} alt="" className="w-16 mx-auto opacity-50 mb-2" />
-                      Nenhum agendamento encontrado.
+              <tbody className={`${theme === "dark" ? "bg-gray-800 " : "bg-white"} divide-y`}>
+              {eventFilter.length === 0 ? (
+                <tr>
+                  <td colSpan="9" className="py-8 text-center text-gray-500">
+                    <img src={car} alt="" className="w-16 mx-auto opacity-50 mb-2" />
+                    Nenhum agendamento encontrado.
+                  </td>
+                </tr>
+              ) : (
+                eventFilter.map((appointment) => (
+                  <tr key={appointment.id} className="content-table text-sm">
+                    <td data-label="Telefone" className="px-4 py-2 text-center">{formatarTelefone(appointment.telefone)}</td>
+                    <td data-label="Saída" className="px-4 py-2 text-center">{FormattedDate(appointment.saida)}</td>
+                    <td data-label="Horário" className="px-4 py-2 text-center">{FormattedHour(appointment.horario)}</td>
+                    <td data-label="Cliente" className="px-4 py-2 font-medium">{appointment.cliente}</td>
+                    <td data-label="Qtd" className="px-4 py-2 text-center">{appointment.quantidade}</td>
+                    <td data-label="Valor" className={`px-4 py-2 text-center font-semibold ${Number(appointment.valor) < 250 ? 'text-red-600':  ''}`}>
+                      R$ {appointment.valor}
+                    </td>
+                    <td data-label="Pedido" className="px-4 py-2 text-center">{appointment.pedido}</td>
+                    <td data-label="Status" className="px-4 py-2 text-center">
+                      <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+                        appointment.status === "Pago" ? "bg-green-100 text-green-700" :
+                        appointment.status === "Entrada" ? "bg-yellow-100 text-yellow-700" :
+                        "bg-blue-100 text-blue-700"
+                      }`}>
+                        {appointment.status}
+                      </span>
+                    </td>
+                    <td data-label="Ações" className="px-4 py-2 flex gap-2 justify-center">
+                      <button 
+                        onClick={() => { setShowPasswordModal(true); setAtributePassword('editar'); setPendingEdit(appointment); }}
+                        className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                      >
+                        <MdOutlineModeEditOutline />
+                      </button>
+                      <button 
+                        onClick={() => { setShowPasswordModal(true); setAtributePassword('deletar'); setPendingDelete(appointment.id); }}
+                        className="p-2 bg-red-500 text-white rounded hover:bg-red-600"
+                      >
+                        <RiDeleteBin6Line />
+                      </button>
                     </td>
                   </tr>
-                ) : (
-                  eventFilter.map((appointment) => (
-                    <tr key={appointment.id} className="content-table text-sm">
-                      <td className="px-4 py-2 text-center">{formatarTelefone(appointment.telefone)}</td>
-                      <td className="px-4 py-2 text-center">{FormattedDate(appointment.saida)}</td>
-                      <td className="px-4 py-2 text-center">{FormattedHour(appointment.horario)}</td>
-                      <td className="px-4 py-2 font-medium">{appointment.cliente}</td>
-                      <td className="px-4 py-2 text-center">{appointment.quantidade}</td>
-                      <td className={`px-4 py-2 text-center font-semibold ${Number(appointment.valor) < 250 ? 'text-red-600': Number(appointment.valor) > 250 ?'text-': 'text-white'}`}>
-                        R$ {appointment.valor}
-                      </td>
-                      <td className="px-4 py-2 text-center">{appointment.pedido}</td>
-                      <td className="px-4 py-2 text-center">
-                        <span className={`px-2 py-1 rounded-full text-xs font-bold ${
-                          appointment.status === "Pago" ? "bg-green-100 text-green-700" :
-                          appointment.status === "Entrada" ? "bg-yellow-100 text-yellow-700" :
-                          "bg-blue-100 text-blue-700"
-                        }`}>
-                          {appointment.status}
-                        </span>
-                      </td>
-                      <td className="px-4 py-2 flex gap-2 justify-center">
-                        <button 
-                          onClick={() => { setShowPasswordModal(true); setAtributePassword('editar'); setPendingEdit(appointment); }}
-                          className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                        >
-                          <MdOutlineModeEditOutline />
-                        </button>
-                        <button 
-                          onClick={() => { setShowPasswordModal(true); setAtributePassword('deletar'); setPendingDelete(appointment.id); }}
-                          className="p-2 bg-red-500 text-white rounded hover:bg-red-600"
-                        >
-                          <RiDeleteBin6Line />
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
+                ))
+              )}
+            </tbody>
+
             </table>
           </div>
         </>

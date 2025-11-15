@@ -34,7 +34,7 @@ export const SideBar = ({ setActiveComponent }) => {
       name: <VscAccount />,
       label: "Account",
       action: (i) => {
-        handleChangePages("account", i);
+        handleChangePages("accessdenied", i);
         Notie.warning("Aviso! Pagina em desenvolvimento...");
       },
     },
@@ -52,7 +52,7 @@ export const SideBar = ({ setActiveComponent }) => {
       name: <IoBarChartSharp />,
       label: "Gráficos",
       action: (i) => {
-        handleChangePages("chart", i);
+        handleChangePages("accessdenied", i);
         Notie.error("Atenção! Seu perfil não tem acesso a essa página.");
       },
     },
@@ -60,7 +60,7 @@ export const SideBar = ({ setActiveComponent }) => {
       name: <LuSettings />,
       label: "Configurações",
       action: (i) => {
-        handleChangePages("config", i);
+        handleChangePages("accessdenied", i);
         Notie.error("Atenção! Seu perfil não tem acesso a essa página.");
       },
     },

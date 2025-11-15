@@ -17,6 +17,7 @@
     "@tailwindcss/vite": "^4.0.14",
     "calendar": "^0.1.1",
     "cleave.js": "^1.6.0",
+    "crypto-js": "^4.2.0",
     "framer-motion": "^12.23.22",
     "lucide-react": "^0.483.0",
     "node-fetch": "^3.3.2",

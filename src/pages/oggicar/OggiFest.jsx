@@ -46,7 +46,7 @@ export default function OggiFest() {
 
   // --- Config modal
   const message = {
-    title: "Agendar Carrinho",
+    title: "Reservar Carrinho",
     btnConfirm: "Salvar",
     btnCancel: "Cancelar",
     ok: "Carrinho agendado!",
@@ -103,6 +103,11 @@ export default function OggiFest() {
       console.error(err);
       Notie.error("Erro ao limpar agendamentos.");
     }
+  };
+
+  const handleDoubleClick = (date) => {
+    setSelectedDate(date);
+    setOpen(true);
   };
 
   return (
@@ -163,6 +168,8 @@ export default function OggiFest() {
           <article className="oggiFest-calendar ">
             <Calendar
               onChange={setSelectedDate}
+              onClickDay={(date) => handleDoubleClick(date)} // Para não interferir no onDoubleClick
+            
               value={selectedDate}
               className="custom-calendar"
               tileContent={({ date, view }) =>
@@ -186,7 +193,7 @@ export default function OggiFest() {
 
             {loading ? (
               <div className="loading">
-                <LoadSplash />
+                <LoadSplash/>
               </div>
             ) : agendamentosFiltrados.length ? (
               <ul>
@@ -217,7 +224,7 @@ export default function OggiFest() {
               <p className="empty">Nenhum agendamento</p>
             )}
           </aside>
-        </div>
+        </div>  
       </section>
 
       {/* Modal animado */}
@@ -230,14 +237,7 @@ export default function OggiFest() {
             exit={{ opacity: 0 }}
           >
             <div className="modal-content">
-              <button
-                className="modal-close"
-                onClick={() => setOpen(false)}
-                aria-label="Fechar"
-              >
-                <MdClose />
-              </button>
-              <CustomWindow
+              <CustomWindow 
                 action="insert"
                 message={message}
                 openWindowEdit={open}

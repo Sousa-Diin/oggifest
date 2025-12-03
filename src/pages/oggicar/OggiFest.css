@@ -220,8 +220,8 @@ header.oggiFest-header{
 
 .modal-content {
   background: var(--card-bg);
-  padding: .3rem;
-  border-radius: 1rem;
+  padding: .2rem;
+  /* border-radius: 1rem; */
   width: 95%;
   max-width: 580px;
   position: relative;

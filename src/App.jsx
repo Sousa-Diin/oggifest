@@ -58,7 +58,7 @@ function App() {
     <section className="flex flex-row justify-between w-[98dvw] gap-1 h-[99dvh] capitalize">
       <SideBar setActiveComponent={handleSetActiveComponent} />
       <div className="md:ml-8 w-full">
-        {stackComponent[activeComponent] || <OggiFest /> }
+        {stackComponent[activeComponent] || <LoadSplash /> }
       </div>
     </section>
   )

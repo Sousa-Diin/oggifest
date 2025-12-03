@@ -33,24 +33,27 @@ const formatarData = (date) => {
 
 const AuthContextProvider = ({ children }) => {
   const [evento, setEvento] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Carregar dados ao iniciar
+  const loadData = async () => {
+    setLoading(true);
+    
+    try {
+      const data = await getAllAppointments();
+      setEvento(Array.isArray(data.allAppointments) ? data.allAppointments : []);
+      console.log("Dados carregados da API.");
+    } catch (e) {
+      console.error("Erro ao carregar agendamentos:", e);
+      setEvento([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const loadData = async () => {
-      //const stored = getLocalStorage("agendamentos");
-
-      /* if (stored && stored.length > 0) {
-        setEvento(stored);
-      } else { */
-        const apiData = await getAllAppointments();
-        setEvento(apiData.allAppointments);
-        console.log("Dados carregados da API.");
-        //setLocalStorage("agendamentos", apiData.allAppointments);
-     // }
-    };
-
     loadData();
-  }, [evento]);
+  }, []); // ← executa apenas NA INICIALIZAÇÃO
+
 
   const addEvento = async (ev, action) => {
     if (!ev || !ev.cliente || !ev.pedido || !ev.horario || !ev.saida ) {

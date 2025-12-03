@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react';
 import CustomWindow from '../components/menumain/CustomWindow.jsx';
 import { IoMdArrowBack } from "react-icons/io";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { FaPlus } from "react-icons/fa";
 import { MdOutlineModeEditOutline, MdOutlineFilterListOff, MdClose } from "react-icons/md";
 import { IoFilter } from "react-icons/io5";
-import { Sun, Moon } from "lucide-react"; // Ícones para toggle
+import { Sun, Moon, MessageSquareDashed } from "lucide-react"; // Ícones para toggle
 import { useAuth } from '../provider/AuthContextProvider.jsx';
 import './Agendamentos.css';
 import car from '../assets/carrinho-oggi-front.png';
@@ -13,7 +14,7 @@ import LoadSplash from "../pages/splash/LoadSplash.jsx";
 import Notie from '../service/notieService.js';
 import { FormattedDate, FormattedHour, formatarTelefone } from "../util/FormattedDate.js";
 import { deleteAppointment } from '../service/AppointmentsService.js';
-import { PASSWORD_DELETE, PASSWORD_EDIT } from '../service/authSheets.js';
+import { PASSWORD_ADD, PASSWORD_DELETE, PASSWORD_EDIT } from '../service/authSheets.js';
 import monthOfYear from '../util/date.js';
 
 const Agendamentos = ({ setActiveComponent }) => {
@@ -22,6 +23,7 @@ const Agendamentos = ({ setActiveComponent }) => {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [atributePassword, setAtributePassword] = useState("");
   const [openWindowEdit, setOpenWindowEdit] = useState(false);
+  const [openWindowADD, setOpenWindowADD] = useState(false);
   const [pendingEdit, setPendingEdit] = useState(null);
   const [pendingDelete, setPendingDelete] = useState(null);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
@@ -146,6 +148,14 @@ const Agendamentos = ({ setActiveComponent }) => {
     error: "Erro ao editar."
   };
 
+  const messageAdd = {
+    title: "Adicionar Reserva",
+    btnConfirm: "Reservar",
+    btnCancel: "Deixar",
+    ok: "Reserva adicionada com sucesso!",
+    error: "Erro ao adicionar."
+  }
+
   return (
     <div className={`${theme === "dark" ? "bg-gray-900 text-gray-100" : "bg-gray-50 text-gray-800"} container-data min-h-screen`}>
       
@@ -195,6 +205,14 @@ const Agendamentos = ({ setActiveComponent }) => {
               </select>
             </section>
 
+            <button
+              onClick={setOpenWindowADD}
+              className="btn-circle btn-primary"
+              title="Novo agendamento"
+            >
+              <FaPlus />
+            </button>
+
             <div className="flex items-center gap-3">
               {/* Toggle Dark/Light */}
               <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
@@ -221,7 +239,7 @@ const Agendamentos = ({ setActiveComponent }) => {
           <div className="flex w-full gap-2 px-2 mb-3">
             <input
               type="text"
-              placeholder="Buscar cliente ou dia..."
+              placeholder="Buscar por cliente.."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               autoComplete="off"
@@ -257,7 +275,7 @@ const Agendamentos = ({ setActiveComponent }) => {
                     Saída {sortConfig.key === "saida" && (sortConfig.direction === "asc" ? "↑" : "↓")}
                   </th>
                   <th 
-                    className="px-4 py-2 text-center min-w-[100px] cursor-pointer select-none"
+                    className="px-4 py-2 text-center min-w-[100px] cursor-pointer select-none"    
                     onClick={() => handleSort("horario")}
                   >
                     Horário {sortConfig.key === "horario" && (sortConfig.direction === "asc" ? "↑" : "↓")}
@@ -332,7 +350,7 @@ const Agendamentos = ({ setActiveComponent }) => {
             <CustomWindow
               message={message}
               action={'edit'}
-              title={'Editar Agendamento'}
+              title={'Editar Reserva'}
               openWindowEdit={openWindowEdit}
               setOpenWindowEdit={setOpenWindowEdit}
               appointment={selectedAppointment}
@@ -340,6 +358,23 @@ const Agendamentos = ({ setActiveComponent }) => {
           </div>
         </aside>
       )}
+
+      {/* Modal adição */}
+      {openWindowADD && (
+        <aside className='flex items-center justify-center w-[96dvw] z-50 h-[100dvh] absolute top-0 left-0 bg-black/50'>
+          <div className='flex w-[95%] md:w-[50%] h-[65%] items-center justify-center rounded shadow bg-white'>
+            <CustomWindow
+              message = {messageAdd}
+              action={'insert'}
+              title={'Adicionar Reserva'}
+              openWindowEdit={openWindowADD}
+              setOpenWindowEdit={setOpenWindowADD}
+              appointment={null}
+            />
+          </div>
+        </aside>
+      )}
+      
 
       {/* Modal senha */}
       {showPasswordModal && (
@@ -352,6 +387,10 @@ const Agendamentos = ({ setActiveComponent }) => {
           onConfirm={(value) => {
             try {
               if (atributePassword === 'editar' && value === PASSWORD_EDIT) {
+                setOpenWindowEdit(true);
+                setSelectedAppointment(pendingEdit);
+                setShowPasswordModal(false);
+              } else if (atributePassword === 'adicionar' && PASSWORD_ADD) {
                 setOpenWindowEdit(true);
                 setSelectedAppointment(pendingEdit);
                 setShowPasswordModal(false);

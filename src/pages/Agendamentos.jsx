@@ -1,3 +1,5 @@
+/* Migrations to SoluttecBR at 13/12/2025 07:45 */
+
 import { useState, useEffect } from 'react';
 import CustomWindow from '../components/menumain/CustomWindow.jsx';
 import { IoMdArrowBack } from "react-icons/io";
